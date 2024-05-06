@@ -14,7 +14,7 @@ import type { NextFunction, Request, Response } from 'express';
 export const ValidationMiddleware = (
   type: any,
   field?: 'body' | 'query' | 'params',
-  skipMissingProperties = true,
+  skipMissingProperties = false,
   whitelist = true,
   forbidNonWhitelisted = true,
 ) => {

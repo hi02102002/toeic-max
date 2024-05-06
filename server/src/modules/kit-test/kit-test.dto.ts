@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator';
 import { BaseQueryDto, IBasePagingQuery } from '@/libs/api';
 
 export class KitTestDto {
@@ -7,7 +7,7 @@ export class KitTestDto {
   @IsNotEmpty()
   name: string;
 
-  @IsNumberString()
+  @IsNumber()
   @IsNotEmpty()
   @Transform(({ value }) => parseInt(value))
   year: number;
@@ -15,10 +15,6 @@ export class KitTestDto {
   @IsString()
   @IsNotEmpty()
   kit_id: string;
-
-  @IsString()
-  @IsNotEmpty()
-  type: string;
 
   @IsString()
   @IsNotEmpty()

@@ -1,9 +1,10 @@
 import { Service } from 'typedi';
 import { KitTestService } from './kit-test.service';
-import {  TResponse } from '@/interfaces/api.interface';
+import { TResponse } from '@/interfaces/api.interface';
 import { catchAsync } from '@/utils/catch-async';
 import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { tests } from '@/database/schema';
 
 @Service()
 export class KitTestController {
@@ -51,14 +52,34 @@ export class KitTestController {
 
   public delete = catchAsync(async (req, res: Response<TResponse>) => {
     const { id } = req.params;
-    await this.kitTestService.delete(id as string);
+    await this.kitTestService.delete(id as string, {
+      message: 'Cannot find kit test with this id.',
+      throwIfNotFound: true,
+    });
 
-    return res.status(StatusCodes.OK).json();
+    return res.status(StatusCodes.OK).json({
+      message: 'Deleted kit test successfully.',
+      data: null,
+    });
   });
 
   public getPaging = catchAsync(async (req, res: Response<TResponse>) => {
     const data = await this.kitTestService.getPaging({
       query: req.query,
+      opts: {
+        searchFields: [tests.name],
+      },
+    });
+
+    return res.status(StatusCodes.OK).json({
+      data,
+    });
+  });
+
+  public getForSelect = catchAsync(async (req, res: Response<TResponse>) => {
+    const data = await this.kitTestService.getForSelect({
+      fieldLabel: tests.name,
+      fieldValue: tests.id,
     });
 
     return res.status(StatusCodes.OK).json({

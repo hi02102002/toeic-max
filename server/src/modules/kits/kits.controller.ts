@@ -47,7 +47,7 @@ export class KitsController {
       opts: {
         throwIfNotFound: true,
         message: `Cannot find kit with this id`,
-      }
+      },
     });
 
     return res.status(StatusCodes.OK).json({
@@ -57,9 +57,15 @@ export class KitsController {
 
   public delete = catchAsync(async (req, res: Response<TResponse>) => {
     const { id } = req.params;
-    await this.kitService.delete(id as string);
+    await this.kitService.delete(id as string, {
+      throwIfNotFound: true,
+      message: `Cannot find kit with this id,`,
+    });
 
-    return res.status(StatusCodes.OK).json();
+    return res.status(StatusCodes.OK).json({
+      message: 'Kit deleted successfully',
+      data: null,
+    });
   });
 
   public getPaging = catchAsync(async (req, res: Response<TResponse>) => {

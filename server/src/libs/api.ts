@@ -112,19 +112,20 @@ export abstract class BaseService<C extends Object = Object, U extends Object = 
    * @param {C} data - The data to be inserted.
    * @returns {Promise<T>} - A promise that resolves to the newly created record.
    */
-  async create<T extends unknown = E>(data: C, opts?: {
-    throwIfFound?: boolean;
-    message?: string;
-    foundKey?: keyof C;
-  }) {
+  async create<T extends unknown = E>(
+    data: C,
+    opts?: {
+      throwIfFound?: boolean;
+      message?: string;
+      foundKey?: keyof C;
+    },
+  ) {
     try {
+      const [rows] = await this.db.insert(this.table).values(data).returning();
 
-    const [rows] = await this.db.insert(this.table).values(data).returning();
-
-    return rows as T;
+      return rows as T;
     } catch (error: any) {
-
-      console.log(opts)
+      console.log(opts);
 
       console.log(opts?.throwIfFound && error.code === '23505');
 
@@ -145,19 +146,22 @@ export abstract class BaseService<C extends Object = Object, U extends Object = 
    * @param {string} options.id - The ID of the record to update.
    * @returns {Promise<T>} - A promise that resolves to the updated record.
    */
-  async update<T extends unknown = E>({ data, id,opts }: {
-    data: U; id: string,
+  async update<T extends unknown = E>({
+    data,
+    id,
+    opts,
+  }: {
+    data: U;
+    id: string;
 
     opts?: {
       throwIfNotFound?: boolean;
       message?: string;
-    }
-   }) {
-
+    };
+  }) {
     if (opts?.throwIfNotFound) {
       await this.getOneById(id, opts);
     }
-
 
     const [rows] = await this.db
       .update(this.table)
@@ -175,7 +179,17 @@ export abstract class BaseService<C extends Object = Object, U extends Object = 
    * @returns A promise that resolves to the deleted record.
    * @template T - The type of the deleted record.
    */
-  async delete<T extends unknown = E>(id: string) {
+  async delete<T extends unknown = E>(
+    id: string,
+    opts?: {
+      throwIfNotFound?: boolean;
+      message?: string;
+    },
+  ) {
+    if (opts?.throwIfNotFound) {
+      await this.getOneById(id, opts);
+    }
+
     const [rows] = await this.db
       .delete(this.table)
       .where(eq(get(this.table, 'id'), id))

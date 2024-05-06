@@ -3,7 +3,7 @@ import { Router } from 'express';
 import Container from 'typedi';
 import { KitTestController } from './kit-test.controller';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
-import {KitTestDto, QueryKitTestDto } from './kit-test.dto';
+import { KitTestDto, QueryKitTestDto } from './kit-test.dto';
 
 export class KitTestRoute implements IRoutes {
   path = '/kit-tests';
@@ -15,6 +15,7 @@ export class KitTestRoute implements IRoutes {
   }
 
   initRoutes(): void {
+    this.router.get(`${this.path}/for-select`, this.controller.getForSelect);
     this.router.get(`${this.path}/get-all`, this.controller.getAll);
     this.router.get(`${this.path}/:id`, this.controller.getOneById);
     this.router.post(`${this.path}`, ValidationMiddleware(KitTestDto), this.controller.create);

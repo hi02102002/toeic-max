@@ -8,23 +8,26 @@ import slugify from 'slugify';
 @Service()
 export class KitTestService extends BaseService<KitTestDto, Partial<KitTestDto>, TTest> {
   constructor() {
-    super(kits);
+    super(tests);
   }
 
   async create<T = TTest>(data: KitTestDto) {
-    const test = await super.create({
-      ...data,
-      slug: slugify(data.name, { lower: true }),
-    }, {
-      foundKey: 'name',
-      message: `Test with this name already exists`,
-      throwIfFound: true,
-    });
+    const test = await super.create(
+      {
+        ...data,
+        slug: slugify(data.name, { lower: true }),
+      },
+      {
+        foundKey: 'name',
+        message: `Test with this name already exists`,
+        throwIfFound: true,
+      },
+    );
 
     return test as T;
   }
 
-  async update<T = TTest>({ data, id }: { data: KitTestDto; id: string;}) {
+  async update<T = TTest>({ data, id }: { data: KitTestDto; id: string }) {
     const test = await super.update({
       id,
       opts: {
@@ -34,7 +37,7 @@ export class KitTestService extends BaseService<KitTestDto, Partial<KitTestDto>,
       data: {
         ...data,
         slug: slugify(data.name, { lower: true }),
-      }
+      },
     });
 
     return test as T;
