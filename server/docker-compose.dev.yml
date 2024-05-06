@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  toeic_max_db:
+    container_name: toeic-max-db
+    image: postgres:latest
+    ports:
+      - '5435:5432'
+    volumes:
+      - toeic_max_data:/var/lib/postgresql/data
+    restart: 'unless-stopped'
+    networks:
+      - toeic_server
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+  toeic_max_redis:
+    container_name: toeic-max-redis
+    image: redis:latest
+    volumes:
+      - toeic_max_redis_data:/data
+    ports:
+      - '6389:6379'
+    restart: 'unless-stopped'
+    networks:
+      - toeic_server
+
+networks:
+  toeic_server:
+    driver: bridge
+
+volumes:
+  toeic_max_data:
+    driver: local
+  toeic_max_redis_data:
+    driver: local
