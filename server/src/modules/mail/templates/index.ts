@@ -1,2 +1,2 @@
-export * from './forgot-password';
-export * from './verify-account';
+export * from './forgot-password'
+export * from './verify-account'

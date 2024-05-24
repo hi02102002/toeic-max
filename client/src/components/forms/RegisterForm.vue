@@ -4,11 +4,7 @@
             <FormItem>
                 <FormLabel required> Name </FormLabel>
                 <FormControl>
-                    <Input
-                        type="text"
-                        placeholder="Enter your name"
-                        v-bind="componentField"
-                    />
+                    <Input type="text" placeholder="Enter your name" v-bind="componentField" />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -17,11 +13,7 @@
             <FormItem>
                 <FormLabel required> Email </FormLabel>
                 <FormControl>
-                    <Input
-                        type="text"
-                        placeholder="Enter your email"
-                        v-bind="componentField"
-                    />
+                    <Input type="text" placeholder="Enter your email" v-bind="componentField" />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -31,11 +23,7 @@
                 <FormLabel required> Password </FormLabel>
 
                 <FormControl>
-                    <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        v-bind="componentField"
-                    />
+                    <Input type="password" placeholder="Enter your password" v-bind="componentField" />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -44,11 +32,7 @@
             <FormItem>
                 <FormLabel required> Confirm Password </FormLabel>
                 <FormControl>
-                    <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        v-bind="componentField"
-                    />
+                    <Input type="password" placeholder="Enter your password" v-bind="componentField" />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -79,7 +63,7 @@ const props = withDefaults(
 )
 
 const emits = defineEmits({
-    submit(payload: RegisterSchemaType) {},
+    submit(_payload: RegisterSchemaType) { },
 })
 
 const form = useForm({

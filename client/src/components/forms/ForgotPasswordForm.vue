@@ -4,11 +4,7 @@
             <FormItem>
                 <FormLabel required> Email </FormLabel>
                 <FormControl>
-                    <Input
-                        type="text"
-                        placeholder="Enter your email"
-                        v-bind="componentField"
-                    />
+                    <Input type="text" placeholder="Enter your email" v-bind="componentField" />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -42,7 +38,7 @@ const props = withDefaults(
 )
 
 const emits = defineEmits({
-    submit(payload: ForgotPasswordSchemaType) {},
+    submit(_payload: ForgotPasswordSchemaType) { },
 })
 
 const form = useForm({

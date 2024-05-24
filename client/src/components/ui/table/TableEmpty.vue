@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
-import TableRow from './TableRow.vue'
-import TableCell from './TableCell.vue'
-import { cn } from '@/utils'
+import { cn } from '@/utils';
+import { computed, type HTMLAttributes } from 'vue';
+import TableCell from './TableCell.vue';
+import TableRow from './TableRow.vue';
 
 const props = withDefaults(
     defineProps<{
+        // eslint-disable-next-line vue/require-default-prop
         class?: HTMLAttributes['class']
         colspan?: number
     }>(),
@@ -15,6 +16,7 @@ const props = withDefaults(
 )
 
 const delegatedProps = computed(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { class: _, ...delegated } = props
 
     return delegated
@@ -23,15 +25,11 @@ const delegatedProps = computed(() => {
 
 <template>
     <TableRow>
-        <TableCell
-            :class="
-                cn(
-                    'p-4 whitespace-nowrap align-middle text-sm text-foreground',
-                    props.class,
-                )
-            "
-            v-bind="delegatedProps"
-        >
+        <TableCell :class="cn(
+            'p-4 whitespace-nowrap align-middle text-sm text-foreground',
+            props.class,
+        )
+            " v-bind="delegatedProps">
             <div class="flex items-center justify-center py-10">
                 <slot />
             </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router/auto'
-import { Toaster } from 'vue-sonner'
+import { RouterView } from 'vue-router/auto';
+import { Toaster } from 'vue-sonner';
 </script>
 
 <template>

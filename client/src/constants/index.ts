@@ -17,6 +17,12 @@ export const API_ENDPOINTS = {
         CURRENT_USER: '/auth/current-user',
         LOGOUT: '/auth/logout',
     },
+
+    KITS: {
+        INDEX: '/kits',
+        ALL: '/kits/all',
+        FOR_SELECT: '/kits/for-select',
+    },
 }
 
 export const ERROR_MESSAGE =

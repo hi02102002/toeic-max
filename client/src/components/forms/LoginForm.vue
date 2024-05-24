@@ -4,11 +4,7 @@
             <FormItem>
                 <FormLabel required> Email </FormLabel>
                 <FormControl>
-                    <Input
-                        type="text"
-                        placeholder="Enter your email"
-                        v-bind="componentField"
-                    />
+                    <Input type="text" placeholder="Enter your email" v-bind="componentField" />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -17,19 +13,12 @@
             <FormItem>
                 <div class="flex items-center justify-between">
                     <FormLabel required> Password </FormLabel>
-                    <RouterLink
-                        class="text-sm text-muted-foreground hover:underline"
-                        :to="ROUTES.AUTH.FORGOT_PASSWORD"
-                    >
+                    <RouterLink class="text-sm text-muted-foreground hover:underline" :to="ROUTES.AUTH.FORGOT_PASSWORD">
                         Forgot password?
                     </RouterLink>
                 </div>
                 <FormControl>
-                    <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        v-bind="componentField"
-                    />
+                    <Input type="password" placeholder="Enter your password" v-bind="componentField" />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -61,7 +50,7 @@ const props = withDefaults(
 )
 
 const emits = defineEmits({
-    submit(payload: LoginSchemaType) {},
+    submit(_payload: LoginSchemaType) { },
 })
 
 const form = useForm({

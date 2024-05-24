@@ -1,16 +1,16 @@
-import { Transform } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator';
-import { BaseQueryDto, IBasePagingQuery } from '@/libs/api';
+import { BaseQueryDto } from '@/libs/api/crud-service'
+import { Transform } from 'class-transformer'
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class KitDto {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+    @IsString()
+    @IsNotEmpty()
+    name: string
 
-  @IsNumber()
-  @IsNotEmpty()
-  @Transform(({ value }) => parseInt(value))
-  year: number;
+    @IsNumber()
+    @IsNotEmpty()
+    @Transform(({ value }) => parseInt(value))
+    year: number
 }
 
 export class QueryKitDto extends BaseQueryDto {}

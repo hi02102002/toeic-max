@@ -1,8 +1,13 @@
-import { sql } from 'drizzle-orm';
-import type { AnyColumn, AnyTable, InferSelectModel, SQL } from 'drizzle-orm';
-import type { PgColumn, PgTable, SelectedFields, TableConfig } from 'drizzle-orm/pg-core';
-import type { SelectResultFields } from 'drizzle-orm/query-builders/select.types';
-import { omit } from 'lodash';
+import { sql } from 'drizzle-orm'
+import type { AnyColumn, AnyTable, InferSelectModel, SQL } from 'drizzle-orm'
+import type {
+    PgColumn,
+    PgTable,
+    SelectedFields,
+    TableConfig,
+} from 'drizzle-orm/pg-core'
+import type { SelectResultFields } from 'drizzle-orm/query-builders/select.types'
+import { omit } from 'lodash'
 
 /**
  * Returns a SQL query that selects distinct values based on the specified column.
@@ -12,7 +17,7 @@ import { omit } from 'lodash';
  * @returns {SQLQuery<Column['_']['data']>} - The SQL query selecting distinct values on the specified column.
  */
 export function distinctOn<Column extends AnyColumn>(column: Column) {
-  return sql<Column['_']['data']>`distinct on (${column}) ${column}`;
+    return sql<Column['_']['data']>`distinct on (${column}) ${column}`
 }
 
 /**
@@ -21,17 +26,19 @@ export function distinctOn<Column extends AnyColumn>(column: Column) {
  * @returns The JSON object as a SQL query.
  */
 export function jsonBuildObject<T extends SelectedFields>(shape: T) {
-  const chunks: SQL[] = [];
+    const chunks: SQL[] = []
 
-  Object.entries(shape).forEach(([key, value]) => {
-    if (chunks.length > 0) {
-      chunks.push(sql.raw(','));
-    }
-    chunks.push(sql.raw(`'${key}',`));
-    chunks.push(sql`${value}`);
-  });
+    Object.entries(shape).forEach(([key, value]) => {
+        if (chunks.length > 0) {
+            chunks.push(sql.raw(','))
+        }
+        chunks.push(sql.raw(`'${key}',`))
+        chunks.push(sql`${value}`)
+    })
 
-  return sql<SelectResultFields<T>>`coalesce(jsonb_build_object(${sql.join(chunks)}), '{}')`;
+    return sql<SelectResultFields<T>>`coalesce(jsonb_build_object(${sql.join(
+        chunks,
+    )}), '{}')`
 }
 
 /**
@@ -43,12 +50,15 @@ export function jsonBuildObject<T extends SelectedFields>(shape: T) {
  * @param {Table} table - The table to aggregate values from.
  * @returns {SQLQuery<SelectResultFields<T>[]>} - The SQL query for aggregating the JSON object.
  */
-export function jsonAggBuildDistinctObject<T extends SelectedFields, Table extends AnyTable<TableConfig>>(shape: T, table: Table) {
-  return sql<SelectResultFields<T>[]>`
+export function jsonAggBuildDistinctObject<
+    T extends SelectedFields,
+    Table extends AnyTable<TableConfig>,
+>(shape: T, table: Table) {
+    return sql<SelectResultFields<T>[]>`
         jsonb_agg(
            distinct ${jsonBuildObject(shape)} 
         ) filter (where ${table} is not null)
-    `;
+    `
 }
 /**
  * Builds a JSON object using the specified shape and table, and returns the result as a JSON array.
@@ -64,14 +74,24 @@ export function jsonAggBuildDistinctObject<T extends SelectedFields, Table exten
  *
  * @returns A SQL query that builds a JSON array using the specified shape and table.
  */
-export function jsonAggBuildObject<T extends SelectedFields, Column extends AnyColumn, Table extends AnyTable<TableConfig>>(
-  shape: T,
-  table: Table,
-  options?: { orderBy?: { colName: Column; direction: 'ASC' | 'DESC' } },
+export function jsonAggBuildObject<
+    T extends SelectedFields,
+    Column extends AnyColumn,
+    Table extends AnyTable<TableConfig>,
+>(
+    shape: T,
+    table: Table,
+    options?: { orderBy?: { colName: Column; direction: 'ASC' | 'DESC' } },
 ) {
-  return sql<SelectResultFields<T>[]>`coalesce(jsonb_agg(${jsonBuildObject(shape)}${
-    options?.orderBy ? sql`order by ${options.orderBy.colName} ${sql.raw(options.orderBy.direction)}` : undefined
-  }) filter (where ${table} is not null), '${sql`[]`}')`;
+    return sql<SelectResultFields<T>[]>`coalesce(jsonb_agg(${jsonBuildObject(
+        shape,
+    )}${
+        options?.orderBy
+            ? sql`order by ${options.orderBy.colName} ${sql.raw(
+                  options.orderBy.direction,
+              )}`
+            : undefined
+    }) filter (where ${table} is not null), '${sql`[]`}')`
 }
 
 /**
@@ -81,7 +101,9 @@ export function jsonAggBuildObject<T extends SelectedFields, Column extends AnyC
  * @returns A SQL query that aggregates the rows of the table into a JSON array.
  */
 export function jsonAgg<Table extends AnyTable<TableConfig>>(table: Table) {
-  return sql<InferSelectModel<Table>[]>`json_agg(${table}) filter (where ${table} is not null)`;
+    return sql<
+        InferSelectModel<Table>[]
+    >`json_agg(${table}) filter (where ${table} is not null)`
 }
 
 /**
@@ -91,22 +113,22 @@ export function jsonAgg<Table extends AnyTable<TableConfig>>(table: Table) {
  * @returns An object containing all the fields of the table.
  */
 export function selectAllFields<Table extends PgTable>(table: Table) {
-  const _table = omit(table, ['_', '$inferInsert', '$inferSelect', 'getSQL']);
-  const result: Record<string, PgColumn> = {};
+    const _table = omit(table, ['_', '$inferInsert', '$inferSelect', 'getSQL'])
+    const result: Record<string, PgColumn> = {}
 
-  Object.entries(_table).forEach(([key, value]) => {
-    result[key] = value as any;
-  });
+    Object.entries(_table).forEach(([key, value]) => {
+        result[key] = value as any
+    })
 
-  return result;
+    return result
 }
 
 /**
  * Represents a SQL query that checks if null is null.
  */
-export const nullIsNull = sql`null is null`;
+export const nullIsNull = sql`null is null`
 
 /**
  * Represents a SQL query to count the number of records.
  */
-export const count = sql<number>`count(*)`;
+export const count = sql<number>`count(*)`

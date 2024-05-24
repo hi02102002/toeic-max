@@ -1,29 +1,30 @@
-import { kits, tests } from '@/database/schema';
-import { BaseQueryDto, BaseService, TGetPagingQuery } from '@/libs/api';
-import { Service } from 'typedi';
-import { KitDto, QueryKitDto } from './kits.dto';
-import { TKit, TKitPaginate } from './kits.type';
-import { eq } from 'drizzle-orm';
-import { jsonAggBuildObject } from '@/database/helper';
+import { kits } from '@/database/schema'
+import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
+import { Service } from 'typedi'
+import { KitDto, QueryKitDto } from './kits.dto'
+import { TKit } from './kits.type'
 
 @Service()
-export class KitsService extends BaseService<KitDto, Partial<KitDto>, TKit> {
-  constructor() {
-    super(kits);
-  }
+export class KitsService extends CRUDBaseService<
+    KitDto,
+    Partial<KitDto>,
+    TKit
+> {
+    constructor() {
+        super(kits)
+    }
 
-  async getPaging({ query }: TGetPagingQuery<QueryKitDto>) {
-    const { items, total } = await super.getPaging({
-      query,
-      opts: {
-        searchFields: [kits.name],
-        wheres: [eq(kits.id, 'p5h1l9i5phvbisywz9mzyp8o')],
-      },
-    });
+    async getPaging({ query }: TGetPagingQuery<QueryKitDto>) {
+        const { items, total } = await super.getPaging({
+            query,
+            opts: {
+                searchFields: [kits.name],
+            },
+        })
 
-    return {
-      items,
-      total,
-    };
-  }
+        return {
+            items,
+            total,
+        }
+    }
 }

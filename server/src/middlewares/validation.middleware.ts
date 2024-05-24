@@ -1,7 +1,7 @@
-import { HttpException } from '@/exceptions/http-exception';
-import { plainToInstance } from 'class-transformer';
-import { type ValidationError, validateOrReject } from 'class-validator';
-import type { NextFunction, Request, Response } from 'express';
+import { HttpException } from '@/exceptions/http-exception'
+import { plainToInstance } from 'class-transformer'
+import { type ValidationError, validateOrReject } from 'class-validator'
+import type { NextFunction, Request, Response } from 'express'
 
 /**
  * @name ValidationMiddleware
@@ -12,26 +12,30 @@ import type { NextFunction, Request, Response } from 'express';
  * @param forbidNonWhitelisted If you would rather to have an error thrown when any non-whitelisted properties are present
  */
 export const ValidationMiddleware = (
-  type: any,
-  field?: 'body' | 'query' | 'params',
-  skipMissingProperties = false,
-  whitelist = true,
-  forbidNonWhitelisted = true,
+    type: any,
+    field?: 'body' | 'query' | 'params',
+    skipMissingProperties = false,
+    whitelist = true,
+    forbidNonWhitelisted = true,
 ) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const dto = plainToInstance(type, req[field || 'body']);
-    validateOrReject(dto, {
-      skipMissingProperties,
-      whitelist,
-      forbidNonWhitelisted,
-    })
-      .then(() => {
-        req[field || 'body'] = dto;
-        next();
-      })
-      .catch((errors: ValidationError[]) => {
-        const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(', ');
-        next(new HttpException(400, message));
-      });
-  };
-};
+    return (req: Request, res: Response, next: NextFunction) => {
+        const dto = plainToInstance(type, req[field || 'body'])
+        validateOrReject(dto, {
+            skipMissingProperties,
+            whitelist,
+            forbidNonWhitelisted,
+        })
+            .then(() => {
+                req[field || 'body'] = dto
+                next()
+            })
+            .catch((errors: ValidationError[]) => {
+                const message = errors
+                    .map((error: ValidationError) =>
+                        Object.values(error.constraints),
+                    )
+                    .join(', ')
+                next(new HttpException(400, message))
+            })
+    }
+}
