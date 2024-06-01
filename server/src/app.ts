@@ -1,7 +1,7 @@
 import { CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT } from '@config'
 import type { IRoutes } from '@interfaces/routes.interface'
 import { ErrorMiddleware } from '@middlewares/error.middleware'
-import { stream, logger } from '@utils/logger'
+import { logger, stream } from '@utils/logger'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -10,6 +10,8 @@ import helmet from 'helmet'
 import hpp from 'hpp'
 import morgan from 'morgan'
 import 'reflect-metadata'
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSpec } from './libs/swagger'
 
 export class App {
     public app: express.Application
@@ -24,6 +26,7 @@ export class App {
         this.initializeMiddlewares()
         this.initializeRoutes(routes)
         this.initializeErrorHandling()
+        this.initializeSwagger()
     }
 
     public listen() {
@@ -58,5 +61,18 @@ export class App {
 
     private initializeErrorHandling() {
         this.app.use(ErrorMiddleware)
+    }
+
+    private initializeSwagger() {
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
+        this.app.get('/api-docs.json', (_req, res) => {
+            res.setHeader('Content-Type', 'application/json')
+            res.send(swaggerSpec)
+        })
+
+        logger.info(
+            `This docs is available at http://localhost:${this.port}/api-docs`,
+        )
     }
 }

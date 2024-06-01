@@ -59,6 +59,8 @@ export const tests = pgTable('test_kits', {
         onDelete: 'set null',
     }),
     type: text('type').default('toeic'),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
 })
 
 export const sections = pgTable('sections', {
@@ -75,74 +77,56 @@ export const sections = pgTable('sections', {
     intro_answer: text('intro_answer'),
     section_title: text('section_title'),
     section_description: text('section_description'),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
 })
 
-export const question_sections = pgTable(
-    'question_sections',
-    {
-        id: varchar('id')
-            .primaryKey()
-            .$defaultFn(() => createId()),
-        test_kit_id: varchar('test_kit_id').references(() => tests.id, {
-            onDelete: 'set null',
-        }),
-        part: integer('part').$type<1 | 2 | 3 | 4 | 5 | 6 | 7>(),
-        image_urls: json('image_urls').$type<string[]>(),
-        audio_url: text('audio_url'),
-        teaser: json('teaser').$type<{
-            text: string | null
-            trans: {
-                [key: string]: string | null
-            }
-        }>(),
-        location: text('location'),
-    },
-    ({ test_kit_id, location, part }) => {
-        return {
-            unique: unique('question_sections_unique').on(
-                test_kit_id,
-                location,
-                part,
-            ),
+export const question_sections = pgTable('question_sections', {
+    id: varchar('id')
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    test_kit_id: varchar('test_kit_id').references(() => tests.id, {
+        onDelete: 'set null',
+    }),
+    part: integer('part').$type<1 | 2 | 3 | 4 | 5 | 6 | 7>(),
+    image_urls: json('image_urls').$type<string[]>(),
+    audio_url: text('audio_url'),
+    teaser: json('teaser').$type<{
+        text: string | null
+        trans: {
+            [key: string]: string | null
         }
-    },
-)
+    }>(),
+    location: text('location'),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+})
 
-export const questions = pgTable(
-    'questions',
-    {
-        id: varchar('id')
-            .primaryKey()
-            .$defaultFn(() => createId()),
-        opts: json('opts').$type<{
-            a: string
-            b: string
-            c: string
-            d: string
-        }>(),
-        ans: text('ans').$type<'a' | 'b' | 'c' | 'd'>(),
-        trans: json('tran').$type<{
-            [key: string]: string
-        }>(),
-        p: integer('p').notNull(),
-        location: integer('location').notNull(),
-        question_section_id: varchar('question_section_id').references(
-            () => question_sections.id,
-            {
-                onDelete: 'cascade',
-            },
-        ),
-    },
-    ({ question_section_id, p, location }) => {
-        return {
-            unique: unique('questions_unique').on(
-                question_section_id,
-                p,
-                location,
-            ),
-        }
-    },
-)
+export const questions = pgTable('questions', {
+    id: varchar('id')
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    opts: json('opts').$type<{
+        a: string
+        b: string
+        c: string
+        d: string
+    }>(),
+    ans: text('ans').$type<'a' | 'b' | 'c' | 'd'>(),
+    trans: json('tran').$type<{
+        [key: string]: string
+    }>(),
+    p: integer('p').notNull(),
+    location: integer('location').notNull(),
+    question_section_id: varchar('question_section_id').references(
+        () => question_sections.id,
+        {
+            onDelete: 'cascade',
+        },
+    ),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+})
 
 export const topics = pgTable('topics', {
     id: varchar('id')
@@ -152,6 +136,8 @@ export const topics = pgTable('topics', {
     parent_id: varchar('parent_id'),
     level: integer('level'),
     slug: text('slug').unique(),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
 })
 
 export const vocabularies = pgTable(
@@ -170,6 +156,8 @@ export const vocabularies = pgTable(
             onDelete: 'cascade',
         }),
         category: text('category'),
+        created_at: timestamp('created_at').defaultNow(),
+        updated_at: timestamp('updated_at').defaultNow(),
     },
     ({ name, topic_id, example }) => {
         return {

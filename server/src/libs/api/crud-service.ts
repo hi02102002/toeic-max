@@ -1,4 +1,5 @@
 import { DB, db } from '@/database/db'
+import { HttpException } from '@/exceptions/http-exception'
 import { toBoolean } from '@/utils/common'
 import { Transform } from 'class-transformer'
 import {
@@ -15,7 +16,8 @@ import {
     SelectedFields,
     TableConfig,
 } from 'drizzle-orm/pg-core'
-import { get, isEmpty } from 'lodash'
+import { StatusCodes } from 'http-status-codes'
+import { get, isEmpty, lowerCase } from 'lodash'
 
 export class BaseQueryDto implements IBasePagingQuery {
     @IsNumberString()
@@ -72,10 +74,16 @@ export abstract class CRUDBaseService<
 > {
     protected db: DB = db
     protected table: PgTable<TableConfig>
+    protected modelName: string
 
-    constructor(table: PgTable<TableConfig>) {
+    constructor(
+        table: PgTable<TableConfig>,
+
+        modelName: string,
+    ) {
         this.db = db
         this.table = table
+        this.modelName = modelName
     }
 
     /**
@@ -102,7 +110,11 @@ export abstract class CRUDBaseService<
             .limit(1)
 
         if (isEmpty(rows) && opts?.throwIfNotFound) {
-            throw new Error(opts.message || 'Record not found')
+            throw new HttpException(
+                StatusCodes.NOT_FOUND,
+                opts?.message ||
+                    `Could not find ${this.modelName} with this id.`,
+            )
         }
 
         if (isEmpty(rows)) return null
@@ -129,14 +141,7 @@ export abstract class CRUDBaseService<
      * @param {C} data - The data to be inserted.
      * @returns {Promise<T>} - A promise that resolves to the newly created record.
      */
-    async create<T = E>(
-        data: C,
-        opts?: {
-            throwIfFound?: boolean
-            message?: string
-            foundKey?: keyof C
-        },
-    ) {
+    async create<T = E>(data: C) {
         try {
             const [rows] = await this.db
                 .insert(this.table)
@@ -145,16 +150,11 @@ export abstract class CRUDBaseService<
 
             return rows as T
         } catch (error: any) {
-            console.log(opts)
-
-            console.log(opts?.throwIfFound && error.code === '23505')
-
-            if (opts?.throwIfFound && error.code === '23505') {
+            if (error?.code === '23505') {
                 throw new Error(
-                    opts.message ||
-                        `Record with this ${String(
-                            opts.foundKey,
-                        )} already exists`,
+                    `This ${lowerCase(
+                        this.modelName,
+                    )} already exists in system.`,
                 )
             }
 
@@ -184,17 +184,28 @@ export abstract class CRUDBaseService<
             message?: string
         }
     }) {
-        if (opts?.throwIfNotFound) {
-            await this.getOneById(id, opts)
+        try {
+            if (opts?.throwIfNotFound) {
+                await this.getOneById(id, opts)
+            }
+
+            const [rows] = await this.db
+                .update(this.table)
+                .set(data as Record<string, unknown>)
+                .where(eq(get(this.table, 'id'), id))
+                .returning()
+
+            return rows as T
+        } catch (error) {
+            if (error?.code === '23505') {
+                throw new Error(
+                    `This ${lowerCase(
+                        this.modelName,
+                    )} already exists in system.`,
+                )
+            }
+            throw error
         }
-
-        const [rows] = await this.db
-            .update(this.table)
-            .set(data as Record<string, unknown>)
-            .where(eq(get(this.table, 'id'), id))
-            .returning()
-
-        return rows as T
     }
 
     /**
@@ -325,6 +336,7 @@ export abstract class CRUDBaseService<
                 label: fieldLabel,
             })
             .from(this.table)
+            .orderBy(asc(fieldLabel))
 
         return rows
     }

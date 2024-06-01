@@ -30,6 +30,14 @@
         {
             name: 'Kits',
             url: '/admin/kits'
+        },
+        {
+            name: 'Tests',
+            url: '/admin/kit-tests'
+        },
+        {
+            name: 'Questions',
+            url: '/admin/questions'
         }
     ]" class="fixed top-14 left-0 right-0 h-14 bg-white" />
 </template>

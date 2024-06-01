@@ -35,7 +35,6 @@ import type { ColumnDef, OnChangeFn, PaginationState, SortingState } from '@tans
 import { useUrlSearchParams, watchDebounced } from '@vueuse/core';
 import { XIcon } from 'lucide-vue-next';
 import { defineProps, ref, watch } from 'vue';
-import { useRoute } from 'vue-router/auto';
 import { Button } from '../button';
 import { DataTable } from '../data-table';
 import { Input } from '../input';
@@ -45,13 +44,13 @@ type Props = {
     queryKey: string
     columns: ColumnDef<T, unknown>[]
     apiAction: (params: TBaseQueryParams) => Promise<TPaginateResponse<T>>
+    query?: Record<string, unknown>
 }
 
 const props = defineProps<Props>()
-const route = useRoute()
 
 
-const params = useUrlSearchParams<TBaseQueryParams>('history', {
+const params = useUrlSearchParams<Record<string, any>>('history', {
     initialValue: {
         orderBy: undefined,
         asc: undefined,
@@ -103,12 +102,25 @@ watch(sorting, (value) => {
 
 watch(pagination, (value) => {
     const { pageIndex, pageSize } = value
-    params.page = Number(pageIndex || 1)
+
+    params.page = Number(pageIndex) + 1
     params.limit = Number(pageSize || 10)
 })
 
+watch(() => props.query, (newValue) => {
+    if (!newValue) return;
 
-watch(() => params, (value) => {
+    for (const [key, value] of Object.entries(newValue)) {
+        if (!value) {
+            params[key] = undefined
+        } else {
+            params[key] = value
+        }
+    }
+}, { immediate: true, deep: true });
+
+
+watch(params, (value) => {
     pagination.value.pageIndex = value.page ? Number(value.page) - 1 : 0
     pagination.value.pageSize = value.limit ? Number(value.limit) : 10
 
@@ -126,6 +138,7 @@ watch(() => params, (value) => {
     search.value = value.q || ''
 }, { immediate: true, deep: true })
 
+
 watchDebounced(
     search, (value) => {
         params.q = value
@@ -134,10 +147,6 @@ watchDebounced(
 }
 )
 
-
-watch(route, async (fullPath) => {
-    console.log(fullPath)
-}, { immediate: true, deep: true })
 
 </script>
 

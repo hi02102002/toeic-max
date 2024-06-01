@@ -23,7 +23,14 @@ export const API_ENDPOINTS = {
         ALL: '/kits/all',
         FOR_SELECT: '/kits/for-select',
     },
+    KIT_TESTS: {
+        INDEX: '/kit-tests',
+        ALL: '/kit-tests/all',
+        FOR_SELECT: '/kit-tests/for-select',
+    },
 }
 
 export const ERROR_MESSAGE =
     'Something went wrong while requesting the server. Please try again later.'
+
+export const NOT_CHOOSE = 'NOT_CHOOSE'

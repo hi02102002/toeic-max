@@ -1,54 +1,19 @@
 {
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1714224876560,
-      "tag": "0000_empty_iceman",
+      "version": "6",
+      "when": 1717181223812,
+      "tag": "0000_great_sersi",
       "breakpoints": true
     },
     {
       "idx": 1,
-      "version": "5",
-      "when": 1714225343476,
-      "tag": "0001_harsh_gunslinger",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1714315520513,
-      "tag": "0002_neat_katie_power",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1714315638760,
-      "tag": "0003_first_spirit",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1714320097601,
-      "tag": "0004_tidy_nitro",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1714325044786,
-      "tag": "0005_right_masked_marvel",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1714325307110,
-      "tag": "0006_tiny_swordsman",
+      "version": "6",
+      "when": 1717238774123,
+      "tag": "0001_narrow_the_captain",
       "breakpoints": true
     }
   ]

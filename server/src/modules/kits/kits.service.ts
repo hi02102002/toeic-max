@@ -11,7 +11,18 @@ export class KitsService extends CRUDBaseService<
     TKit
 > {
     constructor() {
-        super(kits)
+        super(kits, 'Kit')
+    }
+
+    async create<T = TKit>(data: KitDto): Promise<T> {
+        const { name, year } = data
+
+        const kit = await super.create<T>({
+            name: `${name} ${year}`,
+            year,
+        })
+
+        return kit
     }
 
     async getPaging({ query }: TGetPagingQuery<QueryKitDto>) {

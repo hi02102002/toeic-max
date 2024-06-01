@@ -22,4 +22,8 @@ export class KitTestDto {
     slug: string
 }
 
-export class QueryKitTestDto extends BaseQueryDto {}
+export class QueryKitTestDto extends BaseQueryDto {
+    @IsString()
+    @IsOptional()
+    kit_id?: string
+}

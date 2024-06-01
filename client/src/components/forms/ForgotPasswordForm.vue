@@ -1,5 +1,5 @@
 <template>
-    <form class="space-y-3" @submit="handleSubmit" :id="props.id">
+    <form :id="props.id" class="space-y-3" @submit="handleSubmit">
         <FormField v-slot="{ componentField }" name="email">
             <FormItem>
                 <FormLabel required> Email </FormLabel>

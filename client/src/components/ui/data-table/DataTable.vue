@@ -22,7 +22,7 @@ import {
 import { valueUpdater } from '@/utils';
 
 import { Loader2 } from 'lucide-vue-next';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref } from 'vue';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table';
 import TablePagination from './TablePagination.vue';
 
@@ -52,26 +52,10 @@ const emits = defineEmits<{
 }>()
 
 const columnVisibility = ref<VisibilityState>({})
+
+
 const rowSelection = ref({})
-const pagination = ref<PaginationState>(props.pagination || {
-    pageIndex: 0,
-    pageSize: 10
-})
-const sorting = ref<SortingState>(props.sorting || [])
 
-watch(() => props, (value) => {
-    if (value.pagination) {
-        pagination.value.pageIndex = value.pagination.pageIndex
-        pagination.value.pageSize = value.pagination.pageSize
-    }
-
-    if (value.sorting && value.sorting.length > 0) {
-        sorting.value[0].id = value.sorting[0].id
-        sorting.value[0].desc = value.sorting[0].desc
-    }
-
-
-}, { immediate: true, deep: true })
 
 const tableOptions = reactive<TableOptions<T>>({
     get columns() {
@@ -81,9 +65,19 @@ const tableOptions = reactive<TableOptions<T>>({
         return props.items
     },
     state: {
-        sorting: sorting.value,
-        rowSelection: rowSelection.value,
-        pagination: pagination.value,
+
+        get columnVisibility() {
+            return columnVisibility.value
+        },
+        get rowSelection() {
+            return rowSelection.value
+        },
+        get pagination() {
+            return props.pagination
+        },
+        get sorting() {
+            return props.sorting
+        },
     },
     enableRowSelection: true,
     onSortingChange: (updaterOrValue) => {
@@ -100,8 +94,9 @@ const tableOptions = reactive<TableOptions<T>>({
     getSortedRowModel: getSortedRowModel(),
     manualSorting: true,
     manualPagination: true,
-    pageCount: props.pageCount,
-    rowCount: props.rowCount,
+    get pageCount() {
+        return props.pageCount
+    }
 })
 
 

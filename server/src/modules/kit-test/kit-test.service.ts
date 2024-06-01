@@ -1,9 +1,10 @@
 import { tests } from '@/database/schema'
-import { CRUDBaseService } from '@/libs/api/crud-service'
+import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
+import { eq } from 'drizzle-orm'
 import slugify from 'slugify'
 import { Service } from 'typedi'
-import { KitTestDto } from './kit-test.dto'
-import { TTest } from './test.type'
+import { KitTestDto, QueryKitTestDto } from './kit-test.dto'
+import { TTest } from './kit-test.type'
 
 @Service()
 export class KitTestService extends CRUDBaseService<
@@ -12,21 +13,33 @@ export class KitTestService extends CRUDBaseService<
     TTest
 > {
     constructor() {
-        super(tests)
+        super(tests, 'Test')
+    }
+
+    async getPaging(opts: TGetPagingQuery<QueryKitTestDto>) {
+        const { query } = opts
+
+        const { items, total } = await super.getPaging({
+            query,
+            opts: {
+                searchFields: [tests.name, tests.slug],
+                wheres: [
+                    query.kit_id ? eq(tests.kit_id, query.kit_id) : undefined,
+                ],
+            },
+        })
+
+        return {
+            items,
+            total,
+        }
     }
 
     async create<T = TTest>(data: KitTestDto) {
-        const test = await super.create(
-            {
-                ...data,
-                slug: slugify(data.name, { lower: true }),
-            },
-            {
-                foundKey: 'name',
-                message: `Test with this name already exists`,
-                throwIfFound: true,
-            },
-        )
+        const test = await super.create({
+            ...data,
+            slug: slugify(`${data.name} ${Date.now()}`, { lower: true }),
+        })
 
         return test as T
     }

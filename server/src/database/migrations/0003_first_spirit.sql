@@ -1,1 +1,0 @@
-ALTER TABLE "test_kits" ALTER COLUMN "kit_id" DROP NOT NULL;

@@ -11,6 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { toTitleCase } from '@/utils';
 import { MixerHorizontalIcon } from '@radix-icons/vue';
 
 interface DataTableViewOptionsProps {
@@ -26,6 +27,8 @@ const columns = computed(() => props.table.getAllColumns()
         column =>
             typeof column.accessorFn !== 'undefined' && column.getCanHide(),
     ))
+
+
 </script>
 
 <template>
@@ -42,7 +45,9 @@ const columns = computed(() => props.table.getAllColumns()
 
             <DropdownMenuCheckboxItem v-for="column in columns" :key="column.id" class="capitalize"
                 :checked="column.getIsVisible()" @update:checked="(value) => column.toggleVisibility(!!value)">
-                {{ column.id }}
+                {{
+                    toTitleCase(column.id)
+                }}
             </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
     </DropdownMenu>

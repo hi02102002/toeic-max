@@ -23,3 +23,8 @@ export type TBaseQueryParams = {
     orderBy?: string
     asc?: boolean
 }
+
+export type TSelectResponse = {
+    value: string
+    label: string
+}

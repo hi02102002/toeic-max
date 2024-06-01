@@ -1,3 +1,4 @@
+import { HttpException } from '@/exceptions/http-exception'
 import { catchAsync } from '@/utils/catch-async'
 import { PgColumn } from 'drizzle-orm/pg-core'
 import { StatusCodes } from 'http-status-codes'
@@ -20,7 +21,7 @@ export abstract class CRUDBaseController<
     constructor(
         protected readonly service: S,
         protected readonly modelName: string,
-        protected readonly forSelectFields: {
+        protected readonly forSelectFields?: {
             value: PgColumn
             label: PgColumn
         },
@@ -132,6 +133,13 @@ export abstract class CRUDBaseController<
      * @returns {Promise<Response>} - The response with the data for select fields.
      */
     public getForSelect = catchAsync(async (_req, res) => {
+        if (!this.forSelectFields) {
+            throw new HttpException(
+                StatusCodes.BAD_REQUEST,
+                'This route is not available for this model.',
+            )
+        }
+
         const data = await this.service.getForSelect({
             fieldLabel: this.forSelectFields.label,
             fieldValue: this.forSelectFields.value,
