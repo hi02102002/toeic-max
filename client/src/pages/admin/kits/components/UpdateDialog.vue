@@ -1,5 +1,5 @@
 <template>
-    <Dialog v-model:open="isOpen">
+    <Dialog v-model:open="model">
         <DialogTrigger as-child>
             <slot />
         </DialogTrigger>
@@ -12,9 +12,9 @@
                     Fill in the form below to update the kit record.
                 </DialogDescription>
             </DialogHeader>
-            <KitForm @submit="handleSubmit" />
+            <KitForm :default-values="props.row.original" @submit="handleSubmit" />
             <DialogFooter>
-                <Button type="submit" form="kit-form">
+                <Button type="submit" form="kit-form" :loading="updateKitMutation.isPending.value">
                     Save changes
                 </Button>
             </DialogFooter>
@@ -26,17 +26,29 @@
 import { KitForm } from '@/components/forms';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useCreateKit } from '@/hooks/kit/use-create-kit';
+import { useUpdateKit } from '@/hooks/kit';
+import type { TKit } from '@/types/kit';
 import type { KitInputSchemaType } from '@/validators/kit';
-import { ref } from 'vue';
+import type { Row } from '@tanstack/vue-table';
 
-const isOpen = ref(false)
+type Props = {
+    row: Row<TKit>
+}
 
-const createKitMutation = useCreateKit()
+const props = defineProps<Props>()
+
+const model = defineModel('isOpen', {
+    type: Boolean,
+})
+
+const updateKitMutation = useUpdateKit()
 
 const handleSubmit = (values: KitInputSchemaType) => {
-    createKitMutation.mutate(values)
-    isOpen.value = false
+    updateKitMutation.mutate({
+        id: props.row.original.id,
+        data: values,
+    })
+    model.value = false
 }
 
 </script>

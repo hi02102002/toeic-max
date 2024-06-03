@@ -1,3 +1,5 @@
+import type { TSelectResponse } from '@/types/common'
+
 export const ROUTES = {
     AUTH: {
         LOGIN: '/login',
@@ -28,9 +30,18 @@ export const API_ENDPOINTS = {
         ALL: '/kit-tests/all',
         FOR_SELECT: '/kit-tests/for-select',
     },
+    QUESTIONS: {
+        INDEX: '/questions',
+        ALL: '/questions/all',
+    },
 }
 
 export const ERROR_MESSAGE =
     'Something went wrong while requesting the server. Please try again later.'
 
 export const NOT_CHOOSE = 'NOT_CHOOSE'
+
+export const PARTS: TSelectResponse[] = [1, 2, 3, 4, 5, 6, 7].map((part) => ({
+    value: part,
+    label: `Part ${part}`,
+}))

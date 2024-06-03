@@ -16,8 +16,17 @@ class KitApi {
     create(data: KitInputSchemaType): Promise<TBaseResponse<TKit>> {
         return http_client.post(API_ENDPOINTS.KITS.INDEX, data)
     }
+
+    update(id: string, data: KitInputSchemaType): Promise<TBaseResponse<TKit>> {
+        return http_client.put(`${API_ENDPOINTS.KITS.INDEX}/${id}`, data)
+    }
+
     select(): Promise<TBaseResponse<TSelectResponse[]>> {
         return http_client.get(API_ENDPOINTS.KITS.FOR_SELECT)
+    }
+
+    delete(id: string): Promise<TBaseResponse<TKit>> {
+        return http_client.delete(`${API_ENDPOINTS.KITS.INDEX}/${id}`)
     }
 }
 

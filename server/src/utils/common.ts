@@ -4,3 +4,7 @@ export const toBoolean = (value: any): boolean => {
     }
     return false
 }
+
+export const getAvatar = (username: string): string => {
+    return `https://ui-avatars.com/api/?background=random&name=${username}`
+}

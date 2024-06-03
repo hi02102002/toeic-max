@@ -10,6 +10,7 @@ import { StatusCodes } from 'http-status-codes'
 import { Service } from 'typedi'
 import { TNewUser, TUser } from './user.type'
 import { ChangePasswordDto, UpdateInfoUserDto } from './users.dto'
+import { getAvatar } from '@/utils/common'
 
 @Service()
 export class UserService extends CRUDBaseService<
@@ -18,7 +19,7 @@ export class UserService extends CRUDBaseService<
     TUser
 > {
     constructor(private readonly firebaseService: FirebaseService) {
-        super(users)
+        super(users, 'User')
     }
 
     public async getOneByEmail(email: string) {
@@ -30,17 +31,10 @@ export class UserService extends CRUDBaseService<
     }
 
     async create<T = TUser>(data: TNewUser) {
-        const user = await super.create(
-            {
-                ...data,
-                avatar: `https://ui-avatars.com/api/?background=random&name=${data.name}`,
-            },
-            {
-                foundKey: 'email',
-                message: `User with this email already exists.`,
-                throwIfFound: true,
-            },
-        )
+        const user = await super.create({
+            ...data,
+            avatar: getAvatar(data.name),
+        })
 
         return user as T
     }

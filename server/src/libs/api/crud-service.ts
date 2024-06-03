@@ -162,6 +162,30 @@ export abstract class CRUDBaseService<
         }
     }
 
+    async createMany<T = E>(data: C[]) {
+        try {
+            const rows = await this.db.transaction(async (trx) => {
+                const [rows] = await trx
+                    .insert(this.table)
+                    .values(data)
+                    .returning()
+                return rows as T
+            })
+
+            return rows
+        } catch (error: any) {
+            if (error?.code === '23505') {
+                throw new Error(
+                    `This ${lowerCase(
+                        this.modelName,
+                    )} already exists in system.`,
+                )
+            }
+
+            throw error
+        }
+    }
+
     /**
      * Updates a record in the database.
      *

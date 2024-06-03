@@ -1,4 +1,4 @@
-import { CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT } from '@config'
+import { LOG_FORMAT, NODE_ENV, PORT } from '@config'
 import type { IRoutes } from '@interfaces/routes.interface'
 import { ErrorMiddleware } from '@middlewares/error.middleware'
 import { logger, stream } from '@utils/logger'
@@ -44,7 +44,12 @@ export class App {
 
     private initializeMiddlewares() {
         this.app.use(morgan(LOG_FORMAT, { stream }))
-        this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }))
+        this.app.use(
+            cors({
+                origin: ['http://localhost:5173', 'http://localhost:4173'],
+                credentials: true,
+            }),
+        )
         this.app.use(hpp())
         this.app.use(helmet())
         this.app.use(compression())

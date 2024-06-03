@@ -10,12 +10,15 @@
             </div>
         </div>
     </div>
+    <ScrollToTop />
 </template>
 
 <script setup lang="ts">
 import PageTitle from '@/components/PageTitle.vue';
+import ScrollToTop from '@/components/ScrollToTop.vue';
 import { Header } from '@/components/layouts/admin';
 import { RouterView, useRoute } from 'vue-router/auto';
+
 
 const route = useRoute()
 

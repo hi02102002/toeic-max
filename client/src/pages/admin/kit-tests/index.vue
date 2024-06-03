@@ -1,11 +1,11 @@
 <template>
     <TableBuilder :columns="cols" :query-key="API_ENDPOINTS.KIT_TESTS.INDEX" :api-action="kitTestApi.getPaginate"
-        :query="query">
+        :query="state">
         <template #extra-button>
             <CreateDialog />
         </template>
         <template #extra-filter>
-            <Select :model-value="query.kit_id" @update:model-value="handleChangeKit">
+            <Select :model-value="state.kit_id" @update:model-value="handleChangeKit">
                 <SelectTrigger class="w-[180px] h-8">
                     <SelectValue placeholder="Select a kit" />
                 </SelectTrigger>
@@ -35,22 +35,20 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { TableBuilder } from '@/components/ui/table-builder';
 import { API_ENDPOINTS, NOT_CHOOSE } from '@/constants';
 import { useKitsForSelect } from '@/hooks/kit';
+import { useQueryState } from '@/hooks/use-query-state';
 import type { TTest } from '@/types/test';
 import type { ColumnDef } from '@tanstack/vue-table';
-import { useTitle, useUrlSearchParams } from '@vueuse/core';
-import { h, reactive, watch } from 'vue';
+import { useTitle } from '@vueuse/core';
+import { h } from 'vue';
 import { definePage } from 'vue-router/auto';
 import { CreateDialog } from './components';
 
-const query = reactive({
-    kit_id: ''
-})
-
-const params = useUrlSearchParams<Record<string, any>>('history')
-
+const { state, handleChange } = useQueryState({
+    kit_id: '',
+}
+)
 
 const { data: options } = useKitsForSelect()
-
 
 const cols: ColumnDef<TTest>[] = [
     {
@@ -83,35 +81,19 @@ const cols: ColumnDef<TTest>[] = [
 ]
 
 const handleChangeKit = (value: string) => {
-    if (value === NOT_CHOOSE) {
-        query.kit_id = ''
-    } else {
-        query.kit_id = value
-    }
+    handleChange('kit_id', value)
 }
-
-watch(() => query.kit_id, (value) => {
-    if (value.trim() !== '') {
-        params.kit_id = value
-    } else {
-        params.kit_id = undefined
-    }
-})
-
-watch(params, (value) => {
-    if (value.kit_id) {
-        query.kit_id = value.kit_id
-    }
-}, { immediate: true, deep: true })
-
 
 useTitle('Manage Tests | ELand')
 
 definePage({
     meta: {
         layout: 'Admin',
-        title: 'Manage Tests'
-    }
+        title: 'Manage Tests',
+        roles: ['ADMIN'],
+        requiresAuth: true
+    },
+
 })
 
 </script>

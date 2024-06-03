@@ -5,7 +5,7 @@
         )" @sorting-change="handleSortingChange" @pagination-change="handlePaginationChange">
         <template #toolbar="toolbarProps">
             <Toolbar :table="toolbarProps.table">
-                <template #search>
+                <template v-if="props.isShowSearch" #search>
                     <div class="flex items-center gap-3">
                         <Input :model-value="search" placeholder="Search..." class="h-8"
                             @update:model-value="handleSearchChange" />
@@ -30,7 +30,7 @@
 <script setup lang="ts" generic="T extends Record<string,unknown>">
 import type { TBaseQueryParams, TPaginateResponse } from '@/types/common';
 import { calcPageCount, valueUpdater } from '@/utils';
-import { useQuery } from '@tanstack/vue-query';
+import { keepPreviousData, useQuery } from '@tanstack/vue-query';
 import type { ColumnDef, OnChangeFn, PaginationState, SortingState } from '@tanstack/vue-table';
 import { useUrlSearchParams, watchDebounced } from '@vueuse/core';
 import { XIcon } from 'lucide-vue-next';
@@ -45,9 +45,13 @@ type Props = {
     columns: ColumnDef<T, unknown>[]
     apiAction: (params: TBaseQueryParams) => Promise<TPaginateResponse<T>>
     query?: Record<string, unknown>
+    isShowSearch?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    isShowSearch: true,
+    query: undefined
+})
 
 
 const params = useUrlSearchParams<Record<string, any>>('history', {
@@ -64,7 +68,8 @@ const params = useUrlSearchParams<Record<string, any>>('history', {
 
 const { data, isLoading } = useQuery({
     queryKey: [props.queryKey, params],
-    queryFn: () => props.apiAction(params).then((res) => res.data)
+    queryFn: () => props.apiAction(params).then((res) => res.data),
+    placeholderData: keepPreviousData,
 })
 
 
@@ -141,7 +146,9 @@ watch(params, (value) => {
 
 watchDebounced(
     search, (value) => {
-        params.q = value
+        if (props.isShowSearch) {
+            params.q = value
+        }
     }, {
     debounce: 800,
 }

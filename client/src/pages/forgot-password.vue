@@ -34,6 +34,7 @@ import { definePage } from 'vue-router/auto'
 definePage({
     meta: {
         layout: 'Auth',
+        isAuthRoute: true,
     },
 })
 </script>

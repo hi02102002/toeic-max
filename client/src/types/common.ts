@@ -25,6 +25,6 @@ export type TBaseQueryParams = {
 }
 
 export type TSelectResponse = {
-    value: string
+    value: any
     label: string
 }

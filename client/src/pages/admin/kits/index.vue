@@ -84,8 +84,10 @@ const cols: ColumnDef<TKit>[] = [
 
             }, 'Actions')
         },
-        cell() {
-            return h(RowAction)
+        cell({ row }) {
+            return h(RowAction, {
+                row
+            })
         }
     }
 ]
@@ -96,8 +98,10 @@ useTitle('Manage Kits | ELand')
 definePage({
     meta: {
         layout: 'Admin',
-        title: 'Manage Kits'
-    }
+        title: 'Manage Kits',
+        roles: ['ADMIN'],
+        requiresAuth: true
+    },
 })
 
 

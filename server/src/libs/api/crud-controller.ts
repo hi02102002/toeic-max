@@ -91,6 +91,7 @@ export abstract class CRUDBaseController<
 
         return res.status(StatusCodes.OK).json({
             data,
+            message: `Updated ${toLower(this.modelName)} successfully`,
         })
     })
 

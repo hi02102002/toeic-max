@@ -15,7 +15,7 @@ export class KitTestRoute implements IRoutes {
     }
 
     initRoutes(): void {
-        // this.router.get(`${this.path}/for-select`, this.controller.getForSelect)
+        this.router.get(`${this.path}/for-select`, this.controller.getForSelect)
         this.router.get(`${this.path}/get-all`, this.controller.getAll)
         this.router.get(`${this.path}/:id`, this.controller.getOneById)
         this.router.post(

@@ -8,13 +8,15 @@ import { definePage } from 'vue-router/auto';
 
 useTitle('Admin Dashboard | ELand')
 
-
 definePage({
     meta: {
         layout: 'Admin',
-        title: "Dashboard"
-    }
+        title: "Dashboard",
+        roles: ['ADMIN'],
+        requiresAuth: true
+    },
 })
+
 
 </script>
 

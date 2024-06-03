@@ -40,10 +40,12 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 const props = withDefaults(
     defineProps<{
-        id?: 'kit-form'
+        id?: 'kit-form',
+        defaultValues?: KitInputSchemaType,
     }>(),
     {
         id: 'kit-form',
+        defaultValues: undefined
     },
 )
 
@@ -53,6 +55,11 @@ const emits = defineEmits({
 
 const form = useForm({
     validationSchema: toTypedSchema(KitInputSchema),
+    initialValues: {
+        name: '',
+        year: undefined,
+        ...props.defaultValues,
+    }
 })
 
 const handleSubmit = form.handleSubmit((values: KitInputSchemaType) => {

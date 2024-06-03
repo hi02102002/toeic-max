@@ -8,7 +8,8 @@ import { verify } from 'jsonwebtoken'
 import Container from 'typedi'
 
 const getAuthorization = (req) => {
-    const coockie = req.cookies.Authorization
+    console.log(req.cookies.access_token)
+    const coockie = req.cookies.access_token
     if (coockie) return coockie
 
     const header = req.header('Authorization')
@@ -36,6 +37,8 @@ export const AuthMiddleware = async (
 
             if (user) {
                 req.user = user
+
+                return next()
             } else {
                 next(new HttpException(401, 'Wrong authentication token'))
             }

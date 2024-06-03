@@ -10,11 +10,7 @@
                 </p>
             </div>
             <LoginForm id="login-form" @submit="handleLogin" />
-            <Button
-                form="login-form"
-                type="submit"
-                :loading="loginMutation.isPending.value"
-            >
+            <Button form="login-form" type="submit" :loading="loginMutation.isPending.value">
                 Login
             </Button>
 
@@ -38,7 +34,9 @@ import { definePage } from 'vue-router/auto'
 definePage({
     meta: {
         layout: 'Auth',
+        isAuthRoute: true,
     },
+  
 })
 
 const loginMutation = useLogin()

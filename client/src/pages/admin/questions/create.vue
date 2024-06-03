@@ -1,5 +1,7 @@
 <template>
-    <div></div>
+    <div>
+
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -7,8 +9,10 @@ import { definePage } from 'vue-router/auto';
 
 definePage({
     meta: {
-        layout: 'Public',
+        layout: 'Admin',
+        title: "Create Question"
     },
+
 })
 </script>
 

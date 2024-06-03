@@ -24,7 +24,6 @@
         "types": [
             "vite-plugin-vue-layouts/client",
             "unplugin-vue-router/client",
-            "unplugin-vue-macros/macros-global"
         ]
     },
 }

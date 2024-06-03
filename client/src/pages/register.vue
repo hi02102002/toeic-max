@@ -9,15 +9,8 @@
                     Enter your information to create an account.
                 </p>
             </div>
-            <RegisterForm
-                :id="'register-form'"
-                @submit="registerMutation.mutate"
-            />
-            <Button
-                form="register-form"
-                type="submit"
-                :loading="registerMutation.isPending.value"
-            >
+            <RegisterForm :id="'register-form'" @submit="registerMutation.mutate" />
+            <Button form="register-form" type="submit" :loading="registerMutation.isPending.value">
                 Create account
             </Button>
 
@@ -41,6 +34,7 @@ import { definePage } from 'vue-router/auto'
 definePage({
     meta: {
         layout: 'Auth',
+        isAuthRoute: true,
     },
 })
 

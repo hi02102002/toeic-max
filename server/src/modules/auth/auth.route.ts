@@ -1,7 +1,8 @@
+import { AuthMiddleware } from '@/middlewares/auth.middleware'
+import { ValidationMiddleware } from '@/middlewares/validation.middleware'
 import type { IRoutes } from '@interfaces/routes.interface'
 import { Router } from 'express'
 import Container from 'typedi'
-import { ValidationMiddleware } from '@/middlewares/validation.middleware'
 import { AuthController } from './auth.controller'
 import {
     ForgotPasswordDto,
@@ -76,6 +77,7 @@ export class AuthRoute implements IRoutes {
 
         this.router.get(
             `${this.path}/current-user`,
+            AuthMiddleware,
             this.controller.getCurrentUser,
         )
 

@@ -1,5 +1,5 @@
 <template>
-    <nav :class="cn('flex items-center border-b border-input border-solid ', props.class)">
+    <nav :class="cn('flex items-center border-b border-input border-solid bg-white z-50 ', props.class)">
         <div class="container-app flex items-center gap-3">
             <RouterLink v-for="nav in props.navItems" :key="nav.url" :to="nav.url" active-class="active-link"
                 class="nav-link">
