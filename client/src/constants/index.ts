@@ -19,7 +19,10 @@ export const API_ENDPOINTS = {
         CURRENT_USER: '/auth/current-user',
         LOGOUT: '/auth/logout',
     },
-
+    BASE_CRUD: {
+        FOR_SELECT: '/for-select',
+        ALL: '/all',
+    },
     KITS: {
         INDEX: '/kits',
         ALL: '/kits/all',

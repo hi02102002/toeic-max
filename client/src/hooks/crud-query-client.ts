@@ -1,0 +1,182 @@
+import type { BaseCrudApi } from '@/apis/crud.api'
+import { queryClient } from '@/libs/react-query'
+import type { TBaseResponse } from '@/types/common'
+import { toastError } from '@/utils'
+import { useMutation, useQuery } from '@tanstack/vue-query'
+import { toast } from 'vue-sonner'
+
+/**
+ * A generic class for handling CRUD operations using query hooks.
+ *
+ * @template C - Type for create operation data.
+ * @template U - Type for update operation data.
+ * @template Q - Type for query operation data.
+ * @template E - Type for error response data.
+ * @template A - Type for the API class implementing BaseCrudApi.
+ */
+export class CrudQueryClient<
+    C extends Record<string, unknown> = Record<string, unknown>,
+    U extends Record<string, unknown> = Record<string, unknown>,
+    Q extends Record<string, unknown> = Record<string, unknown>,
+    E extends Record<string, unknown> = Record<string, unknown>,
+    A extends BaseCrudApi<C, U, Q, E> = BaseCrudApi<C, U, Q, E>,
+> {
+    /**
+     * Creates an instance of CrudQueryClient.
+     *
+     * @param {A} api - An instance of the API class implementing BaseCrudApi.
+     */
+    constructor(private api: A) {
+        this.api = api
+
+        this.useCreate = this.useCreate.bind(this)
+        this.useDelete = this.useDelete.bind(this)
+        this.useUpdate = this.useUpdate.bind(this)
+        this.usePaginate = this.usePaginate.bind(this)
+        this.useGetAll = this.useGetAll.bind(this)
+        this.useGetById = this.useGetById.bind(this)
+        this.useSelect = this.useSelect.bind(this)
+    }
+
+    /**
+     * Custom hook for create operation.
+     *
+     * @param {function} [onExtraSuccess] - Optional callback function to be executed on successful create operation.
+     * @param {function} [onExtraError] - Optional callback function to be executed on error during create operation.
+     * @returns {MutationResult} - The result of the create mutation.
+     */
+    useCreate(
+        onExtraSuccess?: (res: TBaseResponse<Record<string, unknown>>) => void,
+        onExtraError?: (err: any) => void,
+    ) {
+        return useMutation({
+            mutationFn: ({ data }: { data: C }) => this.api.create(data),
+            onSuccess: (res) => {
+                queryClient.invalidateQueries({
+                    queryKey: [this.api.endpoint],
+                })
+
+                queryClient.invalidateQueries({
+                    queryKey: [`${this.api.endpoint}-id`, res.data.id],
+                })
+
+                toast.success(res.message)
+
+                onExtraSuccess?.(res)
+            },
+            onError: (err: any) => {
+                toastError(err)
+                onExtraError?.(err)
+            },
+        })
+    }
+
+    /**
+     * Custom hook for delete operation.
+     *
+     * @returns {MutationResult} - The result of the delete mutation.
+     */
+    useDelete() {
+        return useMutation({
+            mutationFn: (id: string) => this.api.delete(id),
+            onSuccess: (res, id) => {
+                queryClient.invalidateQueries({
+                    queryKey: [this.api.endpoint],
+                })
+
+                queryClient.invalidateQueries({
+                    queryKey: [`${this.api.endpoint}-id`, id],
+                })
+
+                toast.success(res.message)
+            },
+            onError: toastError,
+        })
+    }
+
+    /**
+     * Custom hook for update operation.
+     *
+     * @param {function} [onExtraSuccess] - Optional callback function to be executed on successful update operation.
+     * @param {function} [onExtraError] - Optional callback function to be executed on error during update operation.
+     * @returns {MutationResult} - The result of the update mutation.
+     */
+    useUpdate(
+        onExtraSuccess?: (res: TBaseResponse<Record<string, unknown>>) => void,
+        onExtraError?: (err: any) => void,
+    ) {
+        return useMutation({
+            mutationFn: ({ data, id }: { data: U; id: string }) =>
+                this.api.update(id, data),
+            onSuccess: (res) => {
+                queryClient.invalidateQueries({
+                    queryKey: [this.api.endpoint],
+                })
+
+                queryClient.invalidateQueries({
+                    queryKey: [`${this.api.endpoint}-id`, res.data.id],
+                })
+
+                toast.success(res.message)
+
+                onExtraSuccess?.(res)
+            },
+            onError: (err: any) => {
+                console.log(err)
+                toastError(err)
+                onExtraError?.(err)
+            },
+        })
+    }
+
+    /**
+     * Custom hook for paginated query operation.
+     *
+     * @param {Q} q - The query parameters.
+     * @returns {QueryResult} - The result of the paginated query.
+     */
+    usePaginate(q: Q) {
+        return useQuery({
+            queryKey: [this.api.endpoint, JSON.stringify(q)],
+            queryFn: () => this.api.getPaginate(q),
+        })
+    }
+
+    /**
+     * Custom hook for getting all records.
+     *
+     * @returns {QueryResult} - The result of the query to get all records.
+     */
+    useGetAll() {
+        return useQuery({
+            queryKey: [`${this.api.endpoint}-all`],
+            queryFn: () => this.api.getAll(),
+        })
+    }
+
+    /**
+     * Custom hook for getting a record by ID.
+     *
+     * @param {string} id - The ID of the record to retrieve.
+     * @returns {QueryResult} - The result of the query to get a record by ID.
+     */
+    useGetById(id: string) {
+        return useQuery({
+            queryKey: [`${this.api.endpoint}-id`, id],
+            queryFn: () => this.api.getById(id),
+        })
+    }
+
+    /**
+     * Custom hook for getting a select dropdown options.
+     *
+     * @returns {QueryResult} - The result of the query to get select dropdown options.
+     */
+    useSelect() {
+        return useQuery({
+            queryKey: [`${this.api.endpoint}-select`],
+            queryFn: () => this.api.select(),
+            initialData: [],
+        })
+    }
+}

@@ -36,7 +36,7 @@ definePage({
         layout: 'Auth',
         isAuthRoute: true,
     },
-  
+
 })
 
 const loginMutation = useLogin()

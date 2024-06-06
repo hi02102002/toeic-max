@@ -1,20 +1,20 @@
 import { API_ENDPOINTS } from '@/constants'
-import { http_client } from '@/libs/http-client'
-import type {
-    TBaseQueryParams,
-    TBaseResponse,
-    TPaginateResponse,
-} from '@/types/common'
+import type { TBaseQueryParams, TSelectResponse } from '@/types/common'
 import type { TSectionQuestion } from '@/types/question'
+import { BaseCrudApi } from './crud.api'
 
-class QuestionApi {
-    getPaginate(
-        query: TBaseQueryParams,
-    ): Promise<TPaginateResponse<TSectionQuestion>> {
-        return http_client.get(API_ENDPOINTS.QUESTIONS.INDEX, { params: query })
+class QuestionApi extends BaseCrudApi<
+    TSectionQuestion,
+    TSectionQuestion,
+    TBaseQueryParams,
+    TSectionQuestion
+> {
+    select(): Promise<TSelectResponse[]> {
+        throw new Error('Method not implemented.')
     }
-    create(data: any): Promise<TBaseResponse<TSectionQuestion>> {
-        return http_client.post(API_ENDPOINTS.QUESTIONS.INDEX, data)
+
+    constructor() {
+        super(API_ENDPOINTS.QUESTIONS.INDEX)
     }
 }
 

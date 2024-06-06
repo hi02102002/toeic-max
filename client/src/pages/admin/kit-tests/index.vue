@@ -34,21 +34,21 @@ import { TableHeader } from '@/components/ui/data-table';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TableBuilder } from '@/components/ui/table-builder';
 import { API_ENDPOINTS, NOT_CHOOSE } from '@/constants';
-import { useKitsForSelect } from '@/hooks/kit';
 import { useQueryState } from '@/hooks/use-query-state';
 import type { TTest } from '@/types/test';
 import type { ColumnDef } from '@tanstack/vue-table';
 import { useTitle } from '@vueuse/core';
 import { h } from 'vue';
 import { definePage } from 'vue-router/auto';
-import { CreateDialog } from './components';
+import { CreateDialog, RowAction } from './components';
+import { useForSelectKit } from '@/hooks/kit';
 
 const { state, handleChange } = useQueryState({
     kit_id: '',
 }
 )
 
-const { data: options } = useKitsForSelect()
+const { data: options } = useForSelectKit()
 
 const cols: ColumnDef<TTest>[] = [
     {
@@ -78,6 +78,20 @@ const cols: ColumnDef<TTest>[] = [
             })
         },
     },
+    {
+        accessorKey: 'actions',
+        header() {
+            return h('div', {
+                class: 'text-xs',
+
+            }, 'Actions')
+        },
+        cell({ row }) {
+            return h(RowAction, {
+                row
+            })
+        }
+    }
 ]
 
 const handleChangeKit = (value: string) => {

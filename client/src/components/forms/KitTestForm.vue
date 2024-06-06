@@ -58,7 +58,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useKitsForSelect } from '@/hooks/kit';
+import { useForSelectKit } from '@/hooks/kit';
 import { KitTestInputSchema, type KitTestInputSchemaType } from '@/validators/kit-test';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useField, useForm } from 'vee-validate';
@@ -67,13 +67,15 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 const props = withDefaults(
     defineProps<{
         id?: 'kit-test-form'
+        defaultValues?: KitTestInputSchemaType
     }>(),
     {
         id: 'kit-test-form',
+        defaultValues: undefined
     },
 )
 
-const { data: options } = useKitsForSelect()
+const { data: options } = useForSelectKit()
 
 
 const emits = defineEmits({
@@ -83,6 +85,7 @@ const emits = defineEmits({
 
 const form = useForm({
     validationSchema: toTypedSchema(KitTestInputSchema),
+    initialValues: props.defaultValues,
 })
 
 const { value: kit_id } = useField<string>('kit_id', {}, {

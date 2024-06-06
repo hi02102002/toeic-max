@@ -35,7 +35,12 @@ export const useQueryState = <T extends Record<string, any>>(
         params,
         (newParams) => {
             for (const [key, value] of Object.entries(newParams)) {
-                state[key] = value
+                const keys = Object.keys(state)
+
+                if (keys.includes(key)) {
+                    // @ts-ignore
+                    state[key] = value
+                }
             }
         },
         { immediate: true, deep: true },

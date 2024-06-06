@@ -28,7 +28,7 @@
 import { KitTestForm } from '@/components/forms';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useCreateKitTest } from '@/hooks/kit-test/use-create-test';
+import { useCreateKitTest } from '@/hooks/kit-test';
 import type { KitTestInputSchemaType } from '@/validators/kit-test';
 import { ref } from 'vue';
 
@@ -37,7 +37,9 @@ const isOpen = ref(false)
 const createKitTestMutation = useCreateKitTest()
 
 const handleSubmit = (values: KitTestInputSchemaType) => {
-    createKitTestMutation.mutate(values)
+    createKitTestMutation.mutate({
+        data: values,
+    })
     isOpen.value = false
 }
 

@@ -57,7 +57,7 @@ import { TableHeader } from '@/components/ui/data-table';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TableBuilder } from '@/components/ui/table-builder';
 import { API_ENDPOINTS, NOT_CHOOSE, PARTS } from '@/constants';
-import { useKitTestsForSelect } from '@/hooks/kit-test';
+import { useForSelectKitTest } from '@/hooks/kit-test';
 import { useQueryState } from '@/hooks/use-query-state';
 import type { TSectionQuestion } from '@/types/question';
 import type { ColumnDef } from '@tanstack/vue-table';
@@ -68,7 +68,7 @@ import { definePage } from 'vue-router/auto';
 
 useTitle('Manage Questions | ELand')
 
-const { data: options } = useKitTestsForSelect()
+const { data: options } = useForSelectKitTest()
 
 const { state, handleChange } = useQueryState({
     test_kit_id: '',
