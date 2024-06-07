@@ -35,11 +35,11 @@ export abstract class BaseCrudApi<
         this.delete = this.delete.bind(this)
     }
 
-    getById(id: string): Promise<E> {
+    getById(id: string): Promise<TBaseResponse<E>> {
         return http_client.get(`${this.endpoint}/${id}`)
     }
 
-    getAll(): Promise<TBaseResponse<E[]>> {
+    getAll(): Promise<TBaseResponse<TBaseResponse<E[]>>> {
         return http_client.get(this.endpoint)
     }
 

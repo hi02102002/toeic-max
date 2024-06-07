@@ -16,7 +16,9 @@ class KitApi extends BaseCrudApi<
     }
 
     select(): Promise<TSelectResponse[]> {
-        return http_client.get(API_ENDPOINTS.KITS.FOR_SELECT)
+        return http_client
+            .get(API_ENDPOINTS.KITS.FOR_SELECT)
+            .then((response) => response.data)
     }
 }
 

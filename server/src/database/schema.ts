@@ -119,6 +119,7 @@ export const questions = pgTable('questions', {
     ),
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow(),
+    q: text('q'),
 })
 
 export const topics = pgTable('topics', {

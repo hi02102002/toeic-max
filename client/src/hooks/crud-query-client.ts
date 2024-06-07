@@ -163,7 +163,7 @@ export class CrudQueryClient<
     useGetById(id: string) {
         return useQuery({
             queryKey: [`${this.api.endpoint}-id`, id],
-            queryFn: () => this.api.getById(id),
+            queryFn: () => this.api.getById(id).then((res) => res.data),
         })
     }
 
@@ -175,7 +175,13 @@ export class CrudQueryClient<
     useSelect() {
         return useQuery({
             queryKey: [`${this.api.endpoint}-select`],
-            queryFn: () => this.api.select(),
+            queryFn: async () => {
+                const res = await this.api.select()
+
+                console.log(res)
+
+                return res
+            },
             initialData: [],
         })
     }

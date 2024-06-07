@@ -13,3 +13,4 @@ const SectionQuestionClient = new CrudQueryClient<
 export const useCreateSectionQuestion = SectionQuestionClient.useCreate
 export const useDeleteSectionQuestion = SectionQuestionClient.useDelete
 export const useUpdateSectionQuestion = SectionQuestionClient.useUpdate
+export const useSectionQuestion = SectionQuestionClient.useGetById

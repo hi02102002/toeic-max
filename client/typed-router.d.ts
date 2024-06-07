@@ -24,6 +24,8 @@ declare module 'vue-router/auto-routes' {
     '/admin/kit-tests/': RouteRecordInfo<'/admin/kit-tests/', '/admin/kit-tests', Record<never, never>, Record<never, never>>,
     '/admin/kits/': RouteRecordInfo<'/admin/kits/', '/admin/kits', Record<never, never>, Record<never, never>>,
     '/admin/questions/': RouteRecordInfo<'/admin/questions/', '/admin/questions', Record<never, never>, Record<never, never>>,
+    '/admin/questions/[id]/': RouteRecordInfo<'/admin/questions/[id]/', '/admin/questions/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/admin/questions/[id]/update': RouteRecordInfo<'/admin/questions/[id]/update', '/admin/questions/:id/update', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/admin/questions/create': RouteRecordInfo<'/admin/questions/create', '/admin/questions/create', Record<never, never>, Record<never, never>>,
     '/forgot-password': RouteRecordInfo<'/forgot-password', '/forgot-password', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,

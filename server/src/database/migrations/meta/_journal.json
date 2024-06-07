@@ -15,6 +15,13 @@
       "when": 1717238774123,
       "tag": "0001_narrow_the_captain",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1717778728269,
+      "tag": "0002_good_rocket_racer",
+      "breakpoints": true
     }
   ]
 }

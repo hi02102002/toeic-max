@@ -101,7 +101,7 @@ definePage({
         title: 'Manage Kits',
         roles: ['ADMIN'],
         requiresAuth: true
-    },
+    }
 })
 
 

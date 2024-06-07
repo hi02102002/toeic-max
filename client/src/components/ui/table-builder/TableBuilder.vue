@@ -48,6 +48,7 @@ type Props = {
     isShowSearch?: boolean
 }
 
+
 const props = withDefaults(defineProps<Props>(), {
     isShowSearch: true,
     query: undefined

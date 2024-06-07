@@ -8,6 +8,9 @@ import {
 } from './question-section.dto'
 import { TQuestionSection } from './question-section.type'
 import { QuestionService } from './question.service'
+import { isEmpty } from 'lodash'
+import { HttpException } from '@/exceptions/http-exception'
+import { StatusCodes } from 'http-status-codes'
 
 @Service()
 export class QuestionSectionService extends CRUDBaseService<
@@ -69,5 +72,33 @@ export class QuestionSectionService extends CRUDBaseService<
             items,
             total,
         }
+    }
+
+    async getOneById<T = any>(
+        id: string,
+        opts?: {
+            throwIfNotFound?: boolean
+            message?: string
+        },
+    ): Promise<T> {
+        const sectionQuestion = await this.db.query.question_sections.findFirst(
+            {
+                where: eq(question_sections.id, id),
+                with: {
+                    questions: true,
+                    test_kit: true,
+                },
+            },
+        )
+
+        if (isEmpty(sectionQuestion) && opts?.throwIfNotFound) {
+            throw new HttpException(
+                StatusCodes.NOT_FOUND,
+                opts?.message ||
+                    `Could not find ${this.modelName} with this id.`,
+            )
+        }
+
+        return sectionQuestion as T
     }
 }

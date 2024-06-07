@@ -33,4 +33,5 @@ export type TQuestion = {
     question_section_id: string
     created_at: Date
     updated_at: Date
+    q: string
 }

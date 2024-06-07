@@ -140,6 +140,7 @@ export class CrawlService {
                             p: question.p,
                             question_section_id: id,
                             trans: question.tran,
+                            q: question.q,
                         }
                     }),
                 )

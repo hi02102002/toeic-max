@@ -65,6 +65,7 @@ import { useTitle } from '@vueuse/core';
 import * as dayFns from 'date-fns';
 import { h } from 'vue';
 import { definePage } from 'vue-router/auto';
+import RowAction from './components/RowAction.vue';
 
 useTitle('Manage Questions | ELand')
 
@@ -138,6 +139,20 @@ const cols: ColumnDef<TSectionQuestion>[] = [
             )
         }
     },
+    {
+        accessorKey: 'actions',
+        header() {
+            return h('div', {
+                class: 'text-xs',
+
+            }, 'Actions')
+        },
+        cell({ row }) {
+            return h(RowAction, {
+                row
+            })
+        }
+    }
 ]
 
 </script>
