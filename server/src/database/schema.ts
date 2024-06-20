@@ -74,53 +74,77 @@ export const sections = pgTable('sections', {
     updated_at: timestamp('updated_at').defaultNow(),
 })
 
-export const question_sections = pgTable('question_sections', {
-    id: varchar('id')
-        .primaryKey()
-        .$defaultFn(() => createId()),
-    test_kit_id: varchar('test_kit_id').references(() => tests.id, {
-        onDelete: 'set null',
-    }),
-    part: integer('part').$type<1 | 2 | 3 | 4 | 5 | 6 | 7>(),
-    image_urls: json('image_urls').$type<string[]>(),
-    audio_url: text('audio_url'),
-    teaser: json('teaser').$type<{
-        text: string | null
-        trans: {
-            [key: string]: string | null
+export const question_sections = pgTable(
+    'question_sections',
+    {
+        id: varchar('id')
+            .primaryKey()
+            .$defaultFn(() => createId()),
+        test_kit_id: varchar('test_kit_id').references(() => tests.id, {
+            onDelete: 'set null',
+        }),
+        part: integer('part').$type<1 | 2 | 3 | 4 | 5 | 6 | 7>(),
+        image_urls: json('image_urls').$type<string[]>(),
+        audio_url: text('audio_url'),
+        teaser: json('teaser').$type<{
+            text: string | null
+            trans: {
+                [key: string]: string | null
+            }
+        }>(),
+        location: text('location'),
+        created_at: timestamp('created_at').defaultNow(),
+        updated_at: timestamp('updated_at').defaultNow(),
+    },
+    ({ part, test_kit_id, location }) => {
+        return {
+            uniqueQuestionSection: unique('question_sections_unique').on(
+                part,
+                test_kit_id,
+                location,
+            ),
         }
-    }>(),
-    location: text('location'),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
-})
+    },
+)
 
-export const questions = pgTable('questions', {
-    id: varchar('id')
-        .primaryKey()
-        .$defaultFn(() => createId()),
-    opts: json('opts').$type<{
-        a: string
-        b: string
-        c: string
-        d: string
-    }>(),
-    ans: text('ans').$type<'a' | 'b' | 'c' | 'd'>(),
-    trans: json('tran').$type<{
-        [key: string]: string
-    }>(),
-    p: integer('p').notNull(),
-    location: integer('location').notNull(),
-    question_section_id: varchar('question_section_id').references(
-        () => question_sections.id,
-        {
-            onDelete: 'cascade',
-        },
-    ),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
-    q: text('q'),
-})
+export const questions = pgTable(
+    'questions',
+    {
+        id: varchar('id')
+            .primaryKey()
+            .$defaultFn(() => createId()),
+        opts: json('opts').$type<{
+            a: string
+            b: string
+            c: string
+            d: string
+        }>(),
+        ans: text('ans').$type<'a' | 'b' | 'c' | 'd'>(),
+        trans: json('tran').$type<{
+            [key: string]: string
+        }>(),
+        p: integer('p').notNull(),
+        location: integer('location').notNull(),
+        question_section_id: varchar('question_section_id').references(
+            () => question_sections.id,
+            {
+                onDelete: 'cascade',
+            },
+        ),
+        created_at: timestamp('created_at').defaultNow(),
+        updated_at: timestamp('updated_at').defaultNow(),
+        q: text('q'),
+    },
+    ({ location, question_section_id, p }) => {
+        return {
+            uniqueQuestion: unique('questions_unique').on(
+                location,
+                question_section_id,
+                p,
+            ),
+        }
+    },
+)
 
 export const topics = pgTable('topics', {
     id: varchar('id')

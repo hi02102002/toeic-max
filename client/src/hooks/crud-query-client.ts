@@ -45,10 +45,11 @@ export class CrudQueryClient<
      * @param {function} [onExtraError] - Optional callback function to be executed on error during create operation.
      * @returns {MutationResult} - The result of the create mutation.
      */
-    useCreate(
-        onExtraSuccess?: (res: TBaseResponse<Record<string, unknown>>) => void,
-        onExtraError?: (err: any) => void,
-    ) {
+    useCreate(opts?: {
+        onExtraSuccess?: (res: TBaseResponse<E>) => void
+        onExtraError?: (err: any) => void
+    }) {
+        const { onExtraSuccess, onExtraError } = opts || {}
         return useMutation({
             mutationFn: ({ data }: { data: C }) => this.api.create(data),
             onSuccess: (res) => {
@@ -177,8 +178,6 @@ export class CrudQueryClient<
             queryKey: [`${this.api.endpoint}-select`],
             queryFn: async () => {
                 const res = await this.api.select()
-
-                console.log(res)
 
                 return res
             },

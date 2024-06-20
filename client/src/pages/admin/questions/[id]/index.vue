@@ -1,39 +1,53 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
     <div>
-        <div v-if="isLoading"></div>
+        <div v-if="isLoading" class="flex items-center justify-center">
+            <Loader2 class="animate-spin" />
+        </div>
         <div v-else class="space-y-6">
             <div class="flex items-center justify-between">
                 <span class="text-lg font-semibold">
                     Question {{ data?.location }}
                 </span>
 
-                <div class="flex items-center gap-3">
-                    <Button variant="destructive">
-                        Delete
-                    </Button>
-                    <Button>
-                        Edit
-                    </Button>
-                </div>
+                <RowAction />
             </div>
             <div class="flex items-start gap-4">
-                <div v-if="data?.teaser.text || data?.image_urls.length !== 0 || data?.audio_url"
+                <div v-if="data?.teaser?.text || data?.image_urls.length !== 0 || data?.audio_url"
                     class="space-y-4 max-w-[50%] w-full">
                     <audio v-if="data?.audio_url" controls :src="data?.audio_url" class="w-full" />
-                    <ul v-if="data?.image_urls.length !== 0" class="flex items-center gap-4 justify-center w-full">
+                    <ul v-if="data?.image_urls?.length !== 0"
+                        class="flex items-center gap-4 justify-center w-full flex-col">
                         <li v-for="image in data?.image_urls" :key="image">
                             <img :src="image" alt="image" class="rounded w-full" />
                         </li>
                     </ul>
-                    <div class="text-sm max-w-xl mx-auto" v-html="data?.teaser.text"></div>
+                    <div v-if="data?.teaser?.text || data?.teaser?.tran?.vi ||
+                        data?.teaser?.trans?.vi
+                    " class="space-y-2">
+
+                        <Label class="text-lg font-semibold">
+                            Teaser
+                        </Label>
+                        <div class="text-sm mx-auto" v-html="data?.teaser.text"></div>
+                    </div>
+                    <Separator v-if="data?.teaser?.text" />
+                    <div v-if="
+                        data?.teaser?.tran?.vi || data?.teaser.trans?.vi
+                    " class="space-y-2">
+                        <Label class="text-lg font-semibold">
+                            Teaser Translation
+                        </Label>
+                        <div class="text-sm mx-auto" v-html="data?.teaser.tran?.vi || data?.teaser.trans?.vi
+                            "></div>
+                    </div>
                 </div>
                 <div>
                     <ul class="space-y-4">
                         <li v-for="(question) in data?.questions || []" :key="question.id">
                             <div>
                                 <span class="font-medium">
-                                    {{ question.location }}. {{ question.q.replace(`${question.location}.`, '') }}
+                                    {{ question.location }}. {{ question.q?.replace(`${question.location}.`, '') }}
                                 </span>
 
                                 <Dialog>
@@ -95,14 +109,16 @@
 </template>
 
 <script setup lang="ts">
-import { definePage } from 'vue-router/auto';
-import { useSectionQuestion } from '@/hooks/section-question'
-import { useRoute } from 'vue-router/auto';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/utils';
-import { CircleHelp } from 'lucide-vue-next';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useSectionQuestion } from '@/hooks/section-question';
+import { cn } from '@/utils';
+import { CircleHelp, Loader2 } from 'lucide-vue-next';
+import { definePage, useRoute } from 'vue-router/auto';
+import { RowAction } from './components';
 
 const { params } = useRoute('/admin/questions/[id]/')
 

@@ -37,6 +37,10 @@ export const API_ENDPOINTS = {
         INDEX: '/questions',
         ALL: '/questions/all',
     },
+    UPLOAD: {
+        IMAGE: '/upload/image',
+        AUDIO: '/upload/audio',
+    },
 }
 
 export const ERROR_MESSAGE =
@@ -45,6 +49,6 @@ export const ERROR_MESSAGE =
 export const NOT_CHOOSE = 'NOT_CHOOSE'
 
 export const PARTS: TSelectResponse[] = [1, 2, 3, 4, 5, 6, 7].map((part) => ({
-    value: part,
+    value: `${part}`,
     label: `Part ${part}`,
 }))

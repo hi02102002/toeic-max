@@ -1,4 +1,5 @@
 import { authApi } from '@/apis/auth.api'
+import { queryClient } from '@/libs/react-query'
 import { useCurrentUserStore } from '@/stores/current-user'
 import nProgress from 'nprogress'
 import { setupLayouts } from 'virtual:generated-layouts'
@@ -12,12 +13,16 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-    const user = await authApi
-        .getCurrentUser()
-        .then((res) => res.data)
-        .catch(() => {
-            return null
-        })
+    const user = await queryClient.ensureQueryData({
+        queryKey: ['current-user'],
+        queryFn: () =>
+            authApi
+                .getCurrentUser()
+                .then((res) => res.data)
+                .catch(() => {
+                    return null
+                }),
+    })
 
     useCurrentUserStore().setCurrentUser(user)
 

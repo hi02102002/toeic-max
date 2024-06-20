@@ -8,7 +8,6 @@ import { verify } from 'jsonwebtoken'
 import Container from 'typedi'
 
 const getAuthorization = (req) => {
-    console.log(req.cookies.access_token)
     const coockie = req.cookies.access_token
     if (coockie) return coockie
 

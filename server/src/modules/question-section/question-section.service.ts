@@ -1,16 +1,15 @@
-import { question_sections } from '@/database/schema'
+import { question_sections, questions as sQuestions } from '@/database/schema'
+import { HttpException } from '@/exceptions/http-exception'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
 import { eq } from 'drizzle-orm'
+import { StatusCodes } from 'http-status-codes'
+import { isEmpty } from 'lodash'
 import { Service } from 'typedi'
 import {
     CreateQuestionDto,
     QueryQuestionSectionDto,
 } from './question-section.dto'
 import { TQuestionSection } from './question-section.type'
-import { QuestionService } from './question.service'
-import { isEmpty } from 'lodash'
-import { HttpException } from '@/exceptions/http-exception'
-import { StatusCodes } from 'http-status-codes'
 
 @Service()
 export class QuestionSectionService extends CRUDBaseService<
@@ -18,40 +17,58 @@ export class QuestionSectionService extends CRUDBaseService<
     Partial<CreateQuestionDto>,
     TQuestionSection
 > {
-    constructor(private readonly questionService: QuestionService) {
+    constructor() {
         super(question_sections, 'Question')
     }
 
     async create<T = TQuestionSection>(data: CreateQuestionDto) {
-        const {
-            image_urls,
-            location,
-            part,
-            questions,
-            teaser,
-            audio_url,
-            test_kit_id,
-        } = data
+        try {
+            const {
+                image_urls,
+                location,
+                part,
+                questions,
+                teaser,
+                audio_url,
+                test_kit_id,
+            } = data
 
-        const questionSection = await this.db.transaction(async (trx) => {
-            const [questionSection] = await trx
-                .insert(question_sections)
-                .values({
-                    image_urls,
-                    location,
-                    part,
-                    teaser,
-                    audio_url,
-                    test_kit_id,
-                })
-                .returning()
+            const questionSection = await this.db.transaction(async (trx) => {
+                const [questionSection] = await trx
+                    .insert(question_sections)
+                    .values({
+                        image_urls,
+                        location,
+                        part,
+                        teaser,
+                        audio_url,
+                        test_kit_id,
+                    })
+                    .returning()
 
-            await this.questionService.createMany(questionSection.id, questions)
+                if (questions.length > 0) {
+                    await trx.insert(sQuestions).values(
+                        questions.map((question) => ({
+                            ...question,
+                            question_section_id: questionSection.id,
+                        })),
+                    )
+                }
 
-            return questionSection as T
-        })
+                return questionSection as T
+            })
 
-        return questionSection
+            return questionSection
+        } catch (error) {
+            if (error?.code === '23505') {
+                throw new HttpException(
+                    StatusCodes.CONFLICT,
+                    'This question section already exists.',
+                )
+            }
+
+            throw error
+        }
     }
 
     async getPaging({ query }: TGetPagingQuery<QueryQuestionSectionDto>) {

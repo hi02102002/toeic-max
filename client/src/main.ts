@@ -8,6 +8,7 @@ import { queryClient } from './libs/react-query'
 import router from './router'
 import 'nprogress/nprogress.css'
 import './assets/custom-nprogress.css'
+import './assets/question-conent.css'
 
 const app = createApp(App)
 

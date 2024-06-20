@@ -1,0 +1,2 @@
+ALTER TABLE "question_sections" ADD CONSTRAINT "question_sections_unique" UNIQUE("part","test_kit_id","location");--> statement-breakpoint
+ALTER TABLE "questions" ADD CONSTRAINT "questions_unique" UNIQUE("location","question_section_id","p");

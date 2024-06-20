@@ -11,6 +11,14 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
         'no-multiple-empty-lines': ['error', { max: 2, maxBOF: 0, maxEOF: 0 }],
         '@typescript-eslint/no-explicit-any': 'off',
-        "@typescript-eslint/ban-ts-comment":"off"
+        '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/no-unused-vars': [
+            'warn',
+            {
+                argsIgnorePattern: '^_',
+                varsIgnorePattern: '^_',
+                caughtErrorsIgnorePattern: '^_',
+            },
+        ],
     },
 }

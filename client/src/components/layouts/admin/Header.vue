@@ -52,7 +52,15 @@
         {
             name: 'Questions',
             url: '/admin/questions'
-        }
+        },
+        {
+            name: 'Vocabularies',
+            url: '/admin/vocabularies'
+        },
+        {
+            name: 'Users',
+            url: '/admin/users'
+        },
     ]" class="fixed top-14 left-0 right-0 h-14 bg-white" />
     <Teleport to="body">
         <LoadingFullPage v-if="logoutMutation.isPending.value" />
@@ -71,7 +79,6 @@ import { useLogout } from '@/hooks/auth';
 import LoadingFullPage from '@/components/LoadingFullPage.vue';
 
 const logoutMutation = useLogout()
-
 
 const currentUserStore = useCurrentUserStore();
 

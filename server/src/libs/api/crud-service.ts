@@ -162,17 +162,15 @@ export abstract class CRUDBaseService<
         }
     }
 
-    async createMany<T = E>(data: C[]) {
+    async createMany<T = E>(data: C[], ..._args: any[]) {
+        console.log('createMany', data)
         try {
-            const rows = await this.db.transaction(async (trx) => {
-                const [rows] = await trx
-                    .insert(this.table)
-                    .values(data)
-                    .returning()
-                return rows as T
-            })
+            const rows = await this.db
+                .insert(this.table)
+                .values(data)
+                .returning()
 
-            return rows
+            return rows as T
         } catch (error: any) {
             if (error?.code === '23505') {
                 throw new Error(

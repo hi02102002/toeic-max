@@ -9,7 +9,10 @@ export type TSectionQuestion = {
     audio_url: string
     teaser: {
         text: string
-        trans: {
+        tran?: {
+            [key: string]: string
+        }
+        trans?: {
             [key: string]: string
         }
     }

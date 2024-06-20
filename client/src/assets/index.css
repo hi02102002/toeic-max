@@ -73,3 +73,29 @@
     padding: 0 1rem;
     width: 100%;
 }
+
+.prose table p {
+    @apply m-0;
+}
+
+.prose :where(table):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    @apply border;
+}
+
+.prose th {
+    @apply border-t-0 border-b-0 border-r last:border-r-0 bg-neutral-100 p-2;
+}
+
+.prose
+    :where(tbody td, tfoot td):not(
+        :where([class~='not-prose'], [class~='not-prose'] *)
+    ) {
+    @apply border-t-0 border-b-0 border-l;
+}
+
+.prose
+    :where(tbody td:first-child, tfoot td:first-child):not(
+        :where([class~='not-prose'], [class~='not-prose'] *)
+    ) {
+    @apply border-l-0 ps-[0.5714286em];
+}

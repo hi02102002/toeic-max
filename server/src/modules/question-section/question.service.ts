@@ -36,25 +36,14 @@ export class QuestionService extends CRUDBaseService<
         return question as T
     }
 
-    async createMany<T = TQuestion>(sectionId: string, data: QuestionDto[]) {
-        console.log('sectionId', sectionId)
+    async createMany<T = TQuestion[]>(data: QuestionDto[], sectionId: string) {
+        const _questions = await super.createMany<T>(
+            data.map((item) => ({
+                ...item,
+                question_section_id: sectionId,
+            })),
+        )
 
-        const _questions = await this.db
-            .insert(questions)
-            .values(
-                data.map(({ ans, location, opts, p, trans }) => {
-                    return {
-                        location,
-                        p,
-                        ans,
-                        opts,
-                        trans,
-                        question_section_id: sectionId,
-                    }
-                }),
-            )
-            .returning()
-
-        return _questions as T[]
+        return _questions
     }
 }

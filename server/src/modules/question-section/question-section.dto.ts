@@ -47,6 +47,10 @@ export class QuestionDto {
     trans: {
         vi: string
     }
+
+    @IsString()
+    @IsNotEmpty()
+    q: string
 }
 
 export class CreateQuestionDto {
@@ -55,10 +59,9 @@ export class CreateQuestionDto {
     @Transform(({ value }) => parseInt(value))
     part: 1 | 2 | 3 | 4 | 5 | 6 | 7
 
-    @IsArray({
-        each: true,
-    })
+    @IsArray()
     @IsOptional()
+    @IsString({ each: true })
     @Transform(({ value }) => value || [])
     image_urls: string[]
 

@@ -1,0 +1,6 @@
+.question-content ol,
+.question-content ul {
+    list-style: initial;
+    padding: initial;
+    margin: initial;
+}

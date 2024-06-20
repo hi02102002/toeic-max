@@ -1,7 +1,7 @@
 <template>
     <Header />
     <div class="min-h-svh pt-28">
-        <div class="container-app">
+        <div class="container-app bg-background">
             <div class="py-4 space-y-4">
                 <PageTitle>
                     {{ route.meta?.title || 'App' }}
