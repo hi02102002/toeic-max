@@ -56,7 +56,6 @@
             </FormItem>
         </FormField>
         <FormField v-if="props.defaultValue?.p !== PART2" v-slot="{ componentField }" name="opts.d">
-            >
             <FormItem>
                 <FormLabel required>
                     Option D
@@ -95,7 +94,7 @@
                     Explanation
                 </FormLabel>
                 <FormControl>
-                    <Textarea v-bind="componentField" placeholder="Enter question explanation" />
+                    <Textarea v-bind="componentField" placeholder="Enter question explanation" rows="10" />
                 </FormControl>
                 <FormMessage />
             </FormItem>

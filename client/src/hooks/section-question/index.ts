@@ -2,10 +2,11 @@ import { CrudQueryClient } from '../crud-query-client'
 import type { TBaseQueryParams } from '@/types/common'
 import type { TSectionQuestion } from '@/types/question'
 import { questionApi } from '@/apis/question.api'
+import type { QuestionSectionSchemaType } from '@/validators/question-section'
 
 const SectionQuestionClient = new CrudQueryClient<
-    TSectionQuestion,
-    TSectionQuestion,
+    QuestionSectionSchemaType,
+    QuestionSectionSchemaType,
     TBaseQueryParams,
     TSectionQuestion
 >(questionApi)

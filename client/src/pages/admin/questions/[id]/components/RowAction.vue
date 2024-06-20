@@ -13,7 +13,7 @@
             <DropdownMenuItem @click="() => {
                 router.push(`/admin/questions/${route.params.id}/update`)
             }">
-                Edit
+                Update
             </DropdownMenuItem>
             <DropdownMenuItem @click="isShowConfirm = true">
                 Remove
@@ -22,10 +22,14 @@
     </DropdownMenu>
     <Confirm :open="isShowConfirm" text-confirm="Remove" title="Are you sure?"
         description="This action cannot be undone. This will permanently remove this item."
-        @cancel="isShowConfirm = false" />
+        @cancel="isShowConfirm = false" @confirm="() => {
+            deleteSectionQuestionMutation.mutate(route.params.id)
+        }" />
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
+import Confirm from '@/components/ui/confirm/Confirm.vue';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -33,18 +37,23 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import Confirm from '@/components/ui/confirm/Confirm.vue';
-import { ref } from 'vue';
-import { Button } from '@/components/ui/button';
+} from '@/components/ui/dropdown-menu';
+import { useDeleteSectionQuestion } from '@/hooks/section-question';
 import { DotsHorizontalIcon } from '@radix-icons/vue';
-import { useRouter } from 'vue-router/auto';
-import { useRoute } from 'vue-router/auto';
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router/auto';
 const router = useRouter()
 
 const route = useRoute('/admin/questions/[id]/')
 
 const isShowConfirm = ref(false);
+
+const deleteSectionQuestionMutation = useDeleteSectionQuestion({
+    onExtraSuccess() {
+        isShowConfirm.value = false
+        router.push('/admin/questions')
+    },
+})
 
 
 </script>

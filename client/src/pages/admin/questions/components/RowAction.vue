@@ -13,12 +13,12 @@
             <DropdownMenuItem @click="() => {
                 router.push(`/admin/questions/${props.row.original.id}`)
             }">
-                View inner questions
+                View detail
             </DropdownMenuItem>
             <DropdownMenuItem @click="() => {
                 router.push(`/admin/questions/${props.row.original.id}/update`)
             }">
-                Edit
+                Update
             </DropdownMenuItem>
             <DropdownMenuItem @click="isShowConfirm = true">
                 Remove
@@ -27,10 +27,14 @@
     </DropdownMenu>
     <Confirm :open="isShowConfirm" text-confirm="Remove" title="Are you sure?"
         description="This action cannot be undone. This will permanently remove this item."
-        @cancel="isShowConfirm = false" />
+        @cancel="isShowConfirm = false" @confirm="() => {
+            deleteSectionQuestionMutation.mutate(props.row.original.id)
+        }" />
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
+import Confirm from '@/components/ui/confirm/Confirm.vue';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -38,14 +42,13 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import Confirm from '@/components/ui/confirm/Confirm.vue';
-import { ref } from 'vue';
-import { Button } from '@/components/ui/button';
+} from '@/components/ui/dropdown-menu';
+import { useDeleteSectionQuestion } from '@/hooks/section-question';
+import type { TSectionQuestion } from '@/types/question';
 import { DotsHorizontalIcon } from '@radix-icons/vue';
 import type { Row } from '@tanstack/vue-table';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router/auto';
-import type { TSectionQuestion } from '@/types/question';
 const router = useRouter()
 
 type RowActionProps = {
@@ -55,6 +58,12 @@ type RowActionProps = {
 const props = defineProps<RowActionProps>()
 
 const isShowConfirm = ref(false);
+
+const deleteSectionQuestionMutation = useDeleteSectionQuestion({
+    onExtraSuccess() {
+        isShowConfirm.value = false
+    },
+})
 
 
 </script>

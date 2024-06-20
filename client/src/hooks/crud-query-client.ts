@@ -77,7 +77,12 @@ export class CrudQueryClient<
      *
      * @returns {MutationResult} - The result of the delete mutation.
      */
-    useDelete() {
+    useDelete(opts?: {
+        onExtraSuccess?: (res: TBaseResponse<E>) => void
+        onExtraError?: (err: any) => void
+    }) {
+        const { onExtraSuccess, onExtraError } = opts || {}
+
         return useMutation({
             mutationFn: (id: string) => this.api.delete(id),
             onSuccess: (res, id) => {
@@ -90,8 +95,13 @@ export class CrudQueryClient<
                 })
 
                 toast.success(res.message)
+
+                onExtraSuccess?.(res)
             },
-            onError: toastError,
+            onError: (err: any) => {
+                toastError(err)
+                onExtraError?.(err)
+            },
         })
     }
 
@@ -102,10 +112,11 @@ export class CrudQueryClient<
      * @param {function} [onExtraError] - Optional callback function to be executed on error during update operation.
      * @returns {MutationResult} - The result of the update mutation.
      */
-    useUpdate(
-        onExtraSuccess?: (res: TBaseResponse<Record<string, unknown>>) => void,
-        onExtraError?: (err: any) => void,
-    ) {
+    useUpdate(opts?: {
+        onExtraSuccess?: (res: TBaseResponse<E>) => void
+        onExtraError?: (err: any) => void
+    }) {
+        const { onExtraSuccess, onExtraError } = opts || {}
         return useMutation({
             mutationFn: ({ data, id }: { data: U; id: string }) =>
                 this.api.update(id, data),

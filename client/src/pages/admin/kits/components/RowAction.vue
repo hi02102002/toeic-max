@@ -11,7 +11,7 @@
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem @click="isShowUpdateDialog = true">
-                Edit
+                Update
             </DropdownMenuItem>
             <DropdownMenuItem @click="isShowConfirm = true">
                 Remove
@@ -29,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
+import Confirm from '@/components/ui/confirm/Confirm.vue';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -36,15 +38,13 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import Confirm from '@/components/ui/confirm/Confirm.vue';
-import { ref } from 'vue';
-import { Button } from '@/components/ui/button';
-import { DotsHorizontalIcon } from '@radix-icons/vue';
-import UpdateDialog from './UpdateDialog.vue';
-import type { Row } from '@tanstack/vue-table';
-import type { TKit } from '@/types/kit';
+} from '@/components/ui/dropdown-menu';
 import { useDeleteKit } from '@/hooks/kit';
+import type { TKit } from '@/types/kit';
+import { DotsHorizontalIcon } from '@radix-icons/vue';
+import type { Row } from '@tanstack/vue-table';
+import { ref } from 'vue';
+import UpdateDialog from './UpdateDialog.vue';
 
 type RowActionProps = {
     row: Row<TKit>

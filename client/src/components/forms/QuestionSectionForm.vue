@@ -27,7 +27,8 @@
                 <FormLabel required>
                     Part
                 </FormLabel>
-                <Select v-bind="componentField">
+                <Select v-bind="componentField"
+                    :model-value="typeof componentField.modelValue === 'string' ? componentField.modelValue : `${componentField.modelValue}`">
                     <FormControl>
                         <SelectTrigger>
                             <SelectValue placeholder="Select a part of question" />
@@ -190,12 +191,15 @@ const PART_TO_RENDER_IMAGE = [1, 6, 7]
 
 const props = withDefaults(
     defineProps<{
-        id?: 'question-section-form'
+        id?: 'question-section-form',
+        defaultValues?: QuestionSectionSchemaType,
     }>(),
     {
         id: 'question-section-form',
+        defaultValues: undefined,
     },
 )
+
 
 const emits = defineEmits({
     submit(_payload: QuestionSectionSchemaType) { },
@@ -204,9 +208,13 @@ const emits = defineEmits({
 const form = useForm({
     validationSchema: toTypedSchema(QuestionSectionSchema),
     initialValues: {
-        part: '1' as unknown as number,
-        questions: [],
-        image_urls: [],
+        part: props.defaultValues?.part ?? '1' as unknown as number,
+        questions: props.defaultValues?.questions || [],
+        image_urls: props.defaultValues?.image_urls || [],
+        audio_url: props.defaultValues?.audio_url || '',
+        teaser: props.defaultValues?.teaser,
+        location: props.defaultValues?.location || '',
+        test_kit_id: props.defaultValues?.test_kit_id || '',
     }
 })
 
@@ -219,7 +227,7 @@ const openEditQuestion = ref<string | number | null>(null)
 
 
 const handleSubmit = form.handleSubmit((data) => {
-    console.log(data)
+
 
     emits('submit', data)
 })
@@ -240,6 +248,12 @@ const handleEditQuestion = (question: QuestionSchemaType) => {
 }
 
 watchEffect(() => {
+
+    if (!form.errors.value['questions']) {
+        return;
+    }
+
+
     if (!location.value
     ) {
         form.setFieldValue('questions', [])

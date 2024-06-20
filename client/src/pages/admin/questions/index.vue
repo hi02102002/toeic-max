@@ -43,7 +43,9 @@
 
         </template>
         <template #extra-button>
-            <RouterLink to="/admin/questions/create" :class="buttonVariants()">
+            <RouterLink to="/admin/questions/create" :class="buttonVariants({
+                size: 'sm'
+            })">
                 Create question
             </RouterLink>
         </template>
@@ -90,6 +92,7 @@ definePage({
         layout: 'Admin',
         title: "Manage Questions",
         roles: ['ADMIN'],
+        requiresAuth: true
     },
 
 })
