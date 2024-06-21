@@ -35,7 +35,7 @@ export class BaseQueryDto implements IBasePagingQuery {
 
     @IsOptional()
     @IsBoolean()
-    @Transform(({ value }) => toBoolean(value))
+    @Transform(({ value }) => (value ? toBoolean(value) : true))
     asc?: boolean
 }
 
@@ -58,6 +58,7 @@ export type TGetPagingQuery<
         wheres?: SQLWrapper[]
         searchFields?: PgColumn[]
         selectFields?: S
+        defaultOrderBy?: string
     }
 }
 
@@ -301,7 +302,12 @@ export abstract class CRUDBaseService<
         Q extends IBasePagingQuery = IBasePagingQuery,
     >({ query, callback, opts }: TGetPagingQuery<Q, S>) {
         const { page = 1, limit = 10, q = '', orderBy, asc: _asc } = query || {}
-        const { wheres = [], searchFields = [], selectFields } = opts || {}
+        const {
+            wheres = [],
+            searchFields = [],
+            selectFields,
+            defaultOrderBy = 'id',
+        } = opts || {}
 
         const where = and(
             or(...searchFields.map((field) => ilike(field, `%${q}%`))),
@@ -317,8 +323,8 @@ export abstract class CRUDBaseService<
             .limit(limit)
             .orderBy(
                 _asc
-                    ? asc(get(this.table, orderBy) || 'id')
-                    : desc(get(this.table, orderBy) || 'id'),
+                    ? asc(get(this.table, orderBy) || defaultOrderBy)
+                    : desc(get(this.table, orderBy) || defaultOrderBy),
             )
             .$dynamic()
 

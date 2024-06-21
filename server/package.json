@@ -6,7 +6,7 @@
     "license": "ISC",
     "scripts": {
         "start": "npm run build && concurrently \"npm run server:prod\" \"npm run worker:prod\"",
-        "dev": "concurrently \"npm run server:dev\" \"npm run worker:dev\"",
+        "dev": "cross-env NODE_ENV=development nodemon",
         "server:prod": "cross-env NODE_ENV=production node dist/server.js",
         "worker:prod": "cross-env NODE_ENV=production node dist/worker.js",
         "server:dev": "cross-env NODE_ENV=development nodemon",

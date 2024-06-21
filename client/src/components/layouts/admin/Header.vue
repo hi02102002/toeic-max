@@ -54,6 +54,10 @@
             url: '/admin/questions'
         },
         {
+            name: 'Topics',
+            url: '/admin/topics'
+        },
+        {
             name: 'Vocabularies',
             url: '/admin/vocabularies'
         },
@@ -69,14 +73,14 @@
 
 <script setup lang="ts">
 import logo from '@/assets/logo.png';
+import LoadingFullPage from '@/components/LoadingFullPage.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useLogout } from '@/hooks/auth';
+import { useCurrentUserStore } from '@/stores/current-user';
 import { RouterLink } from 'vue-router/auto';
 import Navbar from './Navbar.vue';
-import { useCurrentUserStore } from '@/stores/current-user';
-import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu';
-import { useLogout } from '@/hooks/auth';
-import LoadingFullPage from '@/components/LoadingFullPage.vue';
 
 const logoutMutation = useLogout()
 

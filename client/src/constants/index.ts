@@ -41,6 +41,14 @@ export const API_ENDPOINTS = {
         IMAGE: '/upload/image',
         AUDIO: '/upload/audio',
     },
+    TOPICS: {
+        INDEX: '/topics',
+        ALL: '/topics/all',
+    },
+    VOCABULARIES: {
+        INDEX: '/vocabularies',
+        ALL: '/vocabularies/all',
+    },
 }
 
 export const ERROR_MESSAGE =

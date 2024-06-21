@@ -40,10 +40,11 @@ import { DataTable } from '../data-table';
 import { Input } from '../input';
 import Toolbar from './Toolbar.vue';
 
+
 type Props = {
     queryKey: string
     columns: ColumnDef<T, unknown>[]
-    apiAction: (params: TBaseQueryParams) => Promise<TPaginateResponse<T>>
+    apiAction: <Q extends TBaseQueryParams = TBaseQueryParams, >(params: Q) => Promise<TPaginateResponse<T>>
     query?: Record<string, unknown>
     isShowSearch?: boolean
 }
@@ -63,9 +64,7 @@ const params = useUrlSearchParams<Record<string, any>>('history', {
         limit: 10,
         q: ''
     },
-
 })
-
 
 const { data, isLoading } = useQuery({
     queryKey: [props.queryKey, params],
@@ -154,7 +153,6 @@ watchDebounced(
     debounce: 800,
 }
 )
-
 
 </script>
 

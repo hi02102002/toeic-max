@@ -1,0 +1,5 @@
+export * from './vocabulary.controller'
+export * from './vocabulary.dto'
+export * from './vocabulary.route'
+export * from './vocabulary.service'
+export * from './vocabulary.type'

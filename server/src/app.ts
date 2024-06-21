@@ -12,6 +12,7 @@ import morgan from 'morgan'
 import 'reflect-metadata'
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './libs/swagger'
+import { runWorker } from './worker'
 
 export class App {
     public app: express.Application
@@ -27,6 +28,8 @@ export class App {
         this.initializeRoutes(routes)
         this.initializeErrorHandling()
         this.initializeSwagger()
+
+        runWorker()
     }
 
     public listen() {

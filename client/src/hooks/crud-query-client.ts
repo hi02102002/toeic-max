@@ -176,6 +176,7 @@ export class CrudQueryClient<
         return useQuery({
             queryKey: [`${this.api.endpoint}-id`, id],
             queryFn: () => this.api.getById(id).then((res) => res.data),
+            enabled: !!id,
         })
     }
 

@@ -1,0 +1,5 @@
+export * from './topic.controller'
+export * from './topic.dto'
+export * from './topic.route'
+export * from './topic.service'
+export * from './topic.type'
