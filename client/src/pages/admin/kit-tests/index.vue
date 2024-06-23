@@ -30,8 +30,7 @@
 
 <script setup lang="ts">
 import { kitTestApi } from '@/apis/kit-test.api';
-import { kitApi } from '@/apis/kit.api';
-import { BadgeApi } from '@/components/ui/badge-api';
+import Badge from '@/components/ui/badge/Badge.vue';
 import { TableHeader } from '@/components/ui/data-table';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TableBuilder } from '@/components/ui/table-builder';
@@ -41,6 +40,7 @@ import { useQueryState } from '@/hooks/use-query-state';
 import type { TTest } from '@/types/test';
 import type { ColumnDef } from '@tanstack/vue-table';
 import { useTitle } from '@vueuse/core';
+import { get } from 'lodash';
 import { h } from 'vue';
 import { definePage } from 'vue-router/auto';
 import { CreateDialog, RowAction } from './components';
@@ -82,19 +82,17 @@ const cols: ColumnDef<TTest>[] = [
         },
     },
     {
-        accessorKey: 'kit_id',
+        accessorKey: 'kit.name',
         header({ column }: any) {
             return h(TableHeader, {
                 title: 'Kit',
                 column
             })
         },
-        enableSorting: false,
         cell({ row }) {
-            return h(BadgeApi, {
-                apiAction: () => kitApi.getById(row.original.kit_id).then(res => res.data.name),
-                queryKey: `kit-${row.original.kit_id}`,
-            })
+            return h(Badge, {
+
+            }, get(row.original, 'kit.name', 'N/A')) || 'N/A'
         }
     },
     {

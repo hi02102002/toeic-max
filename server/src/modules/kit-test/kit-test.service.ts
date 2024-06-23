@@ -1,6 +1,7 @@
-import { tests } from '@/database/schema'
+import { jsonBuildObject } from '@/database/helper'
+import { kits, tests } from '@/database/schema'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
-import { eq } from 'drizzle-orm'
+import { eq, getTableColumns } from 'drizzle-orm'
 import slugify from 'slugify'
 import { Service } from 'typedi'
 import { KitTestDto, QueryKitTestDto } from './kit-test.dto'
@@ -26,6 +27,15 @@ export class KitTestService extends CRUDBaseService<
                 wheres: [
                     query.kit_id ? eq(tests.kit_id, query.kit_id) : undefined,
                 ],
+                selectFields: {
+                    ...getTableColumns(tests),
+                    kit: jsonBuildObject({
+                        ...getTableColumns(kits),
+                    }),
+                },
+            },
+            callback(query) {
+                return query.leftJoin(kits, eq(tests.kit_id, kits.id))
             },
         })
 

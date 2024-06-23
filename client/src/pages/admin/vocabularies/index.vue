@@ -5,9 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { topicApi } from '@/apis/topic.api';
 import { vocabularyApi } from '@/apis/vocabulary.api';
-import { BadgeApi } from '@/components/ui/badge-api';
+import { Badge } from '@/components/ui/badge';
 import { TableHeader } from '@/components/ui/data-table';
 import TableBuilder from '@/components/ui/table-builder/TableBuilder.vue';
 import { API_ENDPOINTS } from '@/constants';
@@ -15,7 +14,7 @@ import { useQueryState } from '@/hooks/use-query-state';
 import type { TQueryVocabulary, TVocabulary } from '@/types/vocabulary';
 import type { ColumnDef } from '@tanstack/vue-table';
 import { useTitle } from '@vueuse/core';
-import { capitalize, unescape } from 'lodash';
+import { capitalize, get, unescape } from 'lodash';
 import { h, watch } from 'vue';
 import { definePage, useRoute } from 'vue-router/auto';
 
@@ -91,22 +90,19 @@ const cols: ColumnDef<TVocabulary>[] = [
         },
     },
     {
-        accessorKey: 'topic_id',
+        accessorKey: 'topic.name',
         header({ column }: any) {
             return h(TableHeader, {
                 title: 'Topic',
                 column,
             })
         },
-        enableSorting: false,
-        cell({ row }) {
-            return h(BadgeApi, {
-                apiAction: () => topicApi.getById(row.original.topic_id).then((res) => res.data.name),
-                queryKey: `topic-${row.original.topic_id}`
-            })
-        }
-
+        cell(props) {
+            return h(Badge, {}, get(props.row.original, 'topic.name', 'N/A'))
+        },
+        enableSorting: false
     }
+
 
 ]
 

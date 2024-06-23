@@ -29,6 +29,20 @@
       "when": 1718863542424,
       "tag": "0003_simple_scalphunter",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1719114783246,
+      "tag": "0004_strong_rafael_vega",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1719114970955,
+      "tag": "0005_rapid_ted_forrester",
+      "breakpoints": true
     }
   ]
 }

@@ -54,6 +54,7 @@
 
 <script setup lang="ts">
 import { questionApi } from '@/apis/question.api';
+import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { TableHeader } from '@/components/ui/data-table';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -65,6 +66,7 @@ import type { TSectionQuestion } from '@/types/question';
 import type { ColumnDef } from '@tanstack/vue-table';
 import { useTitle } from '@vueuse/core';
 import * as dayFns from 'date-fns';
+import { get } from 'lodash';
 import { h } from 'vue';
 import { definePage } from 'vue-router/auto';
 import RowAction from './components/RowAction.vue';
@@ -141,6 +143,22 @@ const cols: ColumnDef<TSectionQuestion>[] = [
                 dayFns.format(new Date(row.original.updated_at), 'dd/MM/yyyy HH:mm')
             )
         }
+    },
+    {
+        accessorKey: 'test_kit.name',
+        header({ column }: any) {
+            return h(TableHeader, {
+                title: 'Test',
+                column
+            })
+        },
+        enableSorting: false,
+        cell({ row }) {
+            return h(
+                Badge, {}, get(row.original, 'test_kit.name', 'N/A') || 'N/A'
+            )
+        },
+
     },
     {
         accessorKey: 'actions',

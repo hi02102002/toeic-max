@@ -15,9 +15,19 @@ export class TopicController extends CRUDBaseController<TopicService> {
 
     getParentsByChildId = catchAsync(async (req, res) => {
         const { id } = req.params
-        const parents = await this.service.getAllChildByParentId(id as string)
+        const parents = await this.service.getAllParentByChildId(id as string)
         res.json({
             data: parents,
+        })
+    })
+
+    getChildrenByParentId = catchAsync(async (req, res) => {
+        const { parentId } = req.query
+        const children = await this.service.getAllChildByParentId(
+            parentId as string,
+        )
+        res.json({
+            data: children,
         })
     })
 }

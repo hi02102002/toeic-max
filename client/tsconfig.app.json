@@ -24,6 +24,7 @@
         "types": [
             "vite-plugin-vue-layouts/client",
             "unplugin-vue-router/client",
-        ]
+        ],
+        "jsx": "preserve",
     },
 }

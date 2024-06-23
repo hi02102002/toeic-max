@@ -17,6 +17,10 @@ export class TopicRoute implements IRoutes {
 
     initRoutes(): void {
         this.router.get(
+            `${this.path}/children`,
+            this.controller.getChildrenByParentId,
+        )
+        this.router.get(
             `${this.path}/parents/:id`,
             this.controller.getParentsByChildId,
         )

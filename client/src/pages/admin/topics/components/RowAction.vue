@@ -23,6 +23,9 @@
             }">
                 View vocabularies
             </DropdownMenuItem>
+            <DropdownMenuItem @click="isShowUpdateDialog = true">
+                Update
+            </DropdownMenuItem>
             <DropdownMenuItem @click="isShowConfirm = true">
                 Remove
             </DropdownMenuItem>
@@ -33,6 +36,7 @@
         @cancel="isShowConfirm = false" @confirm="() => {
             deleteTopicMutation.mutate(props.row.original.id)
         }" />
+    <UpdateDialog v-model:is-open="isShowUpdateDialog" :row="props.row" />
 </template>
 
 <script setup lang="ts">
@@ -47,21 +51,23 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useDeleteTopic } from '@/hooks/topic';
-import type { TSectionQuestion } from '@/types/question';
+import type { TTopic } from '@/types/topic';
 import { DotsHorizontalIcon } from '@radix-icons/vue';
 import type { Row } from '@tanstack/vue-table';
 import { get } from 'lodash';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router/auto';
+import UpdateDialog from './UpdateDialog.vue';
 const router = useRouter()
 
 type RowActionProps = {
-    row: Row<TSectionQuestion>
+    row: Row<TTopic>
 }
 
 const props = defineProps<RowActionProps>()
 
 const isShowConfirm = ref(false);
+const isShowUpdateDialog = ref(false)
 
 const deleteTopicMutation = useDeleteTopic({
     onExtraSuccess() {

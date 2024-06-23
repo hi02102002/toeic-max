@@ -1,6 +1,7 @@
-import { vocabularies } from '@/database/schema'
+import { jsonBuildObject } from '@/database/helper'
+import { topics, vocabularies } from '@/database/schema'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
-import { inArray } from 'drizzle-orm'
+import { eq, getTableColumns, inArray } from 'drizzle-orm'
 import { Service } from 'typedi'
 import { TopicService } from '../topic'
 import { CreateVocabularyDto, QueryVocabularyDto } from './vocabulary.dto'
@@ -40,6 +41,18 @@ export class VocabularyService extends CRUDBaseService<
                 ],
                 searchFields: [vocabularies.name],
                 defaultOrderBy: 'name',
+                selectFields: {
+                    ...getTableColumns(vocabularies),
+                    topic: jsonBuildObject({
+                        ...getTableColumns(topics),
+                    }),
+                },
+            },
+            callback(query) {
+                return query.leftJoin(
+                    topics,
+                    eq(vocabularies.topic_id, topics.id),
+                )
             },
         })
     }

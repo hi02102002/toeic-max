@@ -60,3 +60,5 @@ export const PARTS: TSelectResponse[] = [1, 2, 3, 4, 5, 6, 7].map((part) => ({
     value: `${part}`,
     label: `Part ${part}`,
 }))
+
+export const QUESTION_TYPES: TSelectResponse[] = []

@@ -2,6 +2,7 @@ import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
 import {
     boolean,
+    index,
     integer,
     json,
     pgEnum,
@@ -146,17 +147,24 @@ export const questions = pgTable(
     },
 )
 
-export const topics = pgTable('topics', {
-    id: varchar('id')
-        .primaryKey()
-        .$defaultFn(() => createId()),
-    name: text('name').notNull().unique(),
-    parent_id: varchar('parent_id'),
-    level: integer('level'),
-    slug: text('slug').unique(),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
-})
+export const topics = pgTable(
+    'topics',
+    {
+        id: varchar('id')
+            .primaryKey()
+            .$defaultFn(() => createId()),
+        name: text('name').notNull().unique(),
+        parent_id: varchar('parent_id').default(null),
+        level: integer('level'),
+        slug: text('slug').unique(),
+        created_at: timestamp('created_at').defaultNow(),
+        updated_at: timestamp('updated_at').defaultNow(),
+        order: integer('order').default(0),
+    },
+    ({ name }) => ({
+        nameIdx: index('topic_name_idx').on(name),
+    }),
+)
 
 export const vocabularies = pgTable(
     'vocabularies',
@@ -180,6 +188,7 @@ export const vocabularies = pgTable(
     ({ name, topic_id, example }) => {
         return {
             unique: unique('vocabularies_unique').on(name, topic_id, example),
+            nameIdx: index('vocabulary_name_idx').on(name),
         }
     },
 )

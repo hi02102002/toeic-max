@@ -152,7 +152,8 @@ export abstract class CRUDBaseService<
             return rows as T
         } catch (error: any) {
             if (error?.code === '23505') {
-                throw new Error(
+                throw new HttpException(
+                    StatusCodes.BAD_REQUEST,
                     `This ${lowerCase(
                         this.modelName,
                     )} already exists in system.`,
@@ -174,7 +175,8 @@ export abstract class CRUDBaseService<
             return rows as T
         } catch (error: any) {
             if (error?.code === '23505') {
-                throw new Error(
+                throw new HttpException(
+                    StatusCodes.BAD_REQUEST,
                     `This ${lowerCase(
                         this.modelName,
                     )} already exists in system.`,
@@ -221,7 +223,8 @@ export abstract class CRUDBaseService<
             return rows as T
         } catch (error) {
             if (error?.code === '23505') {
-                throw new Error(
+                throw new HttpException(
+                    StatusCodes.BAD_REQUEST,
                     `This ${lowerCase(
                         this.modelName,
                     )} already exists in system.`,

@@ -4,14 +4,13 @@
             Loading...
         </span>
         <span v-else class="whitespace-nowrap">
-            {{ data || 'N/A' }}
+            {{ data }}
         </span>
     </Badge>
 </template>
 
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
-import { ref, watch } from 'vue';
 import { Badge } from '../badge';
 
 
@@ -20,18 +19,19 @@ type Props = {
     queryKey: string
 }
 
-const queryKeyRef = ref('')
 
 const props = defineProps<Props>()
 
 
-const { data, isLoading } = useQuery({
-    queryKey: ['badge', queryKeyRef.value],
-    queryFn: props.apiAction,
-})
+const useBadgeApi = () => {
+    return useQuery({
+        queryKey: ['badge', props.queryKey],
+        queryFn: props.apiAction,
+    })
+}
 
-watch(() => props.queryKey, (value) => {
-    queryKeyRef.value = value
-}, { immediate: true, deep: true })
+
+const { data, isLoading } = useBadgeApi()
+
 
 </script>

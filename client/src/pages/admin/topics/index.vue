@@ -1,13 +1,15 @@
 <template>
     <TableBuilder :columns="cols" :query-key="API_ENDPOINTS.TOPICS.INDEX" :api-action="topicApi.getPaginate"
         :query="state">
+        <template #extra-button>
+            <CreateTopicDialog />
+        </template>
     </TableBuilder>
 </template>
 
 <script setup lang="ts">
 import { topicApi } from '@/apis/topic.api';
 import { Badge } from '@/components/ui/badge';
-import { BadgeApi } from '@/components/ui/badge-api';
 import { TableHeader } from '@/components/ui/data-table';
 import TableBuilder from '@/components/ui/table-builder/TableBuilder.vue';
 import { API_ENDPOINTS } from '@/constants';
@@ -16,8 +18,10 @@ import type { TTopic } from '@/types/topic';
 import type { ColumnDef } from '@tanstack/vue-table';
 import { useTitle } from '@vueuse/core';
 import * as dayFns from 'date-fns';
+import { get } from 'lodash';
 import { h, watch } from 'vue';
 import { definePage, useRoute } from 'vue-router/auto';
+import { CreateTopicDialog } from './components';
 import RowAction from './components/RowAction.vue';
 
 const { handleChange, state } = useQueryState({
@@ -62,24 +66,19 @@ const cols: ColumnDef<TTopic>[] = [
         }
     },
     {
-        accessorKey: 'parent_id',
+        accessorKey: 'parent.name',
         header({ column }: any) {
             return h(TableHeader, {
-                title: 'Parent topic',
+                title: 'Parent Id',
                 column,
             })
         },
-        enableSorting: false,
         cell({ row }) {
-            return h('span', {},
-                row.original.parent_id ?
-                    h(BadgeApi, {
-                        apiAction: () => topicApi.getById(row.original.parent_id).then(res => res.data.name),
-                        queryKey: `topic-${row.original.parent_id}`
-                    })
-                    : h(Badge, {}, 'N/A')
+            return h(Badge, {},
+                get(row.original, 'parent.name', 'N/A') || 'N/A'
             )
-        }
+        },
+        enableSorting: false
     },
     {
         accessorKey: 'created_at',

@@ -39,8 +39,8 @@ export abstract class BaseCrudApi<
         return http_client.get(`${this.endpoint}/${id}`)
     }
 
-    getAll(): Promise<TBaseResponse<TBaseResponse<E[]>>> {
-        return http_client.get(this.endpoint)
+    getAll(): Promise<TBaseResponse<E[]>> {
+        return http_client.get(`${this.endpoint}/get-all`)
     }
 
     getPaginate(query: Q): Promise<TPaginateResponse<E>> {

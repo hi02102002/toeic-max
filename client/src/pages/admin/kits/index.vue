@@ -3,7 +3,6 @@
         <template #extra-button>
             <CreateDialog />
         </template>
-
     </TableBuilder>
 </template>
 

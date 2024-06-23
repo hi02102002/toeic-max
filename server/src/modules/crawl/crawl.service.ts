@@ -1,5 +1,3 @@
-import { Service } from 'typedi'
-import { callApi, callApiDecrypt } from './crawl.helper'
 import { db } from '@/database/db'
 import {
     kits,
@@ -10,7 +8,10 @@ import {
     topics,
     vocabularies,
 } from '@/database/schema'
+import { getFirstNumberInString } from '@/utils/common'
 import { eq } from 'drizzle-orm'
+import { Service } from 'typedi'
+import { callApi, callApiDecrypt } from './crawl.helper'
 
 @Service()
 export class CrawlService {
@@ -246,6 +247,7 @@ export class CrawlService {
                     name: group.name,
                     slug: group.slug,
                     level: group.level,
+                    order: getFirstNumberInString(group.name) || 0,
                 })
                 .returning()
                 .then((res) => res[0])
@@ -264,6 +266,7 @@ export class CrawlService {
                         slug: item.slug,
                         level: item.level,
                         parent_id: newTopic.id,
+                        order: getFirstNumberInString(item.name) || 0,
                     })
                     .returning()
                     .then((res) => res[0])

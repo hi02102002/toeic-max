@@ -1,7 +1,12 @@
-import { question_sections, questions as sQuestions } from '@/database/schema'
+import { jsonBuildObject } from '@/database/helper'
+import {
+    question_sections,
+    questions as sQuestions,
+    tests,
+} from '@/database/schema'
 import { HttpException } from '@/exceptions/http-exception'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
-import { eq } from 'drizzle-orm'
+import { eq, getTableColumns } from 'drizzle-orm'
 import { StatusCodes } from 'http-status-codes'
 import { isEmpty } from 'lodash'
 import { Service } from 'typedi'
@@ -82,6 +87,16 @@ export class QuestionSectionService extends CRUDBaseService<
                         : undefined,
                     part ? eq(question_sections.part, part) : undefined,
                 ],
+                selectFields: {
+                    ...getTableColumns(question_sections),
+                    test_kit: jsonBuildObject(getTableColumns(tests)),
+                },
+            },
+            callback(query) {
+                return query.leftJoin(
+                    tests,
+                    eq(tests.id, question_sections.test_kit_id),
+                )
             },
         })
 

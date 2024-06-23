@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import autoprefixer from 'autoprefixer'
 import { URL, fileURLToPath } from 'node:url'
 import tailwind from 'tailwindcss'
@@ -21,6 +22,7 @@ export default defineConfig({
             ],
             exclude: ['**/components/**'],
         }),
+        vueJsx(),
         vue(),
         VueDevTools(),
         Layouts({
