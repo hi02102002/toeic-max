@@ -1,6 +1,5 @@
 import { jsonBuildObject } from '@/database/helper'
 import { topics } from '@/database/schema'
-import { HttpException } from '@/exceptions/http-exception'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
 import { getFirstNumberInString } from '@/utils/common'
 import {
@@ -13,8 +12,6 @@ import {
     sql,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import { StatusCodes } from 'http-status-codes'
-import { lowerCase } from 'lodash'
 import slugify from 'slugify'
 import { Service } from 'typedi'
 import { CreateTopicDto, QueryTopicDto } from './topic.dto'
@@ -22,7 +19,7 @@ import { TTopic } from './topic.type'
 
 @Service()
 export class TopicService extends CRUDBaseService<
-    CreateTopicDto,
+    Pick<TTopic, 'name' | 'level' | 'parent_id' | 'order'>,
     Partial<TTopic>,
     TTopic
 > {
@@ -31,37 +28,20 @@ export class TopicService extends CRUDBaseService<
     }
 
     async create<T = TTopic>(data: CreateTopicDto) {
-        try {
-            let parent: TTopic | null = null
+        let parent: TTopic | null = null
 
-            if (data.parent_id) {
-                parent = await this.getOneById(data.parent_id)
-            }
-
-            const [newTopic] = await this.db
-                .insert(topics)
-                .values({
-                    ...data,
-                    slug: slugify(data.name, {
-                        lower: true,
-                    }),
-                    level: parent ? parent.level + 1 : 1,
-                })
-                .returning()
-
-            return newTopic as T
-        } catch (error) {
-            if (error?.code === '23505') {
-                throw new HttpException(
-                    StatusCodes.BAD_REQUEST,
-                    `This ${lowerCase(
-                        this.modelName,
-                    )} already exists in system.`,
-                )
-            }
-
-            throw error
+        if (data.parent_id) {
+            parent = await this.getOneById(data.parent_id)
         }
+
+        const topic = await super.create({
+            level: parent ? parent.level + 1 : 1,
+            order: getFirstNumberInString(data.name) || 0,
+            name: data.name,
+            parent_id: data.parent_id,
+        })
+
+        return topic as T
     }
 
     async update<T = TTopic>({

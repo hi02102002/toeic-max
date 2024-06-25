@@ -62,3 +62,29 @@ export const PARTS: TSelectResponse[] = [1, 2, 3, 4, 5, 6, 7].map((part) => ({
 }))
 
 export const QUESTION_TYPES: TSelectResponse[] = []
+
+export const VOCABULARY_TYPES: TSelectResponse[] = [
+    'Noun',
+    'Verb',
+    'Adjective',
+    'Adverb',
+    'Preposition',
+    'Conjunction',
+    'Interjection',
+].map((type) => ({
+    value: type.toLowerCase(),
+    label: type,
+}))
+
+export const VOCABULARY_CATEGORY: TSelectResponse[] = [
+    'Verb - Động từ',
+    'Noun - Danh từ',
+    'Adjective - Tính từ',
+    'Adverb - Trạng từ',
+    'Preposition - Giới từ',
+    'Conjunction - Liên từ',
+    'Interjection - Thán từ',
+].map((category) => ({
+    value: category,
+    label: category,
+}))

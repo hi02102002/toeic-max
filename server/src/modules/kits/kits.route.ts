@@ -1,4 +1,6 @@
 import { IRoutes } from '@/interfaces/routes.interface'
+import { AuthMiddleware } from '@/middlewares/auth.middleware'
+import { RolesMiddleware } from '@/middlewares/roles.middleware'
 import { ValidationMiddleware } from '@/middlewares/validation.middleware'
 import { Router } from 'express'
 import Container from 'typedi'
@@ -22,15 +24,24 @@ export class KitsRoute implements IRoutes {
 
         this.router.post(
             `${this.path}`,
+            AuthMiddleware,
+            RolesMiddleware(['ADMIN']),
             ValidationMiddleware(KitDto),
             this.controller.create,
         )
         this.router.put(
             `${this.path}/:id`,
+            AuthMiddleware,
+            RolesMiddleware(['ADMIN']),
             ValidationMiddleware(KitDto),
             this.controller.update,
         )
-        this.router.delete(`${this.path}/:id`, this.controller.delete)
+        this.router.delete(
+            `${this.path}/:id`,
+            AuthMiddleware,
+            RolesMiddleware(['ADMIN']),
+            this.controller.delete,
+        )
         this.router.get(
             this.path,
             ValidationMiddleware(QueryKitDto, 'query', true, false, true),

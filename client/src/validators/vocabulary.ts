@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-export const VocabularySchema = z.object({
+export const InputVocabularySchema = z.object({
     name: z
         .string({
             required_error: 'Please enter vocabulary name.',
@@ -31,4 +31,10 @@ export const VocabularySchema = z.object({
             required_error: 'Please select category.',
         })
         .min(1, 'Please select category.'),
+    example: z.string().optional(),
+    image: z.string({
+        required_error: 'Please upload image.',
+    }),
 })
+
+export type TInputVocabularySchemaType = z.infer<typeof InputVocabularySchema>

@@ -5,7 +5,7 @@
                 Create Topic
             </Button>
         </DialogTrigger>
-        <DialogContent class="sm:max-w-[425px]">
+        <DialogContent class="sm:max-w-3xl">
             <DialogHeader>
                 <DialogTitle>
                     Create new topic

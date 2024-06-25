@@ -1,10 +1,11 @@
 import { vocabularyApi } from '@/apis/vocabulary.api'
 import type { TQueryVocabulary, TVocabulary } from '@/types/vocabulary'
+import type { TInputVocabularySchemaType } from '@/validators'
 import { CrudQueryClient } from '../crud-query-client'
 
 const VocabularyClient = new CrudQueryClient<
-    TVocabulary,
-    TVocabulary,
+    TInputVocabularySchemaType,
+    TInputVocabularySchemaType,
     TQueryVocabulary,
     TVocabulary
 >(vocabularyApi)

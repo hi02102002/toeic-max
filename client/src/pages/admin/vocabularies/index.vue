@@ -1,12 +1,20 @@
 <template>
     <TableBuilder :columns="cols" :query-key="API_ENDPOINTS.VOCABULARIES.INDEX" :api-action="vocabularyApi.getPaginate"
         :query="state">
+        <template #extra-button>
+            <RouterLink to="/admin/vocabularies/create" :class="buttonVariants({
+                size: 'sm'
+            })">
+                Create Vocabulary
+            </RouterLink>
+        </template>
     </TableBuilder>
 </template>
 
 <script setup lang="ts">
 import { vocabularyApi } from '@/apis/vocabulary.api';
 import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
 import { TableHeader } from '@/components/ui/data-table';
 import TableBuilder from '@/components/ui/table-builder/TableBuilder.vue';
 import { API_ENDPOINTS } from '@/constants';
@@ -16,7 +24,8 @@ import type { ColumnDef } from '@tanstack/vue-table';
 import { useTitle } from '@vueuse/core';
 import { capitalize, get, unescape } from 'lodash';
 import { h, watch } from 'vue';
-import { definePage, useRoute } from 'vue-router/auto';
+import { RouterLink, definePage, useRoute } from 'vue-router/auto';
+import { RowAction } from './components';
 
 const { handleChange, state } = useQueryState<TQueryVocabulary>({
     topic_id: undefined
@@ -101,8 +110,22 @@ const cols: ColumnDef<TVocabulary>[] = [
             return h(Badge, {}, get(props.row.original, 'topic.name', 'N/A'))
         },
         enableSorting: false
-    }
-
+    },
+    {
+        accessorKey: 'actions',
+        header({ column }: any) {
+            return h(TableHeader, {
+                title: 'Actions',
+                column,
+            })
+        },
+        cell({ row }) {
+            return h(RowAction, {
+                row,
+            })
+        },
+        enableSorting: false
+    },
 
 ]
 

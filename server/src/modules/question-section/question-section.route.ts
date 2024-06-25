@@ -1,4 +1,6 @@
 import { IRoutes } from '@/interfaces/routes.interface'
+import { AuthMiddleware } from '@/middlewares/auth.middleware'
+import { RolesMiddleware } from '@/middlewares/roles.middleware'
 import { ValidationMiddleware } from '@/middlewares/validation.middleware'
 import { Router } from 'express'
 import Container from 'typedi'
@@ -22,6 +24,8 @@ export class QuestionSectionRoute implements IRoutes {
         this.router.get(`${this.path}/:id`, this.controller.getOneById)
         this.router.post(
             `${this.path}`,
+            AuthMiddleware,
+            RolesMiddleware(['ADMIN']),
             ValidationMiddleware(CreateQuestionDto),
             this.controller.create,
         )

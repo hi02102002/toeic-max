@@ -148,6 +148,7 @@ watchDebounced(
     search, (value) => {
         if (props.isShowSearch) {
             params.q = value
+            params.page = 1
         }
     }, {
     debounce: 800,

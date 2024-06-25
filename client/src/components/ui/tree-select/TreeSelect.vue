@@ -1,7 +1,7 @@
 <template>
     <Popover v-model:open="isOpen" modal>
         <PopoverTrigger as-child>
-            <Button variant="outline" class="w-full justify-between font-normal text-sm px-2">
+            <Button variant="outline" class="w-full justify-between font-normal text-sm px-2 break-all">
                 {{
                     value || props.placeholder || 'Select an option'
                 }}
@@ -24,10 +24,10 @@
 </template>
 
 <script setup lang="ts">
-import { flattenTree } from '@/utils';
+import { findIdPath } from '@/utils';
 import { useVModel } from '@vueuse/core';
 import { X } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { Button } from '../button';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import { ScrollArea } from '../scroll-area';
@@ -56,9 +56,11 @@ const handleSelect = () => {
     isOpen.value = false
 }
 
-const value = computed(() => flattenTree(props.options).find(
-    (option) => option.value === model.value
-)?.label)
+const value = computed(() => findIdPath(props.options, model.value as string))
+
+defineComponent({
+    inheritAttrs: false,
+})
 
 </script>
 
