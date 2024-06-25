@@ -17,11 +17,14 @@ import { VocabularyForm } from '@/components/forms';
 import { Button } from '@/components/ui/button';
 import { useUpdateVocabulary, useVocabulary } from '@/hooks/vocabulary';
 import type { TInputVocabularySchemaType } from '@/validators';
+import { useTitle } from '@vueuse/core';
 import { Loader2 } from 'lucide-vue-next';
 import { definePage, useRoute, useRouter } from 'vue-router/auto';
 
 const { params } = useRoute('/admin/vocabularies/[id]/update')
 const router = useRouter()
+useTitle('Update Vocabulary | ELand')
+
 
 const { data, isLoading } = useVocabulary(params.id)
 

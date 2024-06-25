@@ -48,6 +48,23 @@ const cols: ColumnDef<TVocabulary>[] = [
         },
     },
     {
+        accessorKey: 'image',
+        header({ column }: any) {
+            return h(TableHeader, {
+                title: 'Image',
+                column,
+            })
+        },
+        cell({ row }) {
+            return h('img', {
+                src: row.original.image,
+                alt: row.original.name,
+                class: 'h-10 w-10 object-cover rounded'
+            })
+        },
+        enableSorting: false
+    },
+    {
         accessorKey: 'name',
         header({ column }: any) {
             return h(TableHeader, {
@@ -85,6 +102,15 @@ const cols: ColumnDef<TVocabulary>[] = [
         header({ column }: any) {
             return h(TableHeader, {
                 title: 'Meaning',
+                column,
+            })
+        },
+    },
+    {
+        accessorKey: 'example',
+        header({ column }: any) {
+            return h(TableHeader, {
+                title: 'Example',
                 column,
             })
         },

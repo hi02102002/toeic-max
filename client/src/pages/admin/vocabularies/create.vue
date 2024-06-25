@@ -13,8 +13,11 @@
 import { VocabularyForm } from '@/components/forms';
 import { Button } from '@/components/ui/button';
 import { useCreateVocabulary } from '@/hooks/vocabulary';
+import { useTitle } from '@vueuse/core';
 import { definePage, useRouter } from 'vue-router/auto';
 const router = useRouter()
+
+useTitle('Create Vocabulary | ELand')
 
 const createQuestionMutation = useCreateVocabulary({
     onExtraSuccess() {
