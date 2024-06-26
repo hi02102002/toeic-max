@@ -31,6 +31,7 @@ declare module 'vue-router/auto-routes' {
     '/admin/vocabularies/': RouteRecordInfo<'/admin/vocabularies/', '/admin/vocabularies', Record<never, never>, Record<never, never>>,
     '/admin/vocabularies/[id]/update': RouteRecordInfo<'/admin/vocabularies/[id]/update', '/admin/vocabularies/:id/update', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/admin/vocabularies/create': RouteRecordInfo<'/admin/vocabularies/create', '/admin/vocabularies/create', Record<never, never>, Record<never, never>>,
+    '/dashboard/': RouteRecordInfo<'/dashboard/', '/dashboard', Record<never, never>, Record<never, never>>,
     '/forgot-password': RouteRecordInfo<'/forgot-password', '/forgot-password', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,

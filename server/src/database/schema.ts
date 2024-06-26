@@ -220,6 +220,20 @@ export const course_topics = pgTable('course_topics', {
     introduction: text('introduction'),
 })
 
+export const history = pgTable('history', {
+    id: varchar('id')
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    user_id: varchar('user_id').references(() => users.id, {
+        onDelete: 'cascade',
+    }),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+    meta_data: json('meta_data'),
+    contents: json('contents'),
+    type: text('type').$type<'test' | 'course' | 'vocab' | 'practice-part'>(),
+})
+
 export const kits_relations = relations(kits, ({ many }) => ({
     tests: many(tests),
 }))

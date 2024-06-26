@@ -36,7 +36,7 @@ router.beforeEach(async (to) => {
     if (meta?.isAuthRoute && user) {
         const isAdmin = user.roles.includes('ADMIN')
 
-        return isAdmin ? '/admin' : '/'
+        return isAdmin ? '/admin' : '/dashboard'
     }
 
     // If the route requires authentication and the user is not logged in, redirect to the login page.
