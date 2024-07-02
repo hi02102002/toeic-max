@@ -28,3 +28,12 @@ export type TSelectResponse = {
     value: any
     label: string
 }
+
+export type TChoice = {
+    section_question_id: string
+    question_id: string
+    choose: string
+    ans: string
+    is_correct: boolean
+    part: number
+}

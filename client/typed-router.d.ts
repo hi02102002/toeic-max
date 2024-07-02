@@ -32,6 +32,8 @@ declare module 'vue-router/auto-routes' {
     '/admin/vocabularies/[id]/update': RouteRecordInfo<'/admin/vocabularies/[id]/update', '/admin/vocabularies/:id/update', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/admin/vocabularies/create': RouteRecordInfo<'/admin/vocabularies/create', '/admin/vocabularies/create', Record<never, never>, Record<never, never>>,
     '/dashboard/': RouteRecordInfo<'/dashboard/', '/dashboard', Record<never, never>, Record<never, never>>,
+    '/dashboard/question/[part]/': RouteRecordInfo<'/dashboard/question/[part]/', '/dashboard/question/:part', { part: ParamValue<true> }, { part: ParamValue<false> }>,
+    '/dashboard/question/[part]/practice/[numOfQuestion]/': RouteRecordInfo<'/dashboard/question/[part]/practice/[numOfQuestion]/', '/dashboard/question/:part/practice/:numOfQuestion', { part: ParamValue<true>, numOfQuestion: ParamValue<true> }, { part: ParamValue<false>, numOfQuestion: ParamValue<false> }>,
     '/forgot-password': RouteRecordInfo<'/forgot-password', '/forgot-password', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,

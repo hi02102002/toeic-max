@@ -1,6 +1,7 @@
 import { db } from '@/database/db'
 import {
     kits,
+    listening,
     question_sections,
     questions,
     sections,
@@ -9,6 +10,7 @@ import {
     vocabularies,
 } from '@/database/schema'
 import { getFirstNumberInString } from '@/utils/common'
+import { logger } from '@/utils/logger'
 import { eq } from 'drizzle-orm'
 import { Service } from 'typedi'
 import { callApi, callApiDecrypt } from './crawl.helper'
@@ -302,5 +304,69 @@ export class CrawlService {
             topic: data,
             exercises,
         }
+    }
+
+    async getDirect(method: 'GET' | 'POST' | 'PUT' | 'DELETE', url: string) {
+        const { data } = await callApiDecrypt(url, method, {}, true)
+
+        return data
+    }
+
+    async crawlSpell() {
+        let page = 1
+        const spellIds = []
+
+        while (page <= 13) {
+            const { data } = await callApi(`app/spell?page=${page}`, 'GET', {})
+
+            spellIds.push(...data.data.map((item: any) => item.id))
+
+            page++
+        }
+
+        const promises = spellIds.map(async (id: string) => {
+            return this.crawlSpellDetail(id)
+        })
+
+        const results = await Promise.all(promises)
+
+        return results
+    }
+
+    async crawlSpellDetail(id: string) {
+        const { data } = await callApiDecrypt(`app/spell/${id}`, 'GET', {})
+
+        if (!data) return
+
+        await db.insert(listening).values({
+            audio_url: data.audio_url,
+            duration: data.duration,
+            duration_text: data.duration_str,
+            image_url: data.image_url,
+            name: data.name,
+            meta_data: data.meta_data.map((item) => {
+                return {
+                    text: item.text,
+                    duration: {
+                        from: item.start,
+                        to: item.end,
+                    },
+                    trans: {
+                        vi: item.tran.vi,
+                    },
+                }
+            }),
+            total_question: data.total_conversation,
+            transcript: {
+                text: data.transcript.text,
+                trans: {
+                    vi: data.transcript.tran.vi,
+                },
+            },
+        })
+
+        logger.info(`Inserted new spell: ${data.name}`)
+
+        return data
     }
 }

@@ -103,7 +103,7 @@ export const getProxy = () => {
 
 const BASE_URL = 'https://api.scandict.com/api/'
 const token =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mzc2MCwibmFtZSI6IkhvYW5nIEh1eSIsInBob25lIjoiMDM5NDYwNDgzMCIsInBhc3N3b3JkIjoiJDJ5JDEwJDFmcjkwZ2VLQXFzWkVrejh1MEdxa09VL3gzL1pRdS5MN2pRa2sxVHFjbGJxZ1k1ZVp4MTBDIiwibm9pc2UiOiI2NWJlZmRjNWEwNWVhIiwiYWN0aXZlIjoxLCJ2ZXJpZnlfcGhvbmUiOjAsImNyZWF0ZWRfYXQiOiIyMDI0LTAyLTAzVDIwOjAwOjIxLjAwMDAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNC0wNC0xNFQwNjowNTozNS4wMDAwMDBaIiwiZW1haWwiOiJob2FuZ2h1eS5kZXYwMjEwQGdtYWlsLmNvbSIsInNlY3Jlc3RfY29kZSI6MCwiZXhwaXJlc19zZWNyZXN0X2NvZGUiOm51bGwsImFjdGl2YXRpb25fY29kZSI6bnVsbCwiZGF0ZV9leHBpcmVzIjpudWxsLCJwYWNrYWdlIjowLCJwYWNrYWdlX2V4cGlyZXMiOm51bGx9.jgRObiR0h43NQImrO97XYliVGXlcLUskCCvyTeZRuek'
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6OTAzMiwibmFtZSI6Ikh1eSBWbyIsInBob25lIjoiMDM5NDYwNDgzMCIsInBhc3N3b3JkIjoiJDJ5JDEwJENPVFhJRG45VUIyWUdCZG5CZzdOdk9mUGgyQzZ0VHloZk82QmVLL01DUk1objVIemZQV1VLIiwibm9pc2UiOiI2NjdmMjQyYzFhYjc5IiwiYWN0aXZlIjoxLCJ2ZXJpZnlfcGhvbmUiOjAsImNyZWF0ZWRfYXQiOiIyMDI0LTA2LTI4VDIwOjU5OjI0LjAwMDAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNC0wNi0yOFQyMTowNTowMS4wMDAwMDBaIiwidG9wX2hvdXJzIjpudWxsLCJlbWFpbCI6ImhvYW5naHV5LmRldjAyMTBAZ21haWwuY29tIiwic2VjcmVzdF9jb2RlIjowLCJleHBpcmVzX3NlY3Jlc3RfY29kZSI6bnVsbCwiYWN0aXZhdGlvbl9jb2RlIjpudWxsLCJkYXRlX2V4cGlyZXMiOm51bGwsInBhY2thZ2UiOjAsInBhY2thZ2VfZXhwaXJlcyI6IjIwMjQtMDctMDIgMDM6NTk6MjQiLCJpc19hZmZpbGlhdGUiOjAsIm1heF9wZXJjZW50IjowLCJzY29yZSI6MCwidG90YWxfdGltZV9vbmxpbmUiOjE0MCwibGFzdF92aXNpdGVkIjoiMjAyNC0wNi0yOSAwNDowMTo1OCJ9.xYt_DW4Q250yl0xsNBV4Lt0N2AiqTCXpE7XiXSlY-wQ'
 
 const APP_MIX = 'MOLZEI634GO7Eaz7l4eK3i/rembzb2Mkl7h1ItTSyeg='
 
@@ -111,15 +111,21 @@ export const callApiDecrypt = async (
     url: string,
     method: string,
     params: Record<string, any>,
+    direct?: boolean,
 ) => {
+    const agent = new HttpsProxyAgent(getProxy())
+
     const data = await axios({
         method,
-        baseURL: BASE_URL,
+        baseURL: direct ? undefined : BASE_URL,
         url,
         params,
         headers: {
             token,
             lang: 'vi',
+        },
+        httpAgent: {
+            agent,
         },
     })
         .then((res) => {
@@ -147,8 +153,14 @@ export const callApiDecrypt = async (
 
             return response
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(async (err) => {
+            if (err?.response?.data?.message === 'Too Many Attempts.')
+                if (err?.response.status === 429) {
+                    await sleep(1 * 60 * 1000)
+                    console.log('Sleep 1 minute')
+                    return callApiDecrypt(url, method, params, direct)
+                }
+
             return null
         })
 

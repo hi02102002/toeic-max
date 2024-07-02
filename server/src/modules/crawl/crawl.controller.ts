@@ -44,4 +44,22 @@ export class CrawlController {
             data,
         })
     })
+
+    getDirect = catchAsync<TResponse>(async (req, res) => {
+        const data = await this.crawlService.getDirect(
+            req.method.toUpperCase() as any,
+            req.query.url as string,
+        )
+
+        res.status(HttpStatusCode.Ok).json({
+            data,
+        })
+    })
+
+    crawlSpell = catchAsync<TResponse>(async (req, res) => {
+        const data = await this.crawlService.crawlSpell()
+        res.status(HttpStatusCode.Ok).json({
+            data,
+        })
+    })
 }

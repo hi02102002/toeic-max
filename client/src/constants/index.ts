@@ -49,6 +49,10 @@ export const API_ENDPOINTS = {
         INDEX: '/vocabularies',
         ALL: '/vocabularies/all',
     },
+    SECTIONS: {
+        INDEX: '/sections',
+        ALL: '/sections/all',
+    },
 }
 
 export const ERROR_MESSAGE =

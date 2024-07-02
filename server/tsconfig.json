@@ -65,7 +65,9 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.json",
-    ".env"
+    ".env",
+    "src/modules/section/section.dtots",
+    "src/modules/section/section.dtots"
   ],
   "exclude": [
     "node_modules",

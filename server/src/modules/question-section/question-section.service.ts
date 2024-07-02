@@ -6,10 +6,11 @@ import {
 } from '@/database/schema'
 import { HttpException } from '@/exceptions/http-exception'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
-import { eq, getTableColumns } from 'drizzle-orm'
+import { and, eq, getTableColumns, notInArray, sql } from 'drizzle-orm'
 import { StatusCodes } from 'http-status-codes'
 import { isEmpty } from 'lodash'
 import { Service } from 'typedi'
+import { HistoryService } from '../history/history.service'
 import {
     CreateQuestionDto,
     QueryQuestionSectionDto,
@@ -22,7 +23,7 @@ export class QuestionSectionService extends CRUDBaseService<
     Partial<CreateQuestionDto>,
     TQuestionSection
 > {
-    constructor() {
+    constructor(private readonly historyService: HistoryService) {
         super(question_sections, 'Question')
     }
 
@@ -132,5 +133,42 @@ export class QuestionSectionService extends CRUDBaseService<
         }
 
         return sectionQuestion as T
+    }
+
+    async getForPractice({
+        numOfQuestions,
+        part,
+        userId,
+    }: {
+        numOfQuestions: number
+        part: TQuestionSection['part']
+        userId: string
+    }) {
+        const sectionQuestionsPracticed =
+            await this.historyService.getQuestionIdsInPartPracticed({
+                part,
+                userId,
+            })
+
+        const sectionQuestions = await this.db.query.question_sections.findMany(
+            {
+                where: and(
+                    eq(question_sections.part, part),
+                    sectionQuestionsPracticed.length > 0
+                        ? notInArray(
+                              question_sections.id,
+                              sectionQuestionsPracticed,
+                          )
+                        : undefined,
+                ),
+                with: {
+                    questions: true,
+                },
+                limit: numOfQuestions,
+                orderBy: sql`random()`,
+            },
+        )
+
+        return sectionQuestions
     }
 }

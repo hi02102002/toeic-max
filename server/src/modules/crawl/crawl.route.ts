@@ -45,5 +45,9 @@ export class CrawlRoute implements IRoutes {
             RolesMiddleware(['ADMIN']),
             this.controller.crawlCourseTopic,
         )
+
+        this.router.get(`${this.path}/spell`, this.controller.crawlSpell)
+
+        this.router.get(`${this.path}/direct`, this.controller.getDirect)
     }
 }

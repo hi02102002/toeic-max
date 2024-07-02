@@ -48,9 +48,6 @@ export default defineConfig({
         VitePWA({
             registerType: 'autoUpdate',
             injectRegister: 'auto',
-            devOptions: {
-                enabled: true,
-            },
             workbox: {
                 cleanupOutdatedCaches: true,
                 globPatterns: [

@@ -1,3 +1,4 @@
+import { TPracticePart, TTest } from '@/modules/history/history.type'
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
 import {
@@ -220,7 +221,7 @@ export const course_topics = pgTable('course_topics', {
     introduction: text('introduction'),
 })
 
-export const history = pgTable('history', {
+export const histories = pgTable('histories', {
     id: varchar('id')
         .primaryKey()
         .$defaultFn(() => createId()),
@@ -230,8 +231,62 @@ export const history = pgTable('history', {
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow(),
     meta_data: json('meta_data'),
-    contents: json('contents'),
+    /**
+     * with type is practice-part contents will be an array like this:
+     * [
+     *   {
+     *      section_question_id: string,
+     *      question_id:string,
+     *      choose: string,
+     *      ans: string,
+     *      is_correct: boolean
+     *   }
+     * ]
+     *
+     * with type is test contents will be an array like this:
+     * [
+     *   {
+     *      section_question_id: string,
+     *      question_id:string,
+     *      choose: string,
+     *      ans: string,
+     *      is_correct: boolean
+     *      part: number
+     * }
+     * ]
+     */
+    contents: json('contents').$type<Array<TPracticePart> | Array<TTest>>(),
     type: text('type').$type<'test' | 'course' | 'vocab' | 'practice-part'>(),
+})
+
+export const listening = pgTable('listening', {
+    id: varchar('id')
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    name: text('name'),
+    duration: integer('duration'),
+    duration_text: text('duration_text'),
+    audio_url: text('audio_url'),
+    image_url: text('image_url'),
+    transcript: json('transcript').$type<{
+        text: string
+        trans: {
+            vi: string
+        }
+    }>(),
+    meta_data: json('meta_data').$type<
+        Array<{
+            text: string
+            duration: {
+                from: string
+                to: string
+            }
+            trans: {
+                vi: string
+            }
+        }>
+    >(),
+    total_question: integer('total_question'),
 })
 
 export const kits_relations = relations(kits, ({ many }) => ({

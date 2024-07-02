@@ -1,7 +1,7 @@
 <template>
     <Header class="border-b border-input border-solid" />
     <div class="min-h-svh pt-14">
-        <div class="container-app bg-background">
+        <div class="container-app bg-background h-full">
             <div class="py-4">
                 <RouterView />
             </div>
