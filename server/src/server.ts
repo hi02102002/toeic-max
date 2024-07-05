@@ -1,15 +1,16 @@
 import { App } from '@/app'
 import { AuthRoute } from '@/modules/auth'
 import { CrawlRoute } from '@/modules/crawl'
+import { HistoryRoute } from '@/modules/history'
 import { KitTestRoute } from '@/modules/kit-test'
 import { KitsRoute } from '@/modules/kits'
 import { QuestionSectionRoute } from '@/modules/question-section'
+import { ResultRoute } from '@/modules/result'
+import { SectionRoute } from '@/modules/section'
+import { TopicRoute } from '@/modules/topic'
 import { UploadRoute } from '@/modules/upload'
 import { VocabulariesRoute } from '@/modules/vocabulary'
 import { ValidateEnv } from '@utils/validateEnv'
-import { HistoryRoute } from './modules/history'
-import { SectionRoute } from './modules/section'
-import { TopicRoute } from './modules/topic'
 
 ValidateEnv()
 
@@ -24,6 +25,7 @@ const app = new App([
     new TopicRoute(),
     new SectionRoute(),
     new HistoryRoute(),
+    new ResultRoute(),
 ])
 
 app.listen()

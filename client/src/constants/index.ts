@@ -53,6 +53,10 @@ export const API_ENDPOINTS = {
         INDEX: '/sections',
         ALL: '/sections/all',
     },
+    HISTORY: {
+        INDEX: '/histories',
+        ALL: '/histories/all',
+    },
 }
 
 export const ERROR_MESSAGE =

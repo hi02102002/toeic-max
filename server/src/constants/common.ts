@@ -17,4 +17,11 @@ export const LOGGER_SECTION = {
     KIT_TEST_CONTROLLER: '[KIT_TEST_CONTROLLER]',
     QUESTION_SERVICE: '[QUESTION_SERVICE]',
     QUESTION_CONTROLLER: '[QUESTION_CONTROLLER]',
+    RESULT_SERVICE: '[RESULT_SERVICE]',
+    RESULT_CONTROLLER: '[RESULT_CONTROLLER]',
+}
+
+export const REDIS_KEYS = {
+    RESULT: (userId: string, historyId: string) =>
+        `RESULT:${userId}:${historyId}`,
 }

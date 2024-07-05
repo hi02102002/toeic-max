@@ -6,10 +6,11 @@ import {
 } from '@/database/schema'
 import { HttpException } from '@/exceptions/http-exception'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
-import { and, eq, getTableColumns, notInArray, sql } from 'drizzle-orm'
+import { and, eq, getTableColumns, inArray, notInArray, sql } from 'drizzle-orm'
 import { StatusCodes } from 'http-status-codes'
 import { isEmpty } from 'lodash'
 import { Service } from 'typedi'
+import { TPracticePart } from '../history'
 import { HistoryService } from '../history/history.service'
 import {
     CreateQuestionDto,
@@ -141,9 +142,10 @@ export class QuestionSectionService extends CRUDBaseService<
         userId,
     }: {
         numOfQuestions: number
-        part: TQuestionSection['part']
+        part: any
         userId: string
     }) {
+        part = Number(part) as TPracticePart['part']
         const sectionQuestionsPracticed =
             await this.historyService.getQuestionIdsInPartPracticed({
                 part,
@@ -170,5 +172,19 @@ export class QuestionSectionService extends CRUDBaseService<
         )
 
         return sectionQuestions
+    }
+
+    async getSectionQuestionsByIds(ids: string[]) {
+        const section_questions =
+            await this.db.query.question_sections.findMany({
+                where: inArray(question_sections.id, ids),
+                with: {
+                    questions: true,
+                },
+            })
+
+        return section_questions.sort((a, b) => {
+            return ids.indexOf(a.id) - ids.indexOf(b.id)
+        })
     }
 }

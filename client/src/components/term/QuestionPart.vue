@@ -1,8 +1,8 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-    <div class="flex gap-10 max-w-5xl mx-auto">
+    <div class="flex gap-5 max-w-5xl mx-auto md:flex-row flex-col md:gap-10">
         <div v-if="props.questionSection?.teaser?.text || props.questionSection?.image_urls.length !== 0 || props.questionSection?.audio_url"
-            class="flex items-start gap-4 flex-col w-1/2
+            class="flex items-start gap-4 flex-col md:w-1/2
                 max-h-screen overflow-y-auto
             ">
             <div v-if="props.questionSection?.audio_url" class='bg-[#F1F3F4] w-full rounded shadow'>
@@ -36,8 +36,8 @@
             </div>
         </div>
         <div class="space-y-4 w-full md:max-w-3xl mx-auto md:w-1/2">
-            <Question v-for="question in questionSection?.questions" :key="question.id" :question="question"
-                @choose="handelChoose" />
+            <Question v-for="(question, index) in questionSection?.questions" :key="question.id" :question="question"
+                :show-is-correct="props.showIsCorrect" :index="index" @choose="handelChoose" />
         </div>
     </div>
 </template>
@@ -55,6 +55,7 @@ type Props = {
     questionSection: TSectionQuestion
     isActive: boolean
     isAutoPlayAudio?: boolean
+    showIsCorrect?: boolean
 }
 
 const props = defineProps<Props>()

@@ -35,7 +35,8 @@ export class HistoryService extends CRUDBaseService<
             const sectionQuestionIds = practicePartHistories
                 .map((item) => {
                     const contents = item.contents.filter(
-                        (content) => content.part === part && !content.choose,
+                        (content) =>
+                            content.part === Number(part) && content.choose,
                     )
 
                     return contents.map(
@@ -48,5 +49,25 @@ export class HistoryService extends CRUDBaseService<
         } catch (error) {
             return []
         }
+    }
+
+    async getDetailHistory({
+        userId,
+        historyId,
+        type,
+    }: {
+        userId: string
+        historyId: string
+        type: THistory['type']
+    }) {
+        const history = await this.db.query.histories.findFirst({
+            where: and(
+                eq(histories.id, historyId),
+                eq(histories.user_id, userId),
+                eq(histories.type, type),
+            ),
+        })
+
+        return history
     }
 }

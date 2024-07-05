@@ -22,14 +22,14 @@ export class HistoryRoute implements IRoutes {
         this.router.post(
             `${this.path}`,
             AuthMiddleware,
-            RolesMiddleware(['ADMIN']),
+            RolesMiddleware(['ADMIN', 'USER']),
             ValidationMiddleware(HistoryDto),
             this.controller.create,
         )
         this.router.put(
             `${this.path}/:id`,
             AuthMiddleware,
-            RolesMiddleware(['ADMIN']),
+            RolesMiddleware(['ADMIN', 'USER']),
             ValidationMiddleware(HistoryDto),
             this.controller.update,
         )

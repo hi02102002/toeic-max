@@ -48,6 +48,10 @@ export class HistoryDto {
     @IsString()
     @IsNotEmpty()
     type: string
+
+    @IsString()
+    @IsNotEmpty()
+    user_id: string
 }
 
 export class QueryHistoryDto extends BaseQueryDto {}

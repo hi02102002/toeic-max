@@ -5,6 +5,13 @@ import { toastError } from '@/utils'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { toast } from 'vue-sonner'
 
+type TMutationOptions<E> = {
+    onExtraSuccess?: (res: TBaseResponse<E>) => void
+    onExtraError?: (err: any) => void
+    isShowToastSuccess?: boolean
+    isShowToastError?: boolean
+}
+
 /**
  * A generic class for handling CRUD operations using query hooks.
  *
@@ -45,11 +52,13 @@ export class CrudQueryClient<
      * @param {function} [onExtraError] - Optional callback function to be executed on error during create operation.
      * @returns {MutationResult} - The result of the create mutation.
      */
-    useCreate(opts?: {
-        onExtraSuccess?: (res: TBaseResponse<E>) => void
-        onExtraError?: (err: any) => void
-    }) {
-        const { onExtraSuccess, onExtraError } = opts || {}
+    useCreate(opts?: TMutationOptions<E>) {
+        const {
+            onExtraSuccess,
+            onExtraError,
+            isShowToastError = true,
+            isShowToastSuccess = true,
+        } = opts || {}
         return useMutation({
             mutationFn: ({ data }: { data: C }) => this.api.create(data),
             onSuccess: (res) => {
@@ -61,12 +70,16 @@ export class CrudQueryClient<
                     queryKey: [`${this.api.endpoint}-id`, res.data.id],
                 })
 
-                toast.success(res.message)
+                if (isShowToastSuccess) {
+                    toast.success(res.message)
+                }
 
                 onExtraSuccess?.(res)
             },
             onError: (err: any) => {
-                toastError(err)
+                if (isShowToastError) {
+                    toastError(err)
+                }
                 onExtraError?.(err)
             },
         })
@@ -77,11 +90,13 @@ export class CrudQueryClient<
      *
      * @returns {MutationResult} - The result of the delete mutation.
      */
-    useDelete(opts?: {
-        onExtraSuccess?: (res: TBaseResponse<E>) => void
-        onExtraError?: (err: any) => void
-    }) {
-        const { onExtraSuccess, onExtraError } = opts || {}
+    useDelete(opts?: TMutationOptions<E>) {
+        const {
+            onExtraSuccess,
+            onExtraError,
+            isShowToastError = true,
+            isShowToastSuccess = true,
+        } = opts || {}
 
         return useMutation({
             mutationFn: (id: string) => this.api.delete(id),
@@ -94,12 +109,17 @@ export class CrudQueryClient<
                     queryKey: [`${this.api.endpoint}-id`, id],
                 })
 
-                toast.success(res.message)
+                if (isShowToastSuccess) {
+                    toast.success(res.message)
+                }
 
                 onExtraSuccess?.(res)
             },
             onError: (err: any) => {
-                toastError(err)
+                if (isShowToastError) {
+                    toastError(err)
+                }
+
                 onExtraError?.(err)
             },
         })
@@ -112,11 +132,13 @@ export class CrudQueryClient<
      * @param {function} [onExtraError] - Optional callback function to be executed on error during update operation.
      * @returns {MutationResult} - The result of the update mutation.
      */
-    useUpdate(opts?: {
-        onExtraSuccess?: (res: TBaseResponse<E>) => void
-        onExtraError?: (err: any) => void
-    }) {
-        const { onExtraSuccess, onExtraError } = opts || {}
+    useUpdate(opts?: TMutationOptions<E>) {
+        const {
+            onExtraSuccess,
+            onExtraError,
+            isShowToastError = true,
+            isShowToastSuccess = true,
+        } = opts || {}
         return useMutation({
             mutationFn: ({ data, id }: { data: U; id: string }) =>
                 this.api.update(id, data),
@@ -129,13 +151,16 @@ export class CrudQueryClient<
                     queryKey: [`${this.api.endpoint}-id`, res.data.id],
                 })
 
-                toast.success(res.message)
+                if (isShowToastSuccess) {
+                    toast.success(res.message)
+                }
 
                 onExtraSuccess?.(res)
             },
             onError: (err: any) => {
-                console.log(err)
-                toastError(err)
+                if (isShowToastError) {
+                    toastError(err)
+                }
                 onExtraError?.(err)
             },
         })
