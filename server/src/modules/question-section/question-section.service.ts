@@ -140,12 +140,27 @@ export class QuestionSectionService extends CRUDBaseService<
         numOfQuestions,
         part,
         userId,
+        ref,
     }: {
         numOfQuestions: number
         part: any
         userId: string
+        ref?: string
     }) {
         part = Number(part) as TPracticePart['part']
+
+        // get questions to practice again base on history ref
+        if (ref) {
+            const sectionQuestionIds =
+                await this.historyService.getQuestionIdsToPracticeAgain(ref)
+
+            if (!sectionQuestionIds.length) {
+                return []
+            }
+
+            return this.getSectionQuestionsByIds(sectionQuestionIds)
+        }
+
         const sectionQuestionsPracticed =
             await this.historyService.getQuestionIdsInPartPracticed({
                 part,

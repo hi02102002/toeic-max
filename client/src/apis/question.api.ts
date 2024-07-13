@@ -19,12 +19,19 @@ class QuestionApi extends BaseCrudApi<
         super(API_ENDPOINTS.QUESTIONS.INDEX)
     }
 
-    async getForPractice(
-        part: number,
-        numOfQuestions: number,
-    ): Promise<TSectionQuestion[]> {
+    async getForPractice({
+        numOfQuestions,
+        part,
+        ref,
+    }: {
+        part: number
+        numOfQuestions: number
+        ref?: string
+    }): Promise<TSectionQuestion[]> {
         return http_client
-            .get(`${this.endpoint}/for-practice/${part}/${numOfQuestions}`)
+            .get(`${this.endpoint}/for-practice/${part}/${numOfQuestions}`, {
+                params: { ref },
+            })
             .then((response) => response.data)
     }
 }

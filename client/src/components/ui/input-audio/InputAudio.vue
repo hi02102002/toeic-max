@@ -3,7 +3,8 @@
         <Input v-model:model-value="modelValue" class="audio-input-url" :disabled="uploadAudioMutation.isPending.value"
             :placeholder="props.placeholder" />
         <Button :size="'icon'" class="audio-input-btn flex-shrink-0" variant="outline"
-            :disabled="uploadAudioMutation.isPending.value" :loading="uploadAudioMutation.isPending.value" @click="() => inputRef?.click()
+            :disabled="uploadAudioMutation.isPending.value" :loading="uploadAudioMutation.isPending.value" type='button'
+            @click="() => inputRef?.click()
                 ">
             <Upload v-if="!uploadAudioMutation.isPending.value" class="w-4 h-4 upload" />
         </Button>
@@ -12,13 +13,13 @@
 </template>
 
 <script setup lang="ts">
+import { useUploadAudio } from '@/hooks/upload';
+import { cn } from '@/utils';
+import { useVModel } from '@vueuse/core';
 import { Upload } from 'lucide-vue-next';
+import { ref } from 'vue';
 import { Button } from '../button';
 import { Input } from '../input';
-import { useVModel } from '@vueuse/core'
-import { cn } from '@/utils';
-import { ref } from 'vue';
-import { useUploadAudio } from '@/hooks/upload'
 
 type Props = {
     modelValue?: string

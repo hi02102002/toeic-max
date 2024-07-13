@@ -57,7 +57,12 @@ export const API_ENDPOINTS = {
         INDEX: '/histories',
         ALL: '/histories/all',
     },
-}
+    RESULT: {
+        INDEX: '/results',
+        PRACTICE_PART: (historyId: string) =>
+            `/results/practice-part/${historyId}`,
+    },
+} as const
 
 export const ERROR_MESSAGE =
     'Something went wrong while requesting the server. Please try again later.'

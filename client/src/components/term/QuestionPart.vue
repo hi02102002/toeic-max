@@ -37,13 +37,14 @@
         </div>
         <div class="space-y-4 w-full md:max-w-3xl mx-auto md:w-1/2">
             <Question v-for="(question, index) in questionSection?.questions" :key="question.id" :question="question"
-                :show-is-correct="props.showIsCorrect" :index="index" @choose="handelChoose" />
+                :show-is-correct="props.showIsCorrect" :index="index" :choices="props.choices"
+                :disabled="props.isForReview" @choose="handelChoose" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import type { TChoice } from '@/stores/practice-part';
+import type { TChoice } from '@/types/common';
 import type { TSectionQuestion } from '@/types/question';
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import Question from './Question.vue';
@@ -56,6 +57,8 @@ type Props = {
     isActive: boolean
     isAutoPlayAudio?: boolean
     showIsCorrect?: boolean
+    choices?: TChoice[]
+    isForReview?: boolean
 }
 
 const props = defineProps<Props>()
@@ -67,6 +70,8 @@ const emits = defineEmits<{
 
 
 const handelChoose = (value: TChoice) => {
+    if (props.isForReview) return
+
     emits('choose', value)
 }
 

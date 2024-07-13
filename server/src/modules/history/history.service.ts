@@ -20,6 +20,7 @@ export class HistoryService extends CRUDBaseService<
     }: {
         userId: string
         part: number
+        ref?: string
     }) {
         try {
             const practicePartHistories = await this.db
@@ -49,6 +50,20 @@ export class HistoryService extends CRUDBaseService<
         } catch (error) {
             return []
         }
+    }
+
+    async getQuestionIdsToPracticeAgain(ref: string) {
+        const history = await this.getOneById(ref)
+
+        if (!history) {
+            return []
+        }
+
+        const sectionQuestionIds = history.contents.map(
+            (content) => content.section_question_id,
+        )
+
+        return sectionQuestionIds
     }
 
     async getDetailHistory({

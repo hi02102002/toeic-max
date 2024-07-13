@@ -36,4 +36,5 @@ export type TChoice = {
     ans: string
     is_correct: boolean
     part: number
+    location: number
 }

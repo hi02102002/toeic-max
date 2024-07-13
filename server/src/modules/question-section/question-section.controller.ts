@@ -18,6 +18,7 @@ export class QuestionSectionController extends CRUDBaseController<QuestionSectio
             part,
             numOfQuestions,
             userId: req.user.id,
+            ref: req.query?.ref as string,
         })
 
         return res.status(StatusCodes.OK).json({

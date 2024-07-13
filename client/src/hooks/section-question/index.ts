@@ -5,7 +5,15 @@ import type { QuestionSectionSchemaType } from '@/validators/question-section'
 import { queryOptions, useQuery } from '@tanstack/vue-query'
 import { CrudQueryClient } from '../crud-query-client'
 
-export const forPracticeOptions = (part: number, numOfQuestions: number) =>
+export const forPracticeOptions = ({
+    numOfQuestions,
+    part,
+    ref,
+}: {
+    part: number
+    numOfQuestions: number
+    ref?: string
+}) =>
     queryOptions({
         queryKey: [
             'questions',
@@ -13,8 +21,14 @@ export const forPracticeOptions = (part: number, numOfQuestions: number) =>
             part,
             numOfQuestions,
             Date.now(),
+            ref,
         ],
-        queryFn: () => questionApi.getForPractice(part, numOfQuestions),
+        queryFn: () =>
+            questionApi.getForPractice({
+                numOfQuestions,
+                part,
+                ref,
+            }),
         initialData: [],
         refetchOnWindowFocus: false,
     })
@@ -31,7 +45,19 @@ export const useDeleteSectionQuestion = SectionQuestionClient.useDelete
 export const useUpdateSectionQuestion = SectionQuestionClient.useUpdate
 export const useSectionQuestion = SectionQuestionClient.useGetById
 
-export const useSectionQuestionForPractice = (
-    part: number,
-    numOfQuestions: number,
-) => useQuery(forPracticeOptions(part, numOfQuestions))
+export const useSectionQuestionForPractice = ({
+    numOfQuestions,
+    part,
+    ref,
+}: {
+    part: number
+    numOfQuestions: number
+    ref?: string
+}) =>
+    useQuery(
+        forPracticeOptions({
+            numOfQuestions,
+            part,
+            ref,
+        }),
+    )

@@ -3,7 +3,7 @@
     <div class="flex gap-3 items-center">
         <div class="w-24">
             <Button class="p-0 w-full h-auto" variant="outline" :disabled="uploadImageMutation.isPending.value"
-                @click="inputRef?.click()">
+                type='button' @click="inputRef?.click()">
                 <AspectRatio :ratio="1 / 1" class="flex items-center justify-center cursor-pointer">
                     <Loader2 v-if="uploadImageMutation.isPending.value" class="animate-spin" />
                     <Plus v-else />
@@ -16,7 +16,7 @@
                 <div class="w-24 relative">
                     <Button size="sm" class="w-5 h-5 p-0 absolute top-2 right-2 z-50" variant="destructive"
                         @click="() => removeImage(index)">
-                        <X class="w-3 h-3" />
+                        <X class="w-3 h-3" type='button' />
                     </Button>
                     <AspectRatio :ratio="1 / 1">
                         <img :src="url" alt="image" class="object-cover w-full h-full" />

@@ -66,13 +66,13 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { useCreateHistory } from '@/hooks/history';
+import { useCreateHistory, useUpdateHistory } from '@/hooks/history';
 import { useSectionByPart } from '@/hooks/section';
 import { useSectionQuestionForPractice } from '@/hooks/section-question';
 import { useCurrentUserStore } from '@/stores/current-user';
 import type { TChoice } from '@/types/common';
 import type { TSection } from '@/types/section';
-import { useStorage } from '@vueuse/core';
+import { useStorage, watchOnce } from '@vueuse/core';
 import { pick } from 'lodash';
 import { Loader2, SettingsIcon } from 'lucide-vue-next';
 import { ref } from 'vue';
@@ -84,20 +84,30 @@ const router = useRouter()
 
 const { params: {
     numOfQuestion, part
-} } = useRoute('/dashboard/question/[part]/practice/[numOfQuestion]/')
+}, query } = useRoute('/dashboard/question/[part]/practice/[numOfQuestion]/')
 
 const { data: section } = useSectionByPart(
     Number(part)
 )
 
 const { data: sectionQuestions, isLoading } = useSectionQuestionForPractice(
-    Number(part),
-    Number(numOfQuestion)
+    {
+        part: Number(part),
+        numOfQuestions: Number(numOfQuestion),
+        ref: query?.ref as string
+    }
 )
 
 const createHistoryMutation = useCreateHistory({
     onExtraSuccess(res) {
-        router.push(`/result/${res.data.id}`)
+        router.push(`/dashboard/results/${res.data.id}`)
+    },
+    isShowToastSuccess: false
+})
+
+const updateHistoryMutation = useUpdateHistory({
+    onExtraSuccess(res) {
+        router.push(`/dashboard/results/${res.data.id}`)
     },
     isShowToastSuccess: false
 })
@@ -124,6 +134,7 @@ const handleToggleChoice = (choice: TChoice) => {
     const index = choices.value.findIndex(
         (c) => c.question_id === choice.question_id,
     )
+
     if (index === -1) {
         choices.value.push(choice)
     } else {
@@ -134,6 +145,7 @@ const handleToggleChoice = (choice: TChoice) => {
             return c
         })
     }
+
 
     handelAutoNextQuestion()
     handelFinishPractice()
@@ -162,7 +174,7 @@ const handelAutoNextQuestion = () => {
 
     if (!currentQuestion) return
 
-    const choicesOfCurrentQuestion = choices.value.filter(choice => choice.section_question_id === currentQuestion.id)
+    const choicesOfCurrentQuestion = choices.value.filter(choice => choice.section_question_id === currentQuestion.id && choice.choose)
 
     if (currentQuestion.questions.length === choicesOfCurrentQuestion.length) {
 
@@ -176,7 +188,7 @@ const handelFinishPractice = () => {
     const lastQuestion = sectionQuestions.value[sectionQuestions.value.length - 1]
 
 
-    const choicesOfLastQuestion = choices.value.filter(choice => choice.section_question_id === lastQuestion.id)
+    const choicesOfLastQuestion = choices.value.filter(choice => choice.section_question_id === lastQuestion.id && choice.choose)
 
 
     if (!(currentQuestionIndex.value === Number(numOfQuestion) - 1 &&
@@ -185,20 +197,53 @@ const handelFinishPractice = () => {
 
     navigateWithoutConfirm.value = true
 
+    const data = {
+        type: 'practice-part',
+        contents: choices.value,
+        meta_data: {
+            part: Number(part),
+            numOfQuestion: sectionQuestions.value.flatMap(section => section.questions).length,
+            totalCorrect: choices.value.filter(choice => choice.is_correct).length,
+            ...pick<TSection>(section.value, ['id', 'name', 'title', 'title_vi'])
+        },
+        user_id: currentUserStore.currentUser?.id as string
+    }
+
+    if (query?.ref) {
+        updateHistoryMutation.mutate({
+            id: query?.ref as string,
+            data: {
+                ...data,
+                type: 'practice-part',
+            }
+        })
+        return
+    }
+
+
     createHistoryMutation.mutate({
         data: {
+            ...data,
             type: 'practice-part',
-            contents: choices.value,
-            meta_data: {
-                part: Number(part),
-                numOfQuestion: Number(numOfQuestion),
-                totalCorrect: choices.value.filter(choice => choice.is_correct).length,
-                ...pick<TSection>(section.value, ['id', 'name', 'title', 'title_vi'])
-            },
-            user_id: currentUserStore.currentUser?.id as string
         }
     })
 }
+
+watchOnce(sectionQuestions, (newValue) => {
+    const initChoice = newValue.flatMap(section => section.questions).map(question => {
+        return {
+            question_id: question.id,
+            section_question_id: question.question_section_id,
+            is_correct: false,
+            ans: question.ans,
+            choose: '',
+            location: question.location,
+            part: question.p,
+        } as TChoice
+    })
+
+    choices.value = initChoice
+})
 
 
 onBeforeRouteLeave(() => {
