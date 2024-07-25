@@ -51,9 +51,12 @@
                 <Loader2 class="w-6 h-6 text-muted-foreground animate-spin" />
             </div>
             <template v-else>
-                <QuestionPart v-for="(question, index) in sectionQuestions" v-show="currentQuestionIndex === index"
-                    :key="question.id" :question-section="question" :is-auto-play-audio="config.autoPlayAudio"
-                    :is-active="currentQuestionIndex === index" :show-is-correct="true" @choose="handleToggleChoice" />
+                <QuestionPart v-for="(question, index) in sectionQuestions.slice(
+                    currentQuestionIndex,
+                    currentQuestionIndex + 5
+                )" v-show="currentQuestion?.id === question.id" :key="question.id" :question-section="question"
+                    :is-auto-play-audio="config.autoPlayAudio" :is-active="currentQuestionIndex === index"
+                    :show-is-correct="true" @choose="handleToggleChoice" />
             </template>
         </div>
     </div>
@@ -75,7 +78,7 @@ import type { TSection } from '@/types/section';
 import { useStorage, watchOnce } from '@vueuse/core';
 import { pick } from 'lodash';
 import { Loader2, SettingsIcon } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { definePage, onBeforeRouteLeave, useRoute, useRouter } from 'vue-router/auto';
 
 const currentUserStore = useCurrentUserStore()
@@ -116,6 +119,12 @@ const updateHistoryMutation = useUpdateHistory({
 const currentQuestionIndex = ref<number>(0)
 const choices = ref<TChoice[]>([])
 const navigateWithoutConfirm = ref<boolean>(false)
+
+const currentQuestion = computed(() => {
+    if (!sectionQuestions.value) return null
+
+    return sectionQuestions.value[currentQuestionIndex.value]
+})
 
 const config = useStorage(
     'practice-part',

@@ -18,10 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import { cn, isLowestChild } from '@/utils';
+import { cn } from '@/utils';
 import { useVModel } from '@vueuse/core';
 import { ChevronRightIcon } from 'lucide-vue-next';
 import { ref } from 'vue';
+import { isLowestChild } from './helper';
 import type { TOption } from './tree-select.type';
 
 type Props = {

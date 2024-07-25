@@ -9,15 +9,18 @@
         </span>
         <RadioGroup v-model:model-value="choose">
             <template v-for="(value, key) in question.opts" :key="key + question.id">
-                <Button variant="ghost" :class="cn('p-1 h-auto justify-start cursor-pointer border-transparent border', {
-                    'text-destructive border-destructive hover:text-destructive border': isIncorrect(key),
-                    'border border-primary': isCorrect(key) || isDefaultAnswer(key),
-
-                })">
-                    <RadioGroupItem :id="`question-${question.id}-choice-${key}`" :value="key"
-                        :disabled="props.disabled || choose !== ''" :class="cn({
-                            'text-destructive border-destructive': isIncorrect(key),
-                        })" :is-failed="isIncorrect(key)">
+                <Button variant="ghost" :class="cn('p-1 h-auto justify-start cursor-pointer border-transparent border',
+                    props.showIsCorrect && {
+                        'text-destructive border-destructive hover:text-destructive border': isIncorrect(key),
+                        'border border-primary': isCorrect(key) || isDefaultAnswer(key),
+                    }
+                )">
+                    <RadioGroupItem :id="`question-${question.id}-choice-${key}`" :value="key" :disabled="props.showIsCorrect && (props.disabled || choose !== '')
+                        " :class="cn(
+                            props.showIsCorrect && {
+                                'text-destructive border-destructive': isIncorrect(key),
+                            }
+                        )">
                         {{ key }}
                     </RadioGroupItem>
                     <Label :for="`question-${question.id}-choice-${key}`"
@@ -79,7 +82,6 @@ const isIncorrect = (key: string) => {
 }
 
 const isDefaultAnswer = (key: string) => {
-
     return (choose.value !== ''
         || chooseOfQuestion.value !== undefined
     ) && props.question.ans === key

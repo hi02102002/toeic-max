@@ -1,8 +1,12 @@
 import type { Router } from 'express'
 
 export interface IRoutes {
-    path: string
     router: Router
-    controller: unknown
-    initRoutes(): void
+    initRoutes(
+        extendsRoutes?: (
+            path: string,
+            router: Router,
+            controller: unknown,
+        ) => void,
+    ): void
 }

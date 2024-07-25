@@ -1,4 +1,5 @@
 import { DB, db } from '@/database/db'
+import { PostgresTransaction } from '@/database/types'
 import { HttpException } from '@/exceptions/http-exception'
 import { toBoolean } from '@/utils/common'
 import { Transform } from 'class-transformer'
@@ -77,11 +78,7 @@ export abstract class CRUDBaseService<
     protected table: PgTable<TableConfig>
     protected modelName: string
 
-    constructor(
-        table: PgTable<TableConfig>,
-
-        modelName: string,
-    ) {
+    constructor(table: PgTable<TableConfig>, modelName: string) {
         this.db = db
         this.table = table
         this.modelName = modelName
@@ -102,9 +99,12 @@ export abstract class CRUDBaseService<
         opts?: {
             throwIfNotFound?: boolean
             message?: string
+            transaction?: PostgresTransaction
         },
     ) {
-        const [rows] = await this.db
+        const database = opts?.transaction || this.db
+
+        const [rows] = await database
             .select()
             .from(this.table)
             .where(eq(get(this.table, 'id'), id))
@@ -142,9 +142,10 @@ export abstract class CRUDBaseService<
      * @param {C} data - The data to be inserted.
      * @returns {Promise<T>} - A promise that resolves to the newly created record.
      */
-    async create<T = E>(data: C) {
+    async create<T = E>(data: C, transaction?: PostgresTransaction) {
+        const database = transaction || this.db
         try {
-            const [rows] = await this.db
+            const [rows] = await database
                 .insert(this.table)
                 .values(data)
                 .returning()
@@ -164,10 +165,16 @@ export abstract class CRUDBaseService<
         }
     }
 
-    async createMany<T = E>(data: C[], ..._args: any[]) {
-        console.log('createMany', data)
+    async createMany<T = E>(
+        data: C[],
+        opts?: {
+            transaction?: PostgresTransaction
+        },
+        ...args: any[]
+    ) {
+        const database = opts?.transaction || this.db
         try {
-            const rows = await this.db
+            const rows = await database
                 .insert(this.table)
                 .values(data)
                 .returning()
@@ -203,18 +210,19 @@ export abstract class CRUDBaseService<
     }: {
         data: U
         id: string
-
         opts?: {
             throwIfNotFound?: boolean
             message?: string
+            transaction?: PostgresTransaction
         }
     }) {
+        const database = opts?.transaction || this.db
         try {
             if (opts?.throwIfNotFound) {
                 await this.getOneById(id, opts)
             }
 
-            const [rows] = await this.db
+            const [rows] = await database
                 .update(this.table)
                 .set(data as Record<string, unknown>)
                 .where(eq(get(this.table, 'id'), id))
@@ -246,13 +254,15 @@ export abstract class CRUDBaseService<
         opts?: {
             throwIfNotFound?: boolean
             message?: string
+            transaction?: PostgresTransaction
         },
     ) {
+        const database = opts?.transaction || this.db
         if (opts?.throwIfNotFound) {
             await this.getOneById(id, opts)
         }
 
-        const [rows] = await this.db
+        const [rows] = await database
             .delete(this.table)
             .where(eq(get(this.table, 'id'), id))
             .returning()
@@ -267,8 +277,9 @@ export abstract class CRUDBaseService<
      * @param {string[]} ids - An array of IDs representing the records to be deleted.
      * @returns {Promise<T>} - A promise that resolves to the deleted records.
      */
-    async deleteMany<T = E>(ids: string[]) {
-        const [rows] = await this.db
+    async deleteMany<T = E>(ids: string[], transaction?: PostgresTransaction) {
+        const database = transaction || this.db
+        const [rows] = await database
             .delete(this.table)
             .where(eq(get(this.table, 'id'), ids))
             .returning()

@@ -17,6 +17,14 @@ export class KitTestService extends CRUDBaseService<
         super(tests, 'Test')
     }
 
+    async getAll<T = any>(): Promise<T[]> {
+        return this.db.query.tests.findMany({
+            with: {
+                kit: true,
+            },
+        }) as any
+    }
+
     async getPaging(opts: TGetPagingQuery<QueryKitTestDto>) {
         const { query } = opts
 

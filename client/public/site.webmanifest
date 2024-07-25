@@ -1,6 +1,6 @@
 {
-  "name": "ELand",
-  "short_name": "ELand",
+  "name": "Ninja Toiec",
+  "short_name": "Ninja Toiec",
   "icons": [
     {
       "src": "/pwa-192x192.png",
@@ -31,5 +31,5 @@
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF",
-  "description": "Eland is an online platform for mastering the TOEIC exam. The \"E\" stands for \"English,\" emphasizing top-quality language learning. Eland offers interactive lessons, practice tests, and personalized plans. With engaging multimedia content, Eland makes TOEIC preparation easy and enjoyable. Whether you're starting out or improving your score, Eland provides the tools and support needed for success."
+  "description": "Master the Toiec exam with Ninja Toiec! This platform offers comprehensive practice tests, personalized learning paths, interactive lessons, progress tracking, and expert tips. Improve your vocabulary, grammar, and listening skills to achieve your highest Toiec score."
 }

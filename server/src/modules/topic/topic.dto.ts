@@ -1,7 +1,7 @@
 import { BaseQueryDto } from '@/libs/api/crud-service'
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
-export class CreateTopicDto {
+export class TopicDto {
     @IsString()
     @IsNotEmpty()
     name: string

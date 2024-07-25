@@ -4,13 +4,13 @@ import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
 import { eq, getTableColumns, inArray } from 'drizzle-orm'
 import { Service } from 'typedi'
 import { TopicService } from '../topic'
-import { CreateVocabularyDto, QueryVocabularyDto } from './vocabulary.dto'
+import { QueryVocabularyDto, VocabularyDto } from './vocabulary.dto'
 import { TVocabulary } from './vocabulary.type'
 
 @Service()
 export class VocabularyService extends CRUDBaseService<
-    CreateVocabularyDto,
-    Partial<CreateVocabularyDto>,
+    VocabularyDto,
+    Partial<VocabularyDto>,
     TVocabulary
 > {
     constructor(private readonly topicService: TopicService) {

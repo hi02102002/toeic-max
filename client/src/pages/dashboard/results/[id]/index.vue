@@ -1,22 +1,20 @@
 <template>
     <div class="flex-1 py-4 relative">
-        <div class="absolute bottom-0 pt-20 p-4 w-full bg-no-repeat flex items-center justify-center gap-3 " :style="{
-            backgroundSize: '100% 100%',
-            backgroundImage: 'url(/images/wave.png)',
-            backgroundPosition: '0px 2px'
-        }">
-            <Button variant='outline' @click="router.push(`/dashboard/results/${data?.history.id}/list-choice`)">
-                View result
-            </Button>
-            <Button variant='outline' @click="router.push(`/dashboard/question/${data?.history.meta_data.part}/practice/${data?.history.meta_data.numOfQuestion
-                }`)">
-                Continue
-            </Button>
-            <Button
-                @click="router.push(`/dashboard/question/${data?.history.meta_data.part}/practice/${data?.history.meta_data.numOfQuestion}?ref=${data?.history.id}`)">
-                Do it again
-            </Button>
-        </div>
+        <FooterWave>
+            <div class="flex items-center justify-center gap-3">
+                <Button variant='outline' @click="router.push(`/dashboard/results/${data?.history.id}/list-choice`)">
+                    View result
+                </Button>
+                <Button variant='outline' @click="router.push(`/dashboard/question/${data?.history.meta_data.part}/practice/${data?.history.meta_data.numOfQuestion
+                    }`)">
+                    Continue
+                </Button>
+                <Button
+                    @click="router.push(`/dashboard/question/${data?.history.meta_data.part}/practice/${data?.history.meta_data.numOfQuestion}?ref=${data?.history.id}`)">
+                    Do it again
+                </Button>
+            </div>
+        </FooterWave>
         <div class="container-app">
             <div class="md:max-w-3xl md:mx-auto">
                 <div class='flex items-center justify-center flex-col gap-4'>
@@ -83,6 +81,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
+import FooterWave from '@/components/FooterWave.vue';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';

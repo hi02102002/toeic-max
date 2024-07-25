@@ -39,6 +39,7 @@
         "axios": "^1.6.8",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "dayjs": "^1.11.12",
         "embla-carousel": "^8.0.2",
         "embla-carousel-vue": "^8.0.2",
         "lodash": "^4.17.21",
@@ -54,6 +55,7 @@
         "vue": "^3.4.21",
         "vue-router": "^4.3.0",
         "vue-sonner": "^1.1.2",
+        "worker-timers": "^8.0.3",
         "zod": "^3.23.4"
     },
     "devDependencies": {

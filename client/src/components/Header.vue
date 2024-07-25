@@ -1,9 +1,9 @@
 <template>
     <header :class="cn('flex items-center h-14 fixed top-0 left-0 right-0 bg-white z-50', $attrs.class as string)">
         <div class="container-app flex items-center justify-between">
-            <RouterLink to="/" class="flex items-center gap-2 text-xl font-bold text-primary">
-                <img :src="logo" alt="Logo" class="h-8 w-8" />
-                <span> ELand </span>
+            <RouterLink :to="isAdmin ? '/admin' : '/dashboard'"
+                class="flex items-center gap-2 text-lg font-medium text-primary">
+                <img src="/images/logo.png" alt="Logo" class="h-10 w-10" />
             </RouterLink>
             <DropdownMenu>
                 <DropdownMenuTrigger>
@@ -26,7 +26,7 @@
                 <DropdownMenuContent :style="{
                     width: 'var(--radix-popper-anchor-width)'
                 }" class="w-[var(--radix-popper-anchor-width)]" align="end">
-                    <DropdownMenuItem v-if="currentUserStore.currentUser?.roles.includes('ADMIN')">
+                    <DropdownMenuItem v-if="isAdmin">
                         Back to site
                     </DropdownMenuItem>
                     <DropdownMenuItem @click="logoutMutation.mutate">
@@ -40,18 +40,21 @@
 </template>
 
 <script setup lang="ts">
-import logo from '@/assets/logo.png';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useLogout } from '@/hooks/auth';
 import { useCurrentUserStore } from '@/stores/current-user';
 import { cn } from '@/utils';
+import { computed } from 'vue';
 import { RouterLink } from 'vue-router/auto';
 
 const logoutMutation = useLogout()
 
 const currentUserStore = useCurrentUserStore();
+
+const isAdmin = computed(() => currentUserStore.currentUser?.roles.includes('ADMIN'))
+
 </script>
 
 <style scoped></style>

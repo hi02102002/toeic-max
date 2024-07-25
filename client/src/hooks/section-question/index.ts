@@ -33,6 +33,14 @@ export const forPracticeOptions = ({
         refetchOnWindowFocus: false,
     })
 
+export const forTestOptions = (kitTestId: string) =>
+    queryOptions({
+        queryKey: ['questions-for-test', kitTestId],
+        queryFn: () => questionApi.getForTest(kitTestId),
+        initialData: [],
+        refetchOnWindowFocus: false,
+    })
+
 const SectionQuestionClient = new CrudQueryClient<
     QuestionSectionSchemaType,
     QuestionSectionSchemaType,
@@ -61,3 +69,6 @@ export const useSectionQuestionForPractice = ({
             ref,
         }),
     )
+
+export const useSectionQuestionForTest = (kitTestId: string) =>
+    useQuery(forTestOptions(kitTestId))

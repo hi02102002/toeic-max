@@ -1,5 +1,5 @@
-import { sql } from 'drizzle-orm'
 import type { AnyColumn, AnyTable, InferSelectModel, SQL } from 'drizzle-orm'
+import { getTableColumns, sql } from 'drizzle-orm'
 import type {
     PgColumn,
     PgTable,
@@ -56,7 +56,7 @@ export function jsonAggBuildDistinctObject<
 >(shape: T, table: Table) {
     return sql<SelectResultFields<T>[]>`
         jsonb_agg(
-           distinct ${jsonBuildObject(shape)} 
+           distinct ${jsonBuildObject(shape)}
         ) filter (where ${table} is not null)
     `
 }
@@ -132,3 +132,17 @@ export const nullIsNull = sql`null is null`
  * Represents a SQL query to count the number of records.
  */
 export const count = sql<number>`count(*)`
+
+export const getTableColumnsInQuery = <Table extends PgTable>(
+    table: Table,
+): Record<string, boolean> => {
+    const columns = getTableColumns(table)
+
+    return Object.keys(columns).reduce(
+        (acc, key) => {
+            acc[key] = true
+            return acc
+        },
+        {} as Record<string, boolean>,
+    )
+}

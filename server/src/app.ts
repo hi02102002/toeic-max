@@ -28,7 +28,6 @@ export class App {
         this.initializeRoutes(routes)
         this.initializeErrorHandling()
         this.initializeSwagger()
-
         runWorker()
     }
 
@@ -64,6 +63,14 @@ export class App {
     private initializeRoutes(routes: IRoutes[]) {
         routes.forEach((route) => {
             this.app.use('/api', route.router)
+
+            route.router.stack.forEach((r) => {
+                if (r.route) {
+                    console.log(
+                        `Mapped ${Object.keys(r.route.methods).join(', ').toUpperCase()} /api${r.route.path}`,
+                    )
+                }
+            })
         })
     }
 

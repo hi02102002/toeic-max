@@ -1,3 +1,4 @@
+import { OpenAPIV3_1 } from 'openapi-types'
 import swaggerJSDoc from 'swagger-jsdoc'
 import { version } from '../../package.json'
 
@@ -28,12 +29,17 @@ const options: swaggerJSDoc.Options = {
             },
         ],
     },
-    apis: [
-        './src/modules/**/*.route.ts',
-        './src/modules/**/*.dto.ts',
-        './src/modules/**/*.type.ts',
-        './src/exceptions/*.ts',
-    ],
+    apis: [],
 }
 
 export const swaggerSpec = swaggerJSDoc(options)
+
+export const openapi: OpenAPIV3_1.Document = {
+    openapi: '3.0.1',
+    info: {
+        title: 'Ninja Toiec API',
+        version: '1.0.0',
+        description: 'API Documentation',
+    },
+    paths: {},
+}

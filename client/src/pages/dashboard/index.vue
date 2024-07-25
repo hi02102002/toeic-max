@@ -129,7 +129,7 @@ const TRAINING_SECTIONS = [{
 }, {
     image: '/images/question.png',
     title: 'Practice Test',
-    href: '/dashboard/practice-test',
+    href: '/dashboard/tests',
 },
 ]
 

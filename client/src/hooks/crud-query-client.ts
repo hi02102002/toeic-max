@@ -2,7 +2,7 @@ import type { BaseCrudApi } from '@/apis/crud.api'
 import { queryClient } from '@/libs/react-query'
 import type { TBaseResponse } from '@/types/common'
 import { toastError } from '@/utils'
-import { useMutation, useQuery } from '@tanstack/vue-query'
+import { queryOptions, useMutation, useQuery } from '@tanstack/vue-query'
 import { toast } from 'vue-sonner'
 
 type TMutationOptions<E> = {
@@ -43,6 +43,21 @@ export class CrudQueryClient<
         this.useGetAll = this.useGetAll.bind(this)
         this.useGetById = this.useGetById.bind(this)
         this.useSelect = this.useSelect.bind(this)
+    }
+
+    getAllQueryOptions = () => {
+        return queryOptions({
+            queryKey: [`${this.api.endpoint}-all`],
+            queryFn: () => this.api.getAll().then((res) => res.data),
+        })
+    }
+
+    getByIdQueryOptions = (id: string) => {
+        return queryOptions({
+            queryKey: [`${this.api.endpoint}-id`, id],
+            queryFn: () => this.api.getById(id).then((res) => res.data),
+            enabled: !!id,
+        })
     }
 
     /**
@@ -185,10 +200,7 @@ export class CrudQueryClient<
      * @returns {QueryResult} - The result of the query to get all records.
      */
     useGetAll() {
-        return useQuery({
-            queryKey: [`${this.api.endpoint}-all`],
-            queryFn: () => this.api.getAll(),
-        })
+        return useQuery(this.getAllQueryOptions())
     }
 
     /**
@@ -198,11 +210,7 @@ export class CrudQueryClient<
      * @returns {QueryResult} - The result of the query to get a record by ID.
      */
     useGetById(id: string) {
-        return useQuery({
-            queryKey: [`${this.api.endpoint}-id`, id],
-            queryFn: () => this.api.getById(id).then((res) => res.data),
-            enabled: !!id,
-        })
+        return useQuery(this.getByIdQueryOptions(id))
     }
 
     /**

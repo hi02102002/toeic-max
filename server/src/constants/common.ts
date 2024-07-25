@@ -24,4 +24,14 @@ export const LOGGER_SECTION = {
 export const REDIS_KEYS = {
     RESULT: (userId: string, historyId: string) =>
         `RESULT:${userId}:${historyId}`,
+    TEST_QUESTIONS: (testId: string) => `TEST-${testId}`,
+} as const
+
+export const SPLIT_SECTION = {
+    '7': '7',
+    '32-34': '32-34',
+    '71-73': '71-73',
+    '101': '101',
+    '131-134': '131-134',
+    '147-148': '147-148',
 }

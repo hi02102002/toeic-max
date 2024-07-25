@@ -3,7 +3,7 @@
         <div class="w-full max-w-sm flex flex-col gap-4">
             <div class="space-y-2">
                 <h2 class="text-2xl font-bold text-center">
-                    Login to <span class="text-primary"> ELand </span>
+                    Login to <span class="text-primary"> Ninja Toiec </span>
                 </h2>
                 <p class="text-sm text-muted-foreground text-center">
                     Enter your email and password to login to your account.

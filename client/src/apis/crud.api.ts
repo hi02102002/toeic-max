@@ -36,7 +36,7 @@ export abstract class BaseCrudApi<
     }
 
     getById(id: string): Promise<TBaseResponse<E>> {
-        return http_client.get(`${this.endpoint}/${id}`)
+        return http_client.get(`${this.endpoint}/get-one/${id}`)
     }
 
     getAll(): Promise<TBaseResponse<E[]>> {

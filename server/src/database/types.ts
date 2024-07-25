@@ -29,16 +29,12 @@ export type InferResultType<
     }
 >
 
-export type Transaction = PgTransaction<
-    NodePgQueryResultHKT,
-    typeof schema,
-    ExtractTablesWithRelations<typeof schema>
->
-
 export const ROLES = z.enum(schema.roles.enumValues)
 
 export type TRole = z.infer<typeof ROLES>
 
-export type TNewUser = typeof schema.users.$inferInsert
-
-export type TUpdateUser = Partial<TNewUser>
+export type PostgresTransaction = PgTransaction<
+    NodePgQueryResultHKT,
+    Schema,
+    ExtractTablesWithRelations<typeof schema>
+>

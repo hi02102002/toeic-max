@@ -14,7 +14,7 @@ import {
 import { alias } from 'drizzle-orm/pg-core'
 import slugify from 'slugify'
 import { Service } from 'typedi'
-import { CreateTopicDto, QueryTopicDto } from './topic.dto'
+import { QueryTopicDto, TopicDto } from './topic.dto'
 import { TTopic } from './topic.type'
 
 @Service()
@@ -27,7 +27,7 @@ export class TopicService extends CRUDBaseService<
         super(topics, 'Topic')
     }
 
-    async create<T = TTopic>(data: CreateTopicDto) {
+    async create<T = TTopic>(data: TopicDto) {
         let parent: TTopic | null = null
 
         if (data.parent_id) {
@@ -44,13 +44,7 @@ export class TopicService extends CRUDBaseService<
         return topic as T
     }
 
-    async update<T = TTopic>({
-        data,
-        id,
-    }: {
-        data: CreateTopicDto
-        id: string
-    }) {
+    async update<T = TTopic>({ data, id }: { data: TopicDto; id: string }) {
         const topic = await super.update({
             id,
             opts: {

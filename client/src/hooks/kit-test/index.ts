@@ -4,7 +4,7 @@ import type { KitTestInputSchemaType } from '@/validators/kit-test'
 import type { TBaseQueryParams } from '@/types/common'
 import type { TTest } from '@/types/test'
 
-const KitTestCrudClient = new CrudQueryClient<
+export const KitTestCrudClient = new CrudQueryClient<
     KitTestInputSchemaType,
     KitTestInputSchemaType,
     TBaseQueryParams,

@@ -1,8 +1,5 @@
-import { IRoutes } from '@/interfaces/routes.interface'
+import { CrudRoute } from '@/libs/api/crud-route'
 import { AuthMiddleware } from '@/middlewares/auth.middleware'
-import { RolesMiddleware } from '@/middlewares/roles.middleware'
-import { ValidationMiddleware } from '@/middlewares/validation.middleware'
-import { Router } from 'express'
 import Container from 'typedi'
 import { QuestionSectionController } from './question-section.controller'
 import {
@@ -10,47 +7,79 @@ import {
     QueryQuestionSectionDto,
 } from './question-section.dto'
 
-export class QuestionSectionRoute implements IRoutes {
-    path = '/questions'
-    router = Router()
-    controller = Container.get(QuestionSectionController)
+// export class QuestionSectionRoute implements IRoutes {
+//     path = '/questions'
+//     router = Router()
+//     controller = Container.get(QuestionSectionController)
 
+//     constructor() {
+//         this.initRoutes()
+//     }
+
+//     initRoutes(): void {
+//         this.router.get(
+//             `${this.path}/for-test/:testKitId`,
+//             this.controller.getForTest,
+//         )
+//         this.router.get(
+//             `${this.path}/for-practice/:part/:numOfQuestions`,
+//             AuthMiddleware,
+//             this.controller.getForPractice,
+//         )
+//         this.router.get(`${this.path}/get-all`, this.controller.getAll)
+//         this.router.get(`${this.path}/:id`, this.controller.getOneById)
+//         this.router.post(
+//             `${this.path}`,
+//             AuthMiddleware,
+//             RolesMiddleware(['ADMIN']),
+//             ValidationMiddleware(CreateQuestionDto),
+//             this.controller.create,
+//         )
+//         this.router.put(
+//             `${this.path}/:id`,
+//             AuthMiddleware,
+//             RolesMiddleware(['ADMIN']),
+//             ValidationMiddleware(CreateQuestionDto),
+//             this.controller.update,
+//         )
+//         this.router.delete(
+//             `${this.path}/:id`,
+//             AuthMiddleware,
+//             RolesMiddleware(['ADMIN']),
+//             this.controller.delete,
+//         )
+//         this.router.get(
+//             this.path,
+//             ValidationMiddleware(QueryQuestionSectionDto, 'query'),
+//             this.controller.getPaging,
+//         )
+//     }
+// }
+
+export class QuestionSectionRoute extends CrudRoute<QuestionSectionController> {
     constructor() {
-        this.initRoutes()
+        super({
+            controller: Container.get(QuestionSectionController),
+            dtos: {
+                createDto: CreateQuestionDto,
+                updateDto: CreateQuestionDto,
+                queryDto: QueryQuestionSectionDto,
+            },
+            path: '/questions',
+        })
+
+        this.extendRoutes()
     }
 
-    initRoutes(): void {
+    extendRoutes(): void {
+        this.router.get(
+            `${this.path}/for-test/:testKitId`,
+            this.controller.getForTest,
+        )
         this.router.get(
             `${this.path}/for-practice/:part/:numOfQuestions`,
             AuthMiddleware,
             this.controller.getForPractice,
-        )
-        this.router.get(`${this.path}/get-all`, this.controller.getAll)
-        this.router.get(`${this.path}/:id`, this.controller.getOneById)
-        this.router.post(
-            `${this.path}`,
-            AuthMiddleware,
-            RolesMiddleware(['ADMIN']),
-            ValidationMiddleware(CreateQuestionDto),
-            this.controller.create,
-        )
-        this.router.put(
-            `${this.path}/:id`,
-            AuthMiddleware,
-            RolesMiddleware(['ADMIN']),
-            ValidationMiddleware(CreateQuestionDto),
-            this.controller.update,
-        )
-        this.router.delete(
-            `${this.path}/:id`,
-            AuthMiddleware,
-            RolesMiddleware(['ADMIN']),
-            this.controller.delete,
-        )
-        this.router.get(
-            this.path,
-            ValidationMiddleware(QueryQuestionSectionDto, 'query'),
-            this.controller.getPaging,
         )
     }
 }

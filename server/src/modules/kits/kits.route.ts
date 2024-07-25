@@ -1,51 +1,24 @@
-import { IRoutes } from '@/interfaces/routes.interface'
-import { AuthMiddleware } from '@/middlewares/auth.middleware'
-import { RolesMiddleware } from '@/middlewares/roles.middleware'
-import { ValidationMiddleware } from '@/middlewares/validation.middleware'
-import { Router } from 'express'
+import { CrudRoute } from '@/libs/api/crud-route'
 import Container from 'typedi'
 import { KitsController } from './kits.controller'
 import { KitDto, QueryKitDto } from './kits.dto'
 
-export class KitsRoute implements IRoutes {
-    path = '/kits'
-    router = Router()
-    controller = Container.get(KitsController)
+export class KitsRoute extends CrudRoute<KitsController> {
+    path: string = '/kits'
 
     constructor() {
-        this.initRoutes()
+        super({
+            controller: Container.get(KitsController),
+            dtos: {
+                createDto: KitDto,
+                updateDto: KitDto,
+                queryDto: QueryKitDto,
+            },
+            path: '/kits',
+        })
     }
 
-    initRoutes(): void {
-        this.router.get(`${this.path}/for-select`, this.controller.getForSelect)
-        this.router.get(`${this.path}/get-all`, this.controller.getAll)
-
-        this.router.get(`${this.path}/:id`, this.controller.getOneById)
-
-        this.router.post(
-            `${this.path}`,
-            AuthMiddleware,
-            RolesMiddleware(['ADMIN']),
-            ValidationMiddleware(KitDto),
-            this.controller.create,
-        )
-        this.router.put(
-            `${this.path}/:id`,
-            AuthMiddleware,
-            RolesMiddleware(['ADMIN']),
-            ValidationMiddleware(KitDto),
-            this.controller.update,
-        )
-        this.router.delete(
-            `${this.path}/:id`,
-            AuthMiddleware,
-            RolesMiddleware(['ADMIN']),
-            this.controller.delete,
-        )
-        this.router.get(
-            this.path,
-            ValidationMiddleware(QueryKitDto, 'query', true, false, true),
-            this.controller.getPaging,
-        )
+    extendRoutes(): void {
+        throw new Error('Method not implemented.')
     }
 }

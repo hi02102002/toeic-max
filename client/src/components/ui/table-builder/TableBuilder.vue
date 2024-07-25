@@ -27,6 +27,7 @@
     </DataTable>
 </template>
 
+
 <script setup lang="ts" generic="T extends Record<string,unknown>">
 import type { TBaseQueryParams, TPaginateResponse } from '@/types/common';
 import { calcPageCount, valueUpdater } from '@/utils';
@@ -34,11 +35,12 @@ import { keepPreviousData, useQuery } from '@tanstack/vue-query';
 import type { ColumnDef, OnChangeFn, PaginationState, SortingState } from '@tanstack/vue-table';
 import { useUrlSearchParams, watchDebounced } from '@vueuse/core';
 import { XIcon } from 'lucide-vue-next';
-import { defineProps, ref, watch } from 'vue';
+import { defineComponent, defineProps, ref, watch } from 'vue';
 import { Button } from '../button';
 import { DataTable } from '../data-table';
 import { Input } from '../input';
 import Toolbar from './Toolbar.vue';
+import { queryClient } from '@/libs/react-query';
 
 
 type Props = {

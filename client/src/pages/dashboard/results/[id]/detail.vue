@@ -7,7 +7,7 @@
                     Previous
                 </Button>
                 <Button size="sm" class="min-w-20 w-full sm:w-auto"
-                    @click="currentQuestionIndex < data?.questions?.length - 1 && currentQuestionIndex++">
+                    @click=" data?.questions && currentQuestionIndex < data?.questions?.length - 1 && currentQuestionIndex++">
                     Next
                 </Button>
             </div>
@@ -27,9 +27,13 @@
                 <Loader2 class="w-6 h-6 text-muted-foreground animate-spin" />
             </div>
             <template v-else>
-                <QuestionPart v-for="(question, index) in data?.questions" v-show="currentQuestionIndex === index"
-                    :key="question.id" :question-section="question" :is-active="currentQuestionIndex === index"
-                    :show-is-correct="true" is-for-review :choices="data?.history.contents" />
+                <QuestionPart v-for="(question) in data?.questions.slice(
+                    currentQuestionIndex,
+                    currentQuestionIndex + 5,
+
+                )" v-show="currentQuestion?.id === question.id" :key="question.id" :question-section="question"
+                    :is-active="currentQuestion?.id === question.id" :show-is-correct="true" is-for-review
+                    :choices="data?.history.contents" />
             </template>
         </div>
     </div>
@@ -56,7 +60,7 @@ import { queryClient } from '@/libs/react-query';
 import type { TSectionQuestion } from '@/types/question';
 import { get } from 'lodash';
 import { Loader2 } from 'lucide-vue-next';
-import { defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { definePage, useRoute } from 'vue-router/auto';
 
 const { params: { id }, query } = useRoute('/dashboard/results/[id]/')
@@ -65,6 +69,8 @@ const currentQuestionIndex = ref<number>(0)
 
 
 const { data, isLoading } = usePracticePartResult(id)
+
+const currentQuestion = computed(() => data?.value?.questions[currentQuestionIndex.value])
 
 
 definePage({

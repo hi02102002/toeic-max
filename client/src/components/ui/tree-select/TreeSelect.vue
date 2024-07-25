@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { findIdPath } from '@/utils';
+import { findIdPath } from './helper';
 import { useVModel } from '@vueuse/core';
 import { X } from 'lucide-vue-next';
 import { computed, defineComponent, ref } from 'vue';

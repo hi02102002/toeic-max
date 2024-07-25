@@ -1,4 +1,5 @@
-import { jsonBuildObject } from '@/database/helper'
+import { REDIS_KEYS } from '@/constants/common'
+import { getTableColumnsInQuery, jsonBuildObject } from '@/database/helper'
 import {
     question_sections,
     questions as sQuestions,
@@ -6,12 +7,24 @@ import {
 } from '@/database/schema'
 import { HttpException } from '@/exceptions/http-exception'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
-import { and, eq, getTableColumns, inArray, notInArray, sql } from 'drizzle-orm'
+import { redis } from '@/libs/redis'
+import { getFirstNumberInString } from '@/utils/common'
+import {
+    and,
+    asc,
+    eq,
+    getTableColumns,
+    inArray,
+    notInArray,
+    sql,
+} from 'drizzle-orm'
 import { StatusCodes } from 'http-status-codes'
 import { isEmpty } from 'lodash'
 import { Service } from 'typedi'
 import { TPracticePart } from '../history'
 import { HistoryService } from '../history/history.service'
+import { KitTestService } from '../kit-test'
+import { SectionService, TSection } from '../section'
 import {
     CreateQuestionDto,
     QueryQuestionSectionDto,
@@ -24,7 +37,13 @@ export class QuestionSectionService extends CRUDBaseService<
     Partial<CreateQuestionDto>,
     TQuestionSection
 > {
-    constructor(private readonly historyService: HistoryService) {
+    constructor(
+        private readonly historyService: HistoryService,
+
+        private readonly sectionService: SectionService,
+
+        private readonly kitTestService: KitTestService,
+    ) {
         super(question_sections, 'Question')
     }
 
@@ -201,5 +220,96 @@ export class QuestionSectionService extends CRUDBaseService<
         return section_questions.sort((a, b) => {
             return ids.indexOf(a.id) - ids.indexOf(b.id)
         })
+    }
+
+    async getSectionQuestionsByTestIdAndPart({
+        part,
+        testId,
+    }: {
+        testId: string
+        part: TQuestionSection['part']
+    }) {
+        const sectionQuestions = await this.db.query.question_sections.findMany(
+            {
+                where: and(
+                    eq(question_sections.test_kit_id, testId),
+                    eq(question_sections.part, part),
+                ),
+                with: {
+                    questions: {
+                        columns: getTableColumnsInQuery(sQuestions),
+                        orderBy: asc(sQuestions.location),
+                    },
+                },
+            },
+        )
+
+        return sectionQuestions.sort((a, b) => {
+            const aNumber = a.location.includes('-')
+                ? getFirstNumberInString(a.location)
+                : Number(a.location)
+            const bNumber = b.location.includes('-')
+                ? getFirstNumberInString(b.location)
+                : Number(b.location)
+            return aNumber - bNumber
+        })
+    }
+
+    async getForTest({ kitTestId }: { kitTestId: string }) {
+        const cached = await redis.get(REDIS_KEYS.TEST_QUESTIONS(kitTestId))
+
+        if (cached) {
+            return JSON.parse(cached) as Array<TQuestionSection | TSection>
+        }
+
+        await this.kitTestService.getOneById(kitTestId, {
+            throwIfNotFound: true,
+        })
+
+        const parts = [1, 2, 3, 4, 5, 6, 7] as TQuestionSection['part'][]
+
+        const partsQuestions = await Promise.all(
+            parts.map((part) =>
+                this.getSectionQuestionsByTestIdAndPart({
+                    part,
+                    testId: kitTestId,
+                }),
+            ),
+        )
+
+        const sections = await this.sectionService.getSectionsMapPart()
+
+        const result: Array<
+            | TQuestionSection
+            | {
+                  type?: any
+                  section?: TSection
+              }
+        > = []
+
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i]
+            const section = sections[part]
+            const sectionQuestions = partsQuestions[i]
+
+            result.push(
+                ...[
+                    {
+                        type: 'info',
+                        section,
+                    },
+                    ...sectionQuestions,
+                ],
+            )
+        }
+
+        await redis.set(
+            REDIS_KEYS.TEST_QUESTIONS(kitTestId),
+            JSON.stringify(result),
+            'EX',
+            60 * 60 * 24,
+        )
+
+        return result
     }
 }

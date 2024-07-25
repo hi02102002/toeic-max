@@ -25,4 +25,15 @@ export class QuestionSectionController extends CRUDBaseController<QuestionSectio
             data: questions,
         })
     })
+
+    getForTest = catchAsync(async (req: RequestWithUser, res) => {
+        const kitTestId = req.params.testKitId
+        const data = await this.service.getForTest({
+            kitTestId,
+        })
+
+        return res.status(StatusCodes.OK).json({
+            data,
+        })
+    })
 }

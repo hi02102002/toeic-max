@@ -101,3 +101,8 @@ export const VOCABULARY_CATEGORY: TSelectResponse[] = [
     value: category,
     label: category,
 }))
+
+/**
+ * The maximum time for a test in seconds.
+ */
+export const MAX_TIME_TEST = 120 * 60 // 120 minutes
