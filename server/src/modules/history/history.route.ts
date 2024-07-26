@@ -1,4 +1,4 @@
-import { CrudRoute } from '@/libs/api/crud-route'
+import { CrudRoute } from '@/libs/api/crud.route'
 import Container from 'typedi'
 import { HistoryController } from './history.controller'
 import { HistoryDto, QueryHistoryDto } from './history.dto'

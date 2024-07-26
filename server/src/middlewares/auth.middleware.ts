@@ -1,4 +1,5 @@
 import { HttpException } from '@/exceptions/http-exception'
+import { redis } from '@/libs/redis'
 import { RequestWithUser, TTokenStore } from '@/modules/auth'
 import { UserService } from '@/modules/user'
 import { ACCESS_TOKEN_SECRET } from '@config'
@@ -32,10 +33,19 @@ export const AuthMiddleware = async (
                 ACCESS_TOKEN_SECRET,
             ) as TTokenStore
 
+            const userInCache = await redis.get(`user:${id}`)
+
+            if (userInCache) {
+                req.user = JSON.parse(userInCache)
+                return next()
+            }
+
             const user = await userService.getOneById(id)
 
             if (user) {
                 req.user = user
+
+                await redis.set(`user:${id}`, JSON.stringify(user))
 
                 return next()
             } else {

@@ -1,4 +1,4 @@
-import { BaseQueryDto } from '@/libs/api/crud-service'
+import { BaseQueryDto } from '@/libs/api'
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class VocabularyDto {

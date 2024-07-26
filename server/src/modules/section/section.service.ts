@@ -1,5 +1,5 @@
 import { sections } from '@/database/schema'
-import { CRUDBaseService } from '@/libs/api/crud-service'
+import { CRUDBaseService } from '@/libs/api/crud.service'
 import { eq } from 'drizzle-orm'
 import { Service } from 'typedi'
 import { SectionDto } from './section.dto'

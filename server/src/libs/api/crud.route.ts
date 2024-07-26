@@ -3,7 +3,7 @@ import { AuthMiddleware } from '@/middlewares/auth.middleware'
 import { RolesMiddleware } from '@/middlewares/roles.middleware'
 import { ValidationMiddleware } from '@/middlewares/validation.middleware'
 import { Router } from 'express'
-import { CRUDBaseController } from './crud-controller'
+import { CRUDBaseController } from './crud.controller'
 
 function getClassMethods(obj: any) {
     return Object.keys(obj).filter((item) => typeof obj[item] === 'function')
@@ -17,6 +17,7 @@ export enum CrudActions {
     GET_ALL = 'getAll',
     GET_PAGING = 'getPaging',
     GET_FOR_SELECT = 'getForSelect',
+    GET_PAGING_BUILDER = 'getPagingBuilder',
 }
 
 export type TConfigRoute = {
@@ -146,6 +147,19 @@ export abstract class CrudRoute<CT extends CRUDBaseController<any>>
             [CrudActions.GET_FOR_SELECT]: {
                 method: 'get',
                 path: '/for-select',
+            },
+            [CrudActions.GET_PAGING_BUILDER]: {
+                method: 'get',
+                path: '/get-paging-builder',
+                middleware: [
+                    ValidationMiddleware(
+                        this.dtos.queryDto,
+                        'query',
+                        true,
+                        false,
+                        true,
+                    ),
+                ],
             },
         }
     }

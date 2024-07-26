@@ -1,5 +1,5 @@
 import { topics } from '@/database/schema'
-import { CRUDBaseController } from '@/libs/api/crud-controller'
+import { CRUDBaseController } from '@/libs/api/crud.controller'
 import { catchAsync } from '@/utils/catch-async'
 import { Service } from 'typedi'
 import { TopicService } from './topic.service'

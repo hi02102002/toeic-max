@@ -10,9 +10,10 @@ export class ResultController {
 
     public getPracticePartResult = catchAsync(
         async (req: RequestWithUser, res) => {
-            const data = await this.resultService.getPracticePartResult({
+            const data = await this.resultService.getPracticeResult({
                 userId: req.user.id,
                 historyId: req.params.historyId as string,
+                type: req.query.type as string,
             })
 
             return res.status(StatusCodes.OK).json({

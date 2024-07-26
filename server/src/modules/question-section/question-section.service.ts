@@ -6,7 +6,6 @@ import {
     tests,
 } from '@/database/schema'
 import { HttpException } from '@/exceptions/http-exception'
-import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
 import { redis } from '@/libs/redis'
 import { getFirstNumberInString } from '@/utils/common'
 import {
@@ -30,6 +29,7 @@ import {
     QueryQuestionSectionDto,
 } from './question-section.dto'
 import { TQuestionSection } from './question-section.type'
+import { CRUDBaseService, TGetPagingQuery } from '@/libs/api'
 
 @Service()
 export class QuestionSectionService extends CRUDBaseService<
@@ -39,9 +39,7 @@ export class QuestionSectionService extends CRUDBaseService<
 > {
     constructor(
         private readonly historyService: HistoryService,
-
         private readonly sectionService: SectionService,
-
         private readonly kitTestService: KitTestService,
     ) {
         super(question_sections, 'Question')
@@ -127,13 +125,13 @@ export class QuestionSectionService extends CRUDBaseService<
         }
     }
 
-    async getOneById<T = any>(
+    async getOneById(
         id: string,
         opts?: {
             throwIfNotFound?: boolean
             message?: string
         },
-    ): Promise<T> {
+    ) {
         const sectionQuestion = await this.db.query.question_sections.findFirst(
             {
                 where: eq(question_sections.id, id),
@@ -152,7 +150,7 @@ export class QuestionSectionService extends CRUDBaseService<
             )
         }
 
-        return sectionQuestion as T
+        return sectionQuestion
     }
 
     async getForPractice({

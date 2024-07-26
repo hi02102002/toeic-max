@@ -1,6 +1,6 @@
 import { jsonBuildObject } from '@/database/helper'
 import { topics, vocabularies } from '@/database/schema'
-import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
+import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud.service'
 import { eq, getTableColumns, inArray } from 'drizzle-orm'
 import { Service } from 'typedi'
 import { TopicService } from '../topic'

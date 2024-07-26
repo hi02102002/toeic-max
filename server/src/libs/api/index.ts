@@ -1,0 +1,5 @@
+export * from './crud.controller'
+export * from './crud.dto'
+export * from './crud.route'
+export * from './crud.service'
+export * from './crud.type'

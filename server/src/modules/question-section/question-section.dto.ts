@@ -1,4 +1,4 @@
-import { BaseQueryDto } from '@/libs/api/crud-service'
+import { BaseQueryDto } from '@/libs/api'
 import { Transform, Type } from 'class-transformer'
 import {
     IsArray,

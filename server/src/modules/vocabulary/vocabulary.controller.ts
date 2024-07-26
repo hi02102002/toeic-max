@@ -1,4 +1,4 @@
-import { CRUDBaseController } from '@/libs/api/crud-controller'
+import { CRUDBaseController } from '@/libs/api/crud.controller'
 import { Service } from 'typedi'
 import { VocabularyService } from './vocabulary.service'
 

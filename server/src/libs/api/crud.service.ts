@@ -1,67 +1,27 @@
 import { DB, db } from '@/database/db'
 import { PostgresTransaction } from '@/database/types'
 import { HttpException } from '@/exceptions/http-exception'
-import { toBoolean } from '@/utils/common'
-import { Transform } from 'class-transformer'
 import {
-    IsBoolean,
-    IsNumberString,
-    IsOptional,
-    IsString,
-} from 'class-validator'
-import { SQLWrapper, and, asc, desc, eq, ilike, or, sql } from 'drizzle-orm'
+    and,
+    asc,
+    desc,
+    eq,
+    getTableName,
+    ilike,
+    inArray,
+    or,
+    sql,
+} from 'drizzle-orm'
 import {
     PgColumn,
-    PgSelect,
     PgTable,
     SelectedFields,
     TableConfig,
 } from 'drizzle-orm/pg-core'
 import { StatusCodes } from 'http-status-codes'
 import { get, isEmpty, lowerCase } from 'lodash'
-
-export class BaseQueryDto implements IBasePagingQuery {
-    @IsNumberString()
-    @IsOptional()
-    page?: number
-    @IsNumberString()
-    @IsOptional()
-    limit?: number
-    @IsString()
-    @IsOptional()
-    q?: string
-    @IsString()
-    @IsOptional()
-    orderBy?: string
-
-    @IsOptional()
-    @IsBoolean()
-    @Transform(({ value }) => (value ? toBoolean(value) : true))
-    asc?: boolean
-}
-
-export interface IBasePagingQuery {
-    page?: number
-    limit?: number
-    q?: string
-    orderBy?: string
-    asc?: boolean
-    [key: string]: any
-}
-
-export type TGetPagingQuery<
-    Q extends IBasePagingQuery = IBasePagingQuery,
-    S extends SelectedFields = SelectedFields,
-> = {
-    query?: Q
-    callback?: (query: PgSelect) => Promise<any>
-    opts?: {
-        wheres?: SQLWrapper[]
-        searchFields?: PgColumn[]
-        selectFields?: S
-        defaultOrderBy?: string
-    }
-}
+import { parseFilters, parseOrderBy, parseWiths } from './crud.helper'
+import { IBasePagingQuery, TGetPagingQuery } from './crud.type'
 
 /**
  * The base service class for interacting with the database.
@@ -94,7 +54,7 @@ export abstract class CRUDBaseService<
      * @param {string} [opts.message] - The error message to throw if the record is not found. Default is 'Record not found'.
      * @returns {Promise<T | null>} - A promise that resolves to the retrieved record, or null if not found.
      */
-    async getOneById<T = E>(
+    async getOneById(
         id: string,
         opts?: {
             throwIfNotFound?: boolean
@@ -120,7 +80,90 @@ export abstract class CRUDBaseService<
 
         if (isEmpty(rows)) return null
 
-        return rows as T
+        return rows as E
+    }
+
+    async getOneByField(
+        field: keyof E,
+        value: any,
+        opts?: {
+            throwIfNotFound?: boolean
+            message?: string
+            transaction?: PostgresTransaction
+        },
+    ) {
+        const database = opts?.transaction || this.db
+
+        const [entity] = await database
+            .select()
+            .from(this.table)
+            .where(eq(get(this.table, field), value))
+
+            .limit(1)
+
+        if (isEmpty(entity) && opts?.throwIfNotFound) {
+            throw new HttpException(
+                StatusCodes.NOT_FOUND,
+                opts?.message ||
+                    `Could not find ${this.modelName} with this id.`,
+            )
+        }
+
+        if (isEmpty(entity)) return null
+
+        return entity as E
+    }
+
+    async getOneByFields(fields: Array<{ field: keyof E; value: any }>) {
+        const where = and(
+            ...fields.map(({ field, value }) =>
+                eq(get(this.table, field), value),
+            ),
+        )
+
+        const [entity] = await this.db
+            .select()
+            .from(this.table)
+            .where(where)
+            .limit(1)
+
+        if (isEmpty(entity)) return null
+
+        return entity as E
+    }
+
+    async getManyByFields(fields: Array<{ field: keyof E; value: any }>) {
+        const where = and(
+            ...fields.map(({ field, value }) =>
+                eq(get(this.table, field), value),
+            ),
+        )
+
+        const rows = await this.db.select().from(this.table).where(where)
+
+        return rows as E[]
+    }
+
+    async getManyByInField(field: keyof E, values: any[]) {
+        if (values.length === 0) {
+            throw new Error('Values cannot be empty')
+        }
+
+        const rows = await this.db
+            .select()
+            .from(this.table)
+            .where(inArray(get(this.table, field), values))
+
+        return rows as E[]
+    }
+
+    async getManyByField(field: keyof E, value: any) {
+        const rows = await this.db
+            .select()
+            .from(this.table)
+            .where(eq(get(this.table, field), value))
+
+        return rows as E[]
     }
 
     /**
@@ -381,5 +424,70 @@ export abstract class CRUDBaseService<
             .orderBy(asc(fieldLabel))
 
         return rows
+    }
+
+    /**
+     * Retrieves a paginated list of items from the database based on the provided query and options.
+     * @param params - The query object.
+     * @returns The paginated list of items and the total count.
+     */
+    async getPagingBuilder({
+        filters = [],
+        limit = 10,
+        orderBy = 'year|desc',
+        page = 1,
+        withs = [],
+    }: {
+        /**
+         * The query object.
+         * @example ['name| = |John', 'age| >|20']
+         */
+        filters: string[]
+        /**
+         * The page number.
+         */
+        page: number
+
+        /**
+         * The limit number.
+         */
+        limit: number
+        /**
+         * The order direction.
+         * @example 'a||desc'
+         */
+        orderBy: string
+        /**
+         * Fileds to select relationship.
+         * @example ['user','user.profile'] -> { user: true, user: { profile: true } }
+         */
+        withs: string[]
+    }) {
+        const where = parseFilters(this.table, filters)
+        const orderByParsed = parseOrderBy(this.table, orderBy)
+        const withParsed = parseWiths(withs)
+
+        const rows = await this.db.query[getTableName(this.table)].findMany({
+            where,
+            with: withParsed,
+            limit: Number(limit),
+            orderBy: orderByParsed,
+            offset: (Number(page) - 1) * limit,
+        })
+
+        const [{ total }] = await db
+            .select({
+                total: sql<number>`cast(count(${get(
+                    this.table,
+                    'id',
+                )}) as integer)`,
+            })
+            .from(this.table)
+            .where(where)
+
+        return {
+            items: rows as E[],
+            total,
+        }
     }
 }

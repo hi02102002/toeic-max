@@ -1,4 +1,4 @@
-import { BaseQueryDto } from '@/libs/api/crud-service'
+import { BaseQueryDto } from '@/libs/api'
 import { toBoolean } from '@/utils/common'
 import { Transform } from 'class-transformer'
 import {

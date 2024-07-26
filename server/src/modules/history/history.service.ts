@@ -1,5 +1,5 @@
 import { histories } from '@/database/schema'
-import { CRUDBaseService } from '@/libs/api/crud-service'
+import { CRUDBaseService } from '@/libs/api/crud.service'
 import { and, eq } from 'drizzle-orm'
 import { Service } from 'typedi'
 import { TCreateHistory, THistory, TUpdateHistory } from './history.type'

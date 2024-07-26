@@ -1,5 +1,5 @@
 import { questions } from '@/database/schema'
-import { CRUDBaseService } from '@/libs/api/crud-service'
+import { CRUDBaseService } from '@/libs/api/crud.service'
 import { Service } from 'typedi'
 import { QuestionDto } from './question-section.dto'
 import { TQuestion } from './question-section.type'

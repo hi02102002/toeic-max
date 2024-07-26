@@ -1,4 +1,4 @@
-import { CrudRoute } from '@/libs/api/crud-route'
+import { CrudRoute } from '@/libs/api/crud.route'
 import { AuthMiddleware } from '@/middlewares/auth.middleware'
 import Container from 'typedi'
 import { QuestionSectionController } from './question-section.controller'

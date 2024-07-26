@@ -1,16 +1,16 @@
 import { db } from '@/database/db'
 import { users } from '@/database/schema'
 import { HttpException } from '@/exceptions/http-exception'
-import { CRUDBaseService } from '@/libs/api/crud-service'
+import { CRUDBaseService } from '@/libs/api/crud.service'
 import { redis } from '@/libs/redis'
 import { FirebaseService } from '@/modules/firebase'
+import { getAvatar } from '@/utils/common'
 import * as bcrypt from 'bcrypt'
 import { and, eq } from 'drizzle-orm'
 import { StatusCodes } from 'http-status-codes'
 import { Service } from 'typedi'
 import { TNewUser, TUser } from './user.type'
 import { ChangePasswordDto, UpdateInfoUserDto } from './users.dto'
-import { getAvatar } from '@/utils/common'
 
 @Service()
 export class UserService extends CRUDBaseService<

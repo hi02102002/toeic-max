@@ -1,6 +1,6 @@
 import { jsonBuildObject } from '@/database/helper'
 import { kits, tests } from '@/database/schema'
-import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
+import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud.service'
 import { eq, getTableColumns } from 'drizzle-orm'
 import slugify from 'slugify'
 import { Service } from 'typedi'

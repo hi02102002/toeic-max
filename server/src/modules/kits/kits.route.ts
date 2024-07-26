@@ -1,4 +1,4 @@
-import { CrudRoute } from '@/libs/api/crud-route'
+import { CrudRoute } from '@/libs/api/crud.route'
 import Container from 'typedi'
 import { KitsController } from './kits.controller'
 import { KitDto, QueryKitDto } from './kits.dto'

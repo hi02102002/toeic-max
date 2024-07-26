@@ -1,8 +1,8 @@
 import Container from 'typedi'
 
-import { CrudRoute } from '@/libs/api/crud-route'
+import { CrudRoute } from '@/libs/api/crud.route'
 import { TopicController } from './topic.controller'
-import { TopicDto, QueryTopicDto } from './topic.dto'
+import { QueryTopicDto, TopicDto } from './topic.dto'
 
 export class TopicRoute extends CrudRoute<TopicController> {
     constructor() {

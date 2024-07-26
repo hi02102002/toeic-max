@@ -1,4 +1,4 @@
-import { CrudRoute } from '@/libs/api/crud-route'
+import { CrudRoute } from '@/libs/api/crud.route'
 import Container from 'typedi'
 import { SectionController } from './section.controller'
 import { QuerySectionDto, SectionDto } from './section.dto'

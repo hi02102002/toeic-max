@@ -3,7 +3,7 @@ import { catchAsync } from '@/utils/catch-async'
 import { PgColumn } from 'drizzle-orm/pg-core'
 import { StatusCodes } from 'http-status-codes'
 import { toLower } from 'lodash'
-import { CRUDBaseService } from './crud-service'
+import { CRUDBaseService } from './crud.service'
 
 /**
  * Base controller class for CRUD operations.
@@ -145,6 +145,18 @@ export abstract class CRUDBaseController<
             fieldLabel: this.forSelectFields.label,
             fieldValue: this.forSelectFields.value,
         })
+        return res.status(StatusCodes.OK).json({ data })
+    })
+
+    public getPagingBuilder = catchAsync(async (req, res) => {
+        const data = await this.service.getPagingBuilder({
+            filters: req.query?.filters as any,
+            limit: req.query?.limit as any,
+            orderBy: req.query?.orderBy as any,
+            page: req.query?.page as any,
+            withs: req.query?.withs as any,
+        })
+
         return res.status(StatusCodes.OK).json({ data })
     })
 }

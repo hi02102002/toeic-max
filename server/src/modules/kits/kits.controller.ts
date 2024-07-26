@@ -1,5 +1,5 @@
 import { kits } from '@/database/schema'
-import { CRUDBaseController } from '@/libs/api/crud-controller'
+import { CRUDBaseController } from '@/libs/api/crud.controller'
 import { Service } from 'typedi'
 import { KitsService } from './kits.service'
 

@@ -1,5 +1,5 @@
 import { kits } from '@/database/schema'
-import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud-service'
+import { CRUDBaseService, TGetPagingQuery } from '@/libs/api'
 import { Service } from 'typedi'
 import { KitDto, QueryKitDto } from './kits.dto'
 import { TKit } from './kits.type'

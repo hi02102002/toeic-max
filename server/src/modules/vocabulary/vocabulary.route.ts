@@ -1,6 +1,6 @@
 import Container from 'typedi'
 
-import { CrudRoute } from '@/libs/api/crud-route'
+import { CrudRoute } from '@/libs/api/crud.route'
 import { VocabularyController } from './vocabulary.controller'
 import { QueryVocabularyDto, VocabularyDto } from './vocabulary.dto'
 

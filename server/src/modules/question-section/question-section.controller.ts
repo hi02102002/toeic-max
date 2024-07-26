@@ -1,4 +1,4 @@
-import { CRUDBaseController } from '@/libs/api/crud-controller'
+import { CRUDBaseController } from '@/libs/api/crud.controller'
 import { catchAsync } from '@/utils/catch-async'
 import { StatusCodes } from 'http-status-codes'
 import { Service } from 'typedi'

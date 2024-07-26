@@ -1,4 +1,4 @@
-import { BaseQueryDto } from '@/libs/api/crud-service'
+import { BaseQueryDto } from '@/libs/api'
 import { Transform } from 'class-transformer'
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 
