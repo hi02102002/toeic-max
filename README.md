@@ -16,6 +16,6 @@ This is a project to help you practice TOEIC test. The project is written in Nod
 
 ## 4. Preview
 
-![Homepage]('preview/home.png?raw=true')
-![Test]('preview/test-1.png?raw=true')
-![Test]('preview/test-2.png?raw=true')
+![Homepage](preview/home.png?raw=true)
+![Test](preview/test-1.png?raw=true)
+![Test](preview/test-2.png?raw=true)
