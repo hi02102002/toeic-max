@@ -6,18 +6,20 @@
             <Info v-else-if="KEYS.some((key) => isNotChoose(key))" class="w-4 h-4 text-yellow-500" />
             <span>
                 {{ formatQuestionLocation(
-                    props.question.location,
-                    undefined,
-                    props.index,
+                    {
+                        location: props.choice.location,
+                        part: props.choice.part,
+                        index: props.index
+                    }
                 ) }}
             </span>
 
         </div>
         <ul class="grid w-full gap-4" :style="{
-            gridTemplateColumns: `repeat(${Object.keys(props.question.opts).length
+            gridTemplateColumns: `repeat(${Object.keys(KEYS).length
                 }, 1fr)`
         }">
-            <li v-for="(value, key) in question.opts" :key="key + question.id" class="flex items-center justify-center">
+            <li v-for="(key) in KEYS" :key="key" class="flex items-center justify-center">
                 <Button variant="outline" :class="cn('w-8 h-8 rounded-full p-0 pointer-events-none', {
                     'bg-yellow-500 hover:bg-yellow-500 border-yellow-500': isNotChoose(key),
                     'bg-green-500 hover:bg-green-500 border-green-500': isCorrect(key) || isAnswer(key),
@@ -32,7 +34,6 @@
 
 <script setup lang="ts">
 import type { TChoice } from '@/types/common';
-import type { TQuestion } from '@/types/question';
 import { cn } from '@/utils';
 import { formatQuestionLocation } from '@/utils/section-question';
 import { Check, Info, X } from 'lucide-vue-next';
@@ -41,9 +42,8 @@ import { Button } from '../ui/button';
 const KEYS = ['a', 'b', 'c', 'd']
 
 type Props = {
-    choices: TChoice[]
-    question: TQuestion
-    index: number
+    choice: TChoice
+    index?: number
 }
 
 const props = defineProps<Props>()
@@ -53,23 +53,31 @@ const emits = defineEmits<{
 }>()
 
 const handelClickChoice = () => {
-    emits('click-question', props.question.question_section_id)
+    emits('click-question', props.choice.section_question_id)
 }
 
 const isCorrect = (key: string) => {
-    return props.choices.find((choice) => choice.question_id === props.question.id && choice.choose === key && choice.ans === key)
+
+
+    return props.choice.choose === key && props.choice.ans === key
 }
 
 const isAnswer = (key: string) => {
-    return props.choices.find((choice) => choice.question_id === props.question.id && choice.ans === key)
+
+
+    return props.choice.ans === key
 }
 
 const isWrong = (key: string) => {
-    return props.choices.find((choice) => choice.question_id === props.question.id && choice.choose === key && choice.ans !== key)
+
+
+    return props.choice.choose === key && props.choice.ans !== key
 }
 
 const isNotChoose = (key: string) => {
-    return props.choices.find((choice) => choice.question_id === props.question.id && choice.choose === '' && choice.ans === key)
+
+
+    return props.choice.choose === '' && props.choice.ans === key
 }
 
 </script>

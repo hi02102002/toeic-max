@@ -2,11 +2,10 @@
     <div class="space-y-4">
         <div class="section">
             <h3 class="section-title">
-                Listening
+                Explore
             </h3>
             <div class="section-content">
-                <div v-for="section in LISTENING_SECTIONS" :key="section.title" class="section-content-item" @click="() => handelMoveToPractice(section.href, section.part)
-                    ">
+                <div v-for="section in EXPLORE_SECTIONS" :key="section.title" class="section-content-item">
                     <div class="ratio">
                         <AspectRatio :ratio="1">
                             <img :src="section.image" alt="section.title">
@@ -18,10 +17,10 @@
         </div>
         <div class="section">
             <h3 class="section-title">
-                Reading
+                Toiec Listening + Reading
             </h3>
             <div class="section-content">
-                <div v-for="section in READING_SECTIONS" :key="section.title" class="section-content-item" @click="() => handelMoveToPractice(section.href, section.part)
+                <div v-for="section in LISTENING_SECTIONS" :key="section.title" class="section-content-item" @click="() => handelMoveToPractice(section.href, section.part)
                     ">
                     <div class="ratio">
                         <AspectRatio :ratio="1">
@@ -69,6 +68,17 @@ const handelMoveToPractice = async (
     router.push(href)
 }
 
+const EXPLORE_SECTIONS = [{
+    title: 'Dictionary',
+    href: '/dashboard/dictionary',
+    image: '/images/dictionary-1.png'
+
+}, {
+    'title': 'News',
+    'href': '/dashboard/news',
+    'image': '/images/newspaper.png'
+}]
+
 
 const LISTENING_SECTIONS = [{
     image: '/images/photo-gallery.png',
@@ -97,10 +107,8 @@ const LISTENING_SECTIONS = [{
     href: '/dashboard/question/4',
     type: 'question',
     part: 4
-}
-]
-
-const READING_SECTIONS = [{
+},
+{
     image: '/images/clipboard.png',
     title: 'Part 5 - Incomplete Sentences',
     href: '/dashboard/question/5',
@@ -121,6 +129,7 @@ const READING_SECTIONS = [{
     part: 7
 }
 ]
+
 
 const TRAINING_SECTIONS = [{
     image: '/images/dictionary.png',

@@ -1,5 +1,10 @@
 <template>
-    <div class="grid md:grid-cols-2 gap-4">
+    <div :class="cn(
+        'grid md:grid-cols-2 gap-4',
+        {
+            'flex items-center justify-center max-w-3xl mx-auto': isNotHaveSlot
+        }
+    )">
         <div class="space-y-3">
             <span class="text-lg font-semibold">
                 {{ props.section.name }}
@@ -35,16 +40,22 @@
 
 <script setup lang="ts">
 import type { TSection } from '@/types/section';
-import { ref, watch } from 'vue';
+import { cn } from '@/utils';
+import { computed, ref, useSlots, watch } from 'vue';
 
 const audioRef = ref<HTMLAudioElement | null>(null)
 
 type Props = {
     section: TSection
     isPlayAudio?: boolean
+
 }
 
 const props = defineProps<Props>();
+
+const slots = useSlots()
+
+const isNotHaveSlot = computed(() => !slots.right)
 
 watch(() => props.isPlayAudio, (value) => {
     if (value) {

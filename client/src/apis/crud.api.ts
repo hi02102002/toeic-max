@@ -1,5 +1,6 @@
 import { http_client } from '@/libs/http-client'
 import type {
+    TBaseQueryPagingBuilderParams,
     TBaseResponse,
     TPaginateResponse,
     TSelectResponse,
@@ -33,6 +34,7 @@ export abstract class BaseCrudApi<
         this.create = this.create.bind(this)
         this.update = this.update.bind(this)
         this.delete = this.delete.bind(this)
+        this.getPagingBuilder = this.getPagingBuilder.bind(this)
     }
 
     getById(id: string): Promise<TBaseResponse<E>> {
@@ -44,6 +46,12 @@ export abstract class BaseCrudApi<
     }
 
     getPaginate(query: Q): Promise<TPaginateResponse<E>> {
+        return http_client.get(this.endpoint, { params: query })
+    }
+
+    getPagingBuilder(
+        query?: TBaseQueryPagingBuilderParams,
+    ): Promise<TPaginateResponse<E>> {
         return http_client.get(this.endpoint, { params: query })
     }
 

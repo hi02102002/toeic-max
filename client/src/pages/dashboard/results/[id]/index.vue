@@ -2,15 +2,15 @@
     <div class="flex-1 py-4 relative">
         <FooterWave>
             <div class="flex items-center justify-center gap-3">
-                <Button variant='outline' @click="router.push(`/dashboard/results/${data?.history.id}/list-choice`)">
+                <Button variant='outline' @click="router.push(`/dashboard/results/${data?.id}/list-choice`)">
                     View result
                 </Button>
-                <Button variant='outline' @click="router.push(`/dashboard/question/${data?.history.meta_data.part}/practice/${data?.history.meta_data.numOfQuestion
+                <Button variant='outline' @click="router.push(`/dashboard/question/${data?.meta_data.part}/practice/${data?.meta_data.numOfQuestion
                     }`)">
                     Continue
                 </Button>
                 <Button
-                    @click="router.push(`/dashboard/question/${data?.history.meta_data.part}/practice/${data?.history.meta_data.numOfQuestion}?ref=${data?.history.id}`)">
+                    @click="router.push(`/dashboard/question/${data?.meta_data.part}/practice/${data?.meta_data.numOfQuestion}?ref=${data?.id}`)">
                     Do it again
                 </Button>
             </div>
@@ -28,17 +28,17 @@
                             You have completed the training test
                         </span>
                         <span>
-                            {{ data?.history.meta_data.name }}
+                            {{ data?.meta_data.name }}
                         </span>
                         <span>
-                            {{ data?.history.meta_data.title }}
+                            {{ data?.meta_data.title }}
                         </span>
                     </div>
 
                     <div class="w-full space-y-3">
                         <span class='font-semibold '>
-                            Result {{ data?.history.meta_data.totalCorrect || 0 }}/{{
-                                data?.history.meta_data.numOfQuestion
+                            Result {{ data?.meta_data.totalCorrect || 0 }}/{{
+                                data?.meta_data.numOfQuestion
                             }}
                         </span>
                         <div class="rounded bg-white border border-input shadow-sm p-4 w-full">
@@ -59,8 +59,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -73,7 +71,7 @@ export default defineComponent({
         const historyId = get(to, 'params.id')
 
         await queryClient.ensureQueryData(
-            practicePartResultOptions(historyId)
+            HistoryCrudClient.getByIdQueryOptions(historyId)
         )
     },
 })
@@ -85,7 +83,7 @@ import FooterWave from '@/components/FooterWave.vue';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { practicePartResultOptions, usePracticePartResult } from '@/hooks/result';
+import { HistoryCrudClient } from '@/hooks/history';
 import { queryClient } from '@/libs/react-query';
 import { get } from 'lodash';
 import { computed, defineComponent } from 'vue';
@@ -95,11 +93,11 @@ const { params: { id } } = useRoute('/dashboard/results/[id]/')
 
 const router = useRouter()
 
-const { data } = usePracticePartResult(id)
+const { data } = HistoryCrudClient.useGetById(id)
 
 const percentage = computed(() => {
-    return ((data?.value?.history.meta_data.totalCorrect || 0) * 100 /
-        data?.value?.history.meta_data.numOfQuestion)
+    return ((data?.value?.meta_data.totalCorrect || 0) * 100 /
+        data?.value?.meta_data.numOfQuestion)
 })
 
 

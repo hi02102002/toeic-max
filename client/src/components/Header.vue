@@ -1,8 +1,7 @@
 <template>
     <header :class="cn('flex items-center h-14 fixed top-0 left-0 right-0 bg-white z-50', $attrs.class as string)">
         <div class="container-app flex items-center justify-between">
-            <RouterLink :to="isAdmin ? '/admin' : '/dashboard'"
-                class="flex items-center gap-2 text-lg font-medium text-primary">
+            <RouterLink :to="path" class="flex items-center gap-2 text-lg font-medium text-primary">
                 <img src="/images/logo.png" alt="Logo" class="h-10 w-10" />
             </RouterLink>
             <DropdownMenu>
@@ -47,13 +46,22 @@ import { useLogout } from '@/hooks/auth';
 import { useCurrentUserStore } from '@/stores/current-user';
 import { cn } from '@/utils';
 import { computed } from 'vue';
-import { RouterLink } from 'vue-router/auto';
+import { RouterLink, useRoute } from 'vue-router/auto';
 
 const logoutMutation = useLogout()
 
 const currentUserStore = useCurrentUserStore();
+const route = useRoute()
 
 const isAdmin = computed(() => currentUserStore.currentUser?.roles.includes('ADMIN'))
+
+const path = computed(() => {
+    if (isAdmin.value && route.path.includes('/admin')) {
+        return '/admin'
+    }
+
+    return '/dashboard'
+})
 
 </script>
 

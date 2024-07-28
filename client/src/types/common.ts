@@ -24,6 +24,14 @@ export type TBaseQueryParams = {
     asc?: boolean
 }
 
+export type TBaseQueryPagingBuilderParams = {
+    page?: number
+    limit?: number
+    filters?: string[]
+    withs?: string[]
+    orderBy?: string
+}
+
 export type TSelectResponse = {
     value: any
     label: string

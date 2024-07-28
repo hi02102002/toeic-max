@@ -14,6 +14,11 @@ export class TopicRoute extends CrudRoute<TopicController> {
                 queryDto: QueryTopicDto,
             },
             path: '/topics',
+            configRoutes: {
+                create: {
+                    roles: ['ADMIN', 'USER'],
+                },
+            },
         })
 
         this.extendRoutes()

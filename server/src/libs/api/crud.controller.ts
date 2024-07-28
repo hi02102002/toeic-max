@@ -48,6 +48,7 @@ export abstract class CRUDBaseController<
      * @param {Response} res - The response object.
      * @returns {Promise<Response>} - The response with the data.
      */
+
     public getOneById = catchAsync(async (req, res) => {
         const { id } = req.params
         const data = await this.service.getOneById(id, {
@@ -155,6 +156,8 @@ export abstract class CRUDBaseController<
             orderBy: req.query?.orderBy as any,
             page: req.query?.page as any,
             withs: req.query?.withs as any,
+            q: req.query?.q as any,
+            searchFields: req.query?.searchFields as any,
         })
 
         return res.status(StatusCodes.OK).json({ data })

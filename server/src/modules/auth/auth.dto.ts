@@ -6,6 +6,7 @@ import {
     MaxLength,
     MinLength,
 } from 'class-validator'
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 
 export class LoginDto {
     @IsEmail(
@@ -120,3 +121,5 @@ export class RequestVerifyAccountDto {
     })
     email: string
 }
+
+export const authSchemas = validationMetadatasToSchemas()

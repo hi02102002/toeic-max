@@ -1,6 +1,9 @@
 import type { BaseCrudApi } from '@/apis/crud.api'
 import { queryClient } from '@/libs/react-query'
-import type { TBaseResponse } from '@/types/common'
+import type {
+    TBaseQueryPagingBuilderParams,
+    TBaseResponse,
+} from '@/types/common'
 import { toastError } from '@/utils'
 import { queryOptions, useMutation, useQuery } from '@tanstack/vue-query'
 import { toast } from 'vue-sonner'
@@ -49,6 +52,14 @@ export class CrudQueryClient<
         return queryOptions({
             queryKey: [`${this.api.endpoint}-all`],
             queryFn: () => this.api.getAll().then((res) => res.data),
+        })
+    }
+
+    getPagingBuilderQueryOptions = (query?: TBaseQueryPagingBuilderParams) => {
+        return queryOptions({
+            queryKey: [`${this.api.endpoint}-paging-builder`, query],
+            queryFn: () =>
+                this.api.getPagingBuilder(query).then((res) => res.data),
         })
     }
 
@@ -192,6 +203,10 @@ export class CrudQueryClient<
             queryKey: [this.api.endpoint, JSON.stringify(q)],
             queryFn: () => this.api.getPaginate(q),
         })
+    }
+
+    usePagingBuilder(query?: TBaseQueryPagingBuilderParams) {
+        return useQuery(this.getPagingBuilderQueryOptions(query))
     }
 
     /**

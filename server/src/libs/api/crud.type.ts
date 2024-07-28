@@ -35,8 +35,7 @@ export interface IBasePagingQuery {
     [key: string]: any
 }
 
-export interface IBasePagingBuilderQuery
-    extends Omit<IBasePagingQuery, 'asc' | 'q'> {
+export interface IBasePagingBuilderQuery extends Omit<IBasePagingQuery, 'asc'> {
     filters?: string[]
     withs?: string[]
 }

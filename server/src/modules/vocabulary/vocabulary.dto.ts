@@ -1,5 +1,6 @@
 import { BaseQueryDto } from '@/libs/api'
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 
 export class VocabularyDto {
     @IsString()
@@ -40,3 +41,5 @@ export class QueryVocabularyDto extends BaseQueryDto {
     @IsOptional()
     topic_id?: string
 }
+
+export const vocabularySchemas = validationMetadatasToSchemas()

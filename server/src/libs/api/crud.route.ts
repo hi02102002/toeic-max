@@ -4,6 +4,7 @@ import { RolesMiddleware } from '@/middlewares/roles.middleware'
 import { ValidationMiddleware } from '@/middlewares/validation.middleware'
 import { Router } from 'express'
 import { CRUDBaseController } from './crud.controller'
+import { BaseQueryPagingBuilderDto } from './crud.dto'
 
 function getClassMethods(obj: any) {
     return Object.keys(obj).filter((item) => typeof obj[item] === 'function')
@@ -153,7 +154,7 @@ export abstract class CrudRoute<CT extends CRUDBaseController<any>>
                 path: '/get-paging-builder',
                 middleware: [
                     ValidationMiddleware(
-                        this.dtos.queryDto,
+                        BaseQueryPagingBuilderDto,
                         'query',
                         true,
                         false,

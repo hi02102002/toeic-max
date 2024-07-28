@@ -1,6 +1,7 @@
 import { BaseQueryDto } from '@/libs/api'
 import { Transform } from 'class-transformer'
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 
 export class KitTestDto {
     @IsString()
@@ -27,3 +28,5 @@ export class QueryKitTestDto extends BaseQueryDto {
     @IsOptional()
     kit_id?: string
 }
+
+export const kitTestSchemas = validationMetadatasToSchemas()

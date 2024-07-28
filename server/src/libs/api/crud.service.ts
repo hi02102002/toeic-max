@@ -437,35 +437,53 @@ export abstract class CRUDBaseService<
         orderBy = 'year|desc',
         page = 1,
         withs = [],
+        searchFields = [],
+        q = '',
     }: {
         /**
          * The query object.
          * @example ['name| = |John', 'age| >|20']
          */
-        filters: string[]
+        filters?: string[]
         /**
          * The page number.
          */
-        page: number
+        page?: number
 
         /**
          * The limit number.
          */
-        limit: number
+        limit?: number
         /**
          * The order direction.
          * @example 'a||desc'
          */
-        orderBy: string
+        orderBy?: string
         /**
          * Fileds to select relationship.
          * @example ['user','user.profile'] -> { user: true, user: { profile: true } }
          */
-        withs: string[]
+        withs?: string[]
+
+        /**
+         * The search fields.
+         */
+        searchFields?: string[]
+
+        q?: string
     }) {
-        const where = parseFilters(this.table, filters)
+        const filterParsed = parseFilters(this.table, filters)
         const orderByParsed = parseOrderBy(this.table, orderBy)
         const withParsed = parseWiths(withs)
+
+        const where = and(
+            or(
+                ...searchFields.map((field) =>
+                    ilike(get(this.table, field), `%${q}%`),
+                ),
+            ),
+            ...filterParsed,
+        )
 
         const rows = await this.db.query[getTableName(this.table)].findMany({
             where,

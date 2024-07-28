@@ -1,26 +1,16 @@
 <template>
     <div class="space-y-4">
-        <div class="flex items-center justify-between sm:flex-row flex-col-reverse gap-3">
-            <div class="flex items-center gap-3 w-full">
-                <Button size="sm" class="min-w-20 w-full sm:w-auto" @click="handelPrevQuestion">
-                    Previous
-                </Button>
-                <Button size="sm" class="min-w-20 w-full sm:w-auto" @click="handelNextQuestion">
-                    Next
-                </Button>
-            </div>
-            <div class="flex items-center gap-3 w-full justify-center sm:justify-end">
-                <span>Question {{ currentQuestionIndex + 1 }} of {{ sectionQuestions.length
-                    }}
+        <Toolbar :disabled-submit="disabledSubmit" :choices="choices" :original-location-list-choices="false"
+            @on-next-question="handelNextQuestion" @on-prev-question="handelPrevQuestion" @on-submit="handelSubmit">
+            <template #question-location>
+                <span class="text-nowrap">
+                    Question {{ currentQuestionIndex + 1 }} of {{ sectionQuestions.length }}
                 </span>
-                <Explanation :section-question="sectionQuestions[currentQuestionIndex]">
-                    <Button size="sm" variant="ghost" class="hover:underline">
-                        Explain
-                    </Button>
-                </Explanation>
+            </template>
+            <template #settings>
                 <Dialog>
                     <DialogTrigger as-child>
-                        <Button size="sm" variant="ghost" class="p-0 w-8 h-8">
+                        <Button variant="outline" class="w-8 h-8 p-0 flex-shrink-0" title="Settings">
                             <SettingsIcon class="w-4 h-4" />
                         </Button>
                     </DialogTrigger>
@@ -44,8 +34,16 @@
                         </div>
                     </DialogContent>
                 </Dialog>
-            </div>
-        </div>
+            </template>
+            <template #explain>
+                <Explanation :section-question="sectionQuestions[currentQuestionIndex]">
+                    <Button variant="outline" class="w-8 h-8 p-0 flex-shrink-0" title="Explain">
+                        <BookA class="w-4 h-4" />
+                    </Button>
+                </Explanation>
+            </template>
+        </Toolbar>
+
         <div>
             <div v-if="isLoading" class="flex items-center justify-center w-full h-16">
                 <Loader2 class="w-6 h-6 text-muted-foreground animate-spin" />
@@ -56,7 +54,9 @@
                     currentQuestionIndex + 5
                 )" v-show="currentQuestion?.id === question.id" :key="question.id" :question-section="question"
                     :is-auto-play-audio="config.autoPlayAudio" :is-active="currentQuestionIndex === index"
-                    :show-is-correct="true" @choose="handleToggleChoice" />
+                    :choices="choices" :show-is-correct="true" 
+                        @choose="handleToggleChoice"
+                    />
             </template>
         </div>
     </div>
@@ -64,7 +64,7 @@
 
 
 <script setup lang="ts">
-import { Explanation, QuestionPart } from '@/components/term';
+import { Explanation, QuestionPart, Toolbar } from '@/components/term';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -75,9 +75,10 @@ import { useSectionQuestionForPractice } from '@/hooks/section-question';
 import { useCurrentUserStore } from '@/stores/current-user';
 import type { TChoice } from '@/types/common';
 import type { TSection } from '@/types/section';
+import * as practiceHelper from '@/utils/practice';
 import { useStorage, watchOnce } from '@vueuse/core';
 import { pick } from 'lodash';
-import { Loader2, SettingsIcon } from 'lucide-vue-next';
+import { BookA, Loader2, SettingsIcon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { definePage, onBeforeRouteLeave, useRoute, useRouter } from 'vue-router/auto';
 
@@ -139,26 +140,16 @@ const config = useStorage(
     },
 )
 
-const handleToggleChoice = (choice: TChoice) => {
-    const index = choices.value.findIndex(
-        (c) => c.question_id === choice.question_id,
-    )
+const handleToggleChoice = (choice: TChoice) => practiceHelper.handelToggleChoice({
+    choice,
+    choices: choices.value,
+    callback(newChoices) {
+        choices.value = newChoices
 
-    if (index === -1) {
-        choices.value.push(choice)
-    } else {
-        choices.value = choices.value.map((c) => {
-            if (c.question_id === choice.question_id) {
-                return choice
-            }
-            return c
-        })
-    }
-
-
-    handelAutoNextQuestion()
-    handelFinishPractice()
-}
+        handelAutoNextQuestion()
+        handelFinishPractice()
+    },
+})
 
 const handelNextQuestion = () => {
     if (currentQuestionIndex.value === Number(numOfQuestion) - 1) {
@@ -176,36 +167,19 @@ const handelPrevQuestion = () => {
     currentQuestionIndex.value = currentQuestionIndex.value - 1
 }
 
-const handelAutoNextQuestion = () => {
-    if (!config.value.autoNext) return
+const handelAutoNextQuestion = () => practiceHelper.handelAutoNextQuestion({
+    autoNext: config.value.autoNext,
+    currentQuestionIndex: currentQuestionIndex.value,
+    choices: choices.value,
+    handelNextQuestion: handelNextQuestion,
+    sectionQuestions: sectionQuestions.value,
+})
 
-    const currentQuestion = sectionQuestions.value[currentQuestionIndex.value]
+const disabledSubmit = computed(() => {
+    return choices.value.every(choice => !choice.choose)
+})
 
-    if (!currentQuestion) return
-
-    const choicesOfCurrentQuestion = choices.value.filter(choice => choice.section_question_id === currentQuestion.id && choice.choose)
-
-    if (currentQuestion.questions.length === choicesOfCurrentQuestion.length) {
-
-        setTimeout(() => {
-            handelNextQuestion()
-        }, 1000)
-    }
-}
-
-const handelFinishPractice = () => {
-    const lastQuestion = sectionQuestions.value[sectionQuestions.value.length - 1]
-
-
-    const choicesOfLastQuestion = choices.value.filter(choice => choice.section_question_id === lastQuestion.id && choice.choose)
-
-
-    if (!(currentQuestionIndex.value === Number(numOfQuestion) - 1 &&
-        lastQuestion.questions.length === choicesOfLastQuestion.length)
-    ) return;
-
-    navigateWithoutConfirm.value = true
-
+const handelSubmit = () => {
     const data = {
         type: 'practice-part',
         contents: choices.value,
@@ -236,6 +210,22 @@ const handelFinishPractice = () => {
             type: 'practice-part',
         }
     })
+}
+
+const handelFinishPractice = () => {
+    const lastQuestion = sectionQuestions.value[sectionQuestions.value.length - 1]
+
+
+    const choicesOfLastQuestion = choices.value.filter(choice => choice.section_question_id === lastQuestion.id && choice.choose)
+
+
+    if (!(currentQuestionIndex.value === Number(numOfQuestion) - 1 &&
+        lastQuestion.questions.length === choicesOfLastQuestion.length)
+    ) return;
+
+    navigateWithoutConfirm.value = true
+
+    handelSubmit()
 }
 
 watchOnce(sectionQuestions, (newValue) => {

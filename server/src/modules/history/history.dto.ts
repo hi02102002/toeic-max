@@ -8,6 +8,7 @@ import {
     IsNumber,
     IsString,
 } from 'class-validator'
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 
 export class PracticePartDto {
     @IsString()
@@ -55,3 +56,5 @@ export class HistoryDto {
 }
 
 export class QueryHistoryDto extends BaseQueryDto {}
+
+export const historySchemas = validationMetadatasToSchemas()

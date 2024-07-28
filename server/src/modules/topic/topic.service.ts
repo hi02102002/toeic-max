@@ -1,6 +1,6 @@
 import { jsonBuildObject } from '@/database/helper'
 import { topics } from '@/database/schema'
-import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud.service'
+import { CRUDBaseService, TGetPagingQuery } from '@/libs/api'
 import { getFirstNumberInString } from '@/utils/common'
 import {
     count,

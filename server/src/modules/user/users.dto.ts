@@ -7,6 +7,7 @@ import {
     MaxLength,
     MinLength,
 } from 'class-validator'
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 
 export class CreateUserDto {
     @IsEmail()
@@ -80,3 +81,5 @@ export class ChangePasswordDto {
     @Match(ChangePasswordDto, (o) => o.password)
     passwordConfirm: string
 }
+
+export const userSchemas = validationMetadatasToSchemas()

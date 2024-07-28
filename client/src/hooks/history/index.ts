@@ -4,7 +4,7 @@ import type { THistory } from '@/types/history'
 import type { THistoryInputSchemaType } from '@/validators/history'
 import { CrudQueryClient } from '../crud-query-client'
 
-const HistoryCrudClient = new CrudQueryClient<
+export const HistoryCrudClient = new CrudQueryClient<
     THistoryInputSchemaType,
     THistoryInputSchemaType,
     TBaseQueryParams,

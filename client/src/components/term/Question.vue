@@ -1,18 +1,22 @@
 <template>
-    <div class="space-y-2 select-none">
+    <div :id="`question-${props.question.id}`" class="space-y-2 select-none">
         <span class="font-medium">
             {{ formatQuestionLocation(
-                props.question.location,
-                props.question.q,
-                props.index
+                {
+                    location: props.question.location,
+                    part: props.question.p,
+                    index: props.index,
+                    q: props.question.q,
+                }
             ) }}
         </span>
-        <RadioGroup v-model:model-value="choose">
+        <RadioGroup :model-value="chooseOfQuestion?.choose || choose" :default-value="chooseOfQuestion?.choose"
+            @update:model-value="handelChoose">
             <template v-for="(value, key) in question.opts" :key="key + question.id">
-                <Button variant="ghost" :class="cn('p-1 h-auto justify-start cursor-pointer border-transparent border',
+                <Button v-if="!(PARTS_RENDER_ONLY_3_OPTS.includes(question.p) && key === 'd')" variant="ghost" :class="cn('p-1 h-auto justify-start cursor-pointer border-transparent border',
                     props.showIsCorrect && {
                         'text-destructive border-destructive hover:text-destructive border': isIncorrect(key),
-                        'border border-primary': isCorrect(key) || isDefaultAnswer(key),
+                        'border border-primary': (isCorrect(key) || isDefaultAnswer(key)) && props.showIsCorrect,
                     }
                 )">
                     <RadioGroupItem :id="`question-${question.id}-choice-${key}`" :value="key" :disabled="props.showIsCorrect && (props.disabled || choose !== '')
@@ -26,7 +30,7 @@
                     <Label :for="`question-${question.id}-choice-${key}`"
                         class="flex-1 text-start cursor-pointer pl-2 block text-wrap leading-5">
                         {{ key.toUpperCase() }}.
-                        <template v-if="!PART_NOT_RENDER_OPTS_VAL.includes(question.p)">
+                        <template v-if="!PARTS_NOT_RENDER_OPTS_VAL.includes(question.p)">
                             {{ value }}
                         </template>
                     </Label>
@@ -37,16 +41,16 @@
 </template>
 
 <script setup lang="ts">
+import { PARTS_NOT_RENDER_OPTS_VAL, PARTS_RENDER_ONLY_3_OPTS } from '@/constants';
 import type { TChoice } from '@/types/common';
 import type { TQuestion } from '@/types/question';
 import { cn } from '@/utils';
 import { formatQuestionLocation } from '@/utils/section-question';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
-const PART_NOT_RENDER_OPTS_VAL = [1, 2, 3]
 
 const choose = ref<string>('')
 
@@ -56,6 +60,7 @@ type Props = {
     showIsCorrect?: boolean
     index: number
     choices?: TChoice[]
+    isForReview?: boolean
 }
 
 const props = defineProps<Props>()
@@ -71,7 +76,7 @@ const chooseOfQuestion = computed(() => {
 
 const isCorrect = (key: string) => {
     return choose.value && choose.value === key && choose.value === props.question.ans || (
-        chooseOfQuestion.value !== undefined && chooseOfQuestion.value.is_correct && chooseOfQuestion.value.choose === key
+        chooseOfQuestion.value !== undefined && chooseOfQuestion.value.choose && chooseOfQuestion.value.is_correct && chooseOfQuestion.value.choose === key
     )
 }
 
@@ -83,26 +88,25 @@ const isIncorrect = (key: string) => {
 
 const isDefaultAnswer = (key: string) => {
     return (choose.value !== ''
-        || chooseOfQuestion.value !== undefined
+        || chooseOfQuestion.value !== undefined && chooseOfQuestion.value.choose !== '' || props.isForReview
     ) && props.question.ans === key
 }
 
+const handelChoose = (value: string) => {
+    if (props.disabled) return
 
-watch(
-    choose, (newVal) => {
-        if (newVal) {
-            emits('choose', {
-                is_correct: choose.value === props.question.ans,
-                ans: props.question.ans,
-                choose: choose.value,
-                part: props.question.p,
-                question_id: props.question.id,
-                section_question_id: props.question.question_section_id,
-                location: props.question.location,
-            })
-        }
-    }
-)
+    choose.value = value
+
+    emits('choose', {
+        is_correct: value === props.question.ans,
+        ans: props.question.ans,
+        choose: value,
+        part: props.question.p,
+        question_id: props.question.id,
+        section_question_id: props.question.question_section_id,
+        location: props.question.location,
+    })
+}
 
 
 </script>

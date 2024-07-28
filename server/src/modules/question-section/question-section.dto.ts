@@ -9,6 +9,7 @@ import {
     IsString,
     ValidateNested,
 } from 'class-validator'
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 
 export class QuestionDto {
     @IsNumber()
@@ -117,3 +118,5 @@ export class QueryQuestionSectionDto extends BaseQueryDto {
     @Transform(({ value }) => parseInt(value))
     part?: 1 | 2 | 3 | 4 | 5 | 6 | 7
 }
+
+export const questionSectionSchemas = validationMetadatasToSchemas()

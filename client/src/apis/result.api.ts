@@ -5,13 +5,18 @@ import type { THistory } from '@/types/history'
 import type { TSectionQuestion } from '@/types/question'
 
 class ResultApi {
-    async getPracticePart(historyId: string): Promise<
+    async getPractice(
+        historyId: string,
+        type: string,
+    ): Promise<
         TBaseResponse<{
             questions: TSectionQuestion[]
             history: THistory
         }>
     > {
-        return http_client.get(API_ENDPOINTS.RESULT.PRACTICE_PART(historyId))
+        return http_client.get(
+            API_ENDPOINTS.RESULT.PRACTICE_PART(historyId, type),
+        )
     }
 }
 

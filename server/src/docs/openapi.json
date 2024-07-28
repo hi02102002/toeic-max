@@ -1,0 +1,1309 @@
+{
+  "info": {
+    "title": "Ninja Toiec API",
+    "version": "1.0.0",
+    "description": "API Document",
+    "contact": {
+      "email": "hoanghuy.dev0210@gmail.com",
+      "name": "Hoang Huy"
+    }
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/questions/get-all": {
+      "get": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Get all QuestionSection",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": [
+                        "array"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get all QuestionSection"
+      }
+    },
+    "/api/questions/get-one/{id}": {
+      "get": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Get one by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": [
+                        "object"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get one by id"
+      }
+    },
+    "/api/questions": {
+      "post": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Create QuestionSection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuestionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": [
+                        "object"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Get paging QuestionSection",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": [
+                        "object"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryQuestionSectionDto",
+            "in": "query"
+          }
+        ]
+      }
+    },
+    "/api/questions/{id}": {
+      "delete": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Delete QuestionSection by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": [
+                        "object"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/questions/get-paging-builder": {
+      "get": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Get paging builder QuestionSection",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": [
+                        "object"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get paging builder QuestionSection",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number",
+              "default": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "orderBy",
+            "schema": {
+              "type": "string",
+              "example": "name|asc"
+            }
+          },
+          {
+            "in": "query",
+            "name": "filters",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "name|like|abc"
+              },
+              "default": []
+            },
+            "description": "Filter data"
+          },
+          {
+            "in": "query",
+            "name": "withs",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "children"
+              },
+              "default": []
+            },
+            "description": "Get relationship data"
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "name"
+              },
+              "default": []
+            },
+            "description": "Fields will be searched"
+          }
+        ]
+      }
+    },
+    "/api/questions/for-select": {
+      "get": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Get all QuestionSection for select",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": [
+                        "array"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get all QuestionSection for select"
+      }
+    },
+    "api/questions/for-test/{testKitId}": {
+      "get": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Get question sections for test",
+        "parameters": [
+          {
+            "name": "testKitId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get question sections for test"
+          }
+        }
+      }
+    },
+    "api/questions/for-practice/{part}/{numOfQuestions}": {
+      "get": {
+        "tags": [
+          "QuestionSection"
+        ],
+        "summary": "Get question sections for practice",
+        "parameters": [
+          {
+            "name": "part",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "numOfQuestions",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get question sections for practice"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateUserDto": {
+        "properties": {
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 32,
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "UpdateUserDto": {
+        "properties": {
+          "password": {
+            "maxLength": 32,
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "password"
+        ]
+      },
+      "UpdateInfoUserDto": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ChangePasswordDto": {
+        "properties": {
+          "oldPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 32,
+            "type": "string",
+            "minLength": 1
+          },
+          "passwordConfirm": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "oldPassword",
+          "password",
+          "passwordConfirm"
+        ]
+      },
+      "LoginDto": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 1,
+            "format": "email"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RegisterDto": {
+        "properties": {
+          "passwordConfirm": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "minLength": 1,
+            "format": "email"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "passwordConfirm",
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "ForgotPasswordDto": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 1,
+            "format": "email"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email"
+        ]
+      },
+      "ResetPasswordDto": {
+        "properties": {
+          "password": {
+            "minLength": 6,
+            "type": "string",
+            "maxLength": 32
+          },
+          "passwordConfirm": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "password",
+          "passwordConfirm"
+        ]
+      },
+      "IdTokenDto": {
+        "properties": {
+          "idToken": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "idToken"
+        ]
+      },
+      "RequestVerifyAccountDto": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 1,
+            "format": "email"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email"
+        ]
+      },
+      "BaseQueryPagingBuilderDto": {
+        "properties": {
+          "page": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "limit": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "orderBy": {
+            "pattern": "^[^|]+\\|(asc|desc)$",
+            "type": "string"
+          },
+          "withs": {
+            "items": {
+              "pattern": "^[^|]+(?:\\.[^|]+)*$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "filters": {
+            "items": {
+              "pattern": "^[^|]+\\|(eq|ne|gt|gte|lt|lte|in|nin|like|nlike|between|nbetween|isnull|isnotnull|notexists|nilike|ilike)\\|.+$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "q": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "BaseQueryDto": {
+        "properties": {
+          "page": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "limit": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "q": {
+            "type": "string"
+          },
+          "orderBy": {
+            "type": "string"
+          },
+          "asc": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "PracticePartDto": {
+        "properties": {
+          "section_question_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "question_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "part": {
+            "minLength": 1,
+            "type": "number"
+          },
+          "ans": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "choose": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "is_correct": {
+            "minLength": 1,
+            "type": "boolean"
+          }
+        },
+        "type": "object",
+        "required": [
+          "section_question_id",
+          "question_id",
+          "part",
+          "ans",
+          "choose",
+          "is_correct"
+        ]
+      },
+      "HistoryDto": {
+        "properties": {
+          "contents": {
+            "items": {},
+            "type": "string",
+            "minLength": 1
+          },
+          "meta_data": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "user_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contents",
+          "meta_data",
+          "type",
+          "user_id"
+        ]
+      },
+      "KitTestDto": {
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "year": {
+            "minLength": 1,
+            "type": "number"
+          },
+          "kit_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "slug": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "year",
+          "kit_id"
+        ]
+      },
+      "QueryKitTestDto": {
+        "properties": {
+          "kit_id": {
+            "type": "string"
+          },
+          "page": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "limit": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "q": {
+            "type": "string"
+          },
+          "orderBy": {
+            "type": "string"
+          },
+          "asc": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "KitDto": {
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "year": {
+            "minLength": 1,
+            "type": "number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "year"
+        ]
+      },
+      "SectionDto": {
+        "properties": {
+          "title": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title_vi": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "intro": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "intro_vi": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "intro_url": {
+            "type": "string"
+          },
+          "intro_image": {
+            "type": "string"
+          },
+          "intro_answer": {
+            "type": "string"
+          },
+          "section_title": {
+            "type": "string"
+          },
+          "section_description": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "title_vi",
+          "intro",
+          "intro_vi",
+          "name"
+        ]
+      },
+      "QuestionDto": {
+        "properties": {
+          "p": {
+            "minLength": 1,
+            "type": "number"
+          },
+          "opts": {
+            "minLength": 1,
+            "type": "object"
+          },
+          "ans": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "location": {
+            "minLength": 1,
+            "type": "number"
+          },
+          "trans": {
+            "type": "object"
+          },
+          "q": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "p",
+          "opts",
+          "ans",
+          "location",
+          "q"
+        ]
+      },
+      "CreateQuestionDto": {
+        "properties": {
+          "part": {
+            "minLength": 1,
+            "type": "number"
+          },
+          "image_urls": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "audio_url": {
+            "type": "string"
+          },
+          "teaser": {
+            "type": "object"
+          },
+          "location": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "questions": {
+            "items": {
+              "$ref": "#/definitions/Array"
+            },
+            "type": "array",
+            "minLength": 1
+          },
+          "test_kit_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "part",
+          "location",
+          "questions",
+          "test_kit_id"
+        ]
+      },
+      "QueryQuestionSectionDto": {
+        "properties": {
+          "test_kit_id": {
+            "type": "string"
+          },
+          "part": {
+            "type": "number"
+          },
+          "page": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "limit": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "q": {
+            "type": "string"
+          },
+          "orderBy": {
+            "type": "string"
+          },
+          "asc": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "TopicDto": {
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "parent_id": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ]
+      },
+      "QueryTopicDto": {
+        "properties": {
+          "parent_id": {
+            "type": "string"
+          },
+          "page": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "limit": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "q": {
+            "type": "string"
+          },
+          "orderBy": {
+            "type": "string"
+          },
+          "asc": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "VocabularyDto": {
+        "properties": {
+          "topic_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "spelling": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "meaning": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "category": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "example": {
+            "type": "string"
+          },
+          "image": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "topic_id",
+          "name",
+          "type",
+          "spelling",
+          "meaning",
+          "category",
+          "image"
+        ]
+      },
+      "QueryVocabularyDto": {
+        "properties": {
+          "topic_id": {
+            "type": "string"
+          },
+          "page": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "limit": {
+            "pattern": "^[-+]?[0-9]+$",
+            "type": "string"
+          },
+          "q": {
+            "type": "string"
+          },
+          "orderBy": {
+            "type": "string"
+          },
+          "asc": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT token",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import openapiDocs from '@/docs/openapi.json'
 import { LOG_FORMAT, NODE_ENV, PORT } from '@config'
 import type { IRoutes } from '@interfaces/routes.interface'
 import { ErrorMiddleware } from '@middlewares/error.middleware'
@@ -11,7 +12,6 @@ import hpp from 'hpp'
 import morgan from 'morgan'
 import 'reflect-metadata'
 import swaggerUi from 'swagger-ui-express'
-import { swaggerSpec } from './libs/swagger'
 import { runWorker } from './worker'
 
 export class App {
@@ -79,12 +79,7 @@ export class App {
     }
 
     private initializeSwagger() {
-        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-
-        this.app.get('/api-docs.json', (_req, res) => {
-            res.setHeader('Content-Type', 'application/json')
-            res.send(swaggerSpec)
-        })
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiDocs))
 
         logger.info(
             `This docs is available at http://localhost:${this.port}/api-docs`,

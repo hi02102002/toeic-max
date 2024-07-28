@@ -1,6 +1,5 @@
 /* eslint-disable no-case-declarations */
 import {
-    and,
     asc,
     between,
     desc,
@@ -66,6 +65,16 @@ export const parseFilter = (
         return undefined
     }
 
+    // if value is empty and condition is not null or not null
+    if (
+        !value &&
+        ![EFilterCondition.IS_NULL, EFilterCondition.IS_NOT_NULL].includes(
+            condition as EFilterCondition,
+        )
+    ) {
+        return undefined
+    }
+
     switch (condition) {
         case EFilterCondition.EQUAL:
             return eq(tableField, parseValue(value, type))
@@ -120,11 +129,9 @@ export const parseFilters = (
         return undefined
     }
 
-    return and(
-        ...filters
-            .map((filter) => parseFilter(table, filter))
-            .filter((filter) => filter !== undefined),
-    )
+    return filters
+        .map((filter) => parseFilter(table, filter))
+        .filter((filter) => filter !== undefined)
 }
 
 export const parseOrderBy = (table: PgTable<TableConfig>, orderBy: string) => {

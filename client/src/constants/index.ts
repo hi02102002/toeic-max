@@ -59,8 +59,8 @@ export const API_ENDPOINTS = {
     },
     RESULT: {
         INDEX: '/results',
-        PRACTICE_PART: (historyId: string) =>
-            `/results/practice-part/${historyId}`,
+        PRACTICE_PART: (historyId: string, type: string) =>
+            `/results/practice-part/${historyId}?type=${type}`,
     },
 } as const
 
@@ -106,3 +106,27 @@ export const VOCABULARY_CATEGORY: TSelectResponse[] = [
  * The maximum time for a test in seconds.
  */
 export const MAX_TIME_TEST = 120 * 60 // 120 minutes
+
+/**
+ * Not render question text for these parts.
+ */
+export const PARTS_NOT_RENDER_QUESTION_TEXT = [1, 2]
+
+/**
+ * Not render options for these parts.
+ */
+export const PARTS_NOT_RENDER_OPTS_VAL = [1, 2, 3]
+
+/**
+ * Render only 3 options for these parts.
+ */
+export const PARTS_RENDER_ONLY_3_OPTS = [2]
+
+/**
+ * Render teaser for these parts.
+ */
+export const PART_RENDER_TEASER = [6, 7]
+
+export const READING_PARTS = [5, 6, 7]
+export const LISTENING_PARTS = [1, 2, 3, 4]
+export const MAX_SCORE = 495

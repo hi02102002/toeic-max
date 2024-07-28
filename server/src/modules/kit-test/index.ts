@@ -1,4 +1,5 @@
 export * from './kit-test.controller'
+export * from './kit-test.dto'
 export * from './kit-test.route'
 export * from './kit-test.service'
 export * from './kit-test.type'

@@ -1,6 +1,7 @@
 import { BaseQueryDto } from '@/libs/api'
 import { Transform } from 'class-transformer'
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 
 export class SectionDto {
     @IsString()
@@ -47,3 +48,5 @@ export class SectionDto {
 }
 
 export class QuerySectionDto extends BaseQueryDto {}
+
+export const sectionSchemas = validationMetadatasToSchemas()

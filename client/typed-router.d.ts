@@ -37,6 +37,8 @@ declare module 'vue-router/auto-routes' {
     '/dashboard/results/[id]/': RouteRecordInfo<'/dashboard/results/[id]/', '/dashboard/results/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/dashboard/results/[id]/detail': RouteRecordInfo<'/dashboard/results/[id]/detail', '/dashboard/results/:id/detail', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/dashboard/results/[id]/list-choice': RouteRecordInfo<'/dashboard/results/[id]/list-choice', '/dashboard/results/:id/list-choice', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/dashboard/results-test/[id]/': RouteRecordInfo<'/dashboard/results-test/[id]/', '/dashboard/results-test/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/dashboard/results-test/[id]/detail': RouteRecordInfo<'/dashboard/results-test/[id]/detail', '/dashboard/results-test/:id/detail', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/dashboard/tests/': RouteRecordInfo<'/dashboard/tests/', '/dashboard/tests', Record<never, never>, Record<never, never>>,
     '/dashboard/tests/[id]/': RouteRecordInfo<'/dashboard/tests/[id]/', '/dashboard/tests/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/dashboard/tests/[id]/practice/': RouteRecordInfo<'/dashboard/tests/[id]/practice/', '/dashboard/tests/:id/practice', { id: ParamValue<true> }, { id: ParamValue<false> }>,
