@@ -42,6 +42,7 @@ declare module 'vue-router/auto-routes' {
     '/dashboard/tests/': RouteRecordInfo<'/dashboard/tests/', '/dashboard/tests', Record<never, never>, Record<never, never>>,
     '/dashboard/tests/[id]/': RouteRecordInfo<'/dashboard/tests/[id]/', '/dashboard/tests/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/dashboard/tests/[id]/practice/': RouteRecordInfo<'/dashboard/tests/[id]/practice/', '/dashboard/tests/:id/practice', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/dashboard/vocabularies/': RouteRecordInfo<'/dashboard/vocabularies/', '/dashboard/vocabularies', Record<never, never>, Record<never, never>>,
     '/forgot-password': RouteRecordInfo<'/forgot-password', '/forgot-password', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,

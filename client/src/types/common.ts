@@ -24,12 +24,16 @@ export type TBaseQueryParams = {
     asc?: boolean
 }
 
-export type TBaseQueryPagingBuilderParams = {
+export type TBaseQueryPagingBuilderParams<
+    T extends Record<any, any> = Record<any, any>,
+> = {
     page?: number
     limit?: number
     filters?: string[]
     withs?: string[]
     orderBy?: string
+    q?: string
+    searchFields?: (keyof T)[]
 }
 
 export type TSelectResponse = {
@@ -45,4 +49,29 @@ export type TChoice = {
     is_correct: boolean
     part: number
     location: number
+}
+
+export enum EOrderBy {
+    ASC = 'asc',
+    DESC = 'desc',
+}
+
+export enum EFilterCondition {
+    EQUAL = 'eq',
+    NOT_EQUAL = 'ne',
+    GREATER_THAN = 'gt',
+    GREATER_THAN_OR_EQUAL = 'gte',
+    LESS_THAN = 'lt',
+    LESS_THAN_OR_EQUAL = 'lte',
+    IN = 'in',
+    NOT_IN = 'nin',
+    LIKE = 'like',
+    NOT_LIKE = 'nlike',
+    BETWEEN = 'between',
+    NOT_BETWEEN = 'nbetween',
+    IS_NULL = 'isnull',
+    IS_NOT_NULL = 'isnotnull',
+    NOT_EXISTS = 'notexists',
+    NOT_ILIKE = 'nilike',
+    ILIKE = 'ilike',
 }

@@ -151,13 +151,7 @@ export abstract class CRUDBaseController<
 
     public getPagingBuilder = catchAsync(async (req, res) => {
         const data = await this.service.getPagingBuilder({
-            filters: req.query?.filters as any,
-            limit: req.query?.limit as any,
-            orderBy: req.query?.orderBy as any,
-            page: req.query?.page as any,
-            withs: req.query?.withs as any,
-            q: req.query?.q as any,
-            searchFields: req.query?.searchFields as any,
+            ...req.body,
         })
 
         return res.status(StatusCodes.OK).json({ data })

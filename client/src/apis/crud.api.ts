@@ -52,7 +52,9 @@ export abstract class BaseCrudApi<
     getPagingBuilder(
         query?: TBaseQueryPagingBuilderParams,
     ): Promise<TPaginateResponse<E>> {
-        return http_client.get(this.endpoint, { params: query })
+        return http_client.post(`${this.endpoint}/get-paging-builder`, {
+            ...query,
+        })
     }
 
     create(data: C): Promise<TBaseResponse<E>> {

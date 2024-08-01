@@ -3,7 +3,7 @@ import type { TQueryVocabulary, TVocabulary } from '@/types/vocabulary'
 import type { TInputVocabularySchemaType } from '@/validators'
 import { CrudQueryClient } from '../crud-query-client'
 
-const VocabularyClient = new CrudQueryClient<
+export const VocabularyClient = new CrudQueryClient<
     TInputVocabularySchemaType,
     TInputVocabularySchemaType,
     TQueryVocabulary,

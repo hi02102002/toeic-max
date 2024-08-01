@@ -150,12 +150,12 @@ export abstract class CrudRoute<CT extends CRUDBaseController<any>>
                 path: '/for-select',
             },
             [CrudActions.GET_PAGING_BUILDER]: {
-                method: 'get',
+                method: 'post',
                 path: '/get-paging-builder',
                 middleware: [
                     ValidationMiddleware(
                         BaseQueryPagingBuilderDto,
-                        'query',
+                        'body',
                         true,
                         false,
                         true,

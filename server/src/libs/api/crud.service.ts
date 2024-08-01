@@ -433,9 +433,9 @@ export abstract class CRUDBaseService<
      */
     async getPagingBuilder({
         filters = [],
-        limit = 10,
+        limit,
         orderBy = 'year|desc',
-        page = 1,
+        page,
         withs = [],
         searchFields = [],
         q = '',
@@ -488,9 +488,9 @@ export abstract class CRUDBaseService<
         const rows = await this.db.query[getTableName(this.table)].findMany({
             where,
             with: withParsed,
-            limit: Number(limit),
+            limit: limit,
             orderBy: orderByParsed,
-            offset: (Number(page) - 1) * limit,
+            offset: page ? (page - 1) * (limit || 0) : 0,
         })
 
         const [{ total }] = await db

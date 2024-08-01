@@ -131,7 +131,10 @@ export const parseFilters = (
 
     return filters
         .map((filter) => parseFilter(table, filter))
-        .filter((filter) => filter !== undefined)
+        .filter((filter) => {
+            console.log(filter)
+            return filter !== undefined
+        })
 }
 
 export const parseOrderBy = (table: PgTable<TableConfig>, orderBy: string) => {

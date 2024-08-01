@@ -54,8 +54,8 @@ export type TGetPagingQuery<
     }
 }
 
-export const FILTER_PATERN = new RegExp(
-    `^[^|]+\\|(${Object.values(EFilterCondition).join('|')})\\|.+$`,
+export const FILTER_PATTERN = new RegExp(
+    `^[^|]+\\|(${Object.values(EFilterCondition).join('|')})(\\|[^|]*)?(\\|[^|]*)?$`,
 )
 
 export const ORDER_BY_PATERN = new RegExp(

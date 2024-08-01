@@ -9,7 +9,7 @@ import {
     Matches,
 } from 'class-validator'
 import {
-    FILTER_PATERN,
+    FILTER_PATTERN,
     IBasePagingBuilderQuery,
     IBasePagingQuery,
     ORDER_BY_PATERN,
@@ -48,7 +48,7 @@ export class BaseQueryPagingBuilderDto implements IBasePagingBuilderQuery {
         each: true,
     })
     @IsOptional()
-    @Matches(FILTER_PATERN, {
+    @Matches(FILTER_PATTERN, {
         message: 'Filter must be in format field|condition|value|type',
         each: true,
     })

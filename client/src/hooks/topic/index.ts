@@ -5,7 +5,7 @@ import type { TInputTopicSchemaType } from '@/validators/topic'
 import { useQuery } from '@tanstack/vue-query'
 import { CrudQueryClient } from '../crud-query-client'
 
-const TopicClient = new CrudQueryClient<
+export const TopicClient = new CrudQueryClient<
     TInputTopicSchemaType,
     TInputTopicSchemaType,
     TBaseQueryParams,
