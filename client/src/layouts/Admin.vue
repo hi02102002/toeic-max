@@ -6,7 +6,7 @@
                 <PageTitle>
                     {{ route.meta?.title || 'App' }}
                 </PageTitle>
-                <RouterView />
+                <RouterView :key="route.fullPath" />
             </div>
         </div>
     </div>

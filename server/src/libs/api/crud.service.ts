@@ -21,7 +21,11 @@ import {
 import { StatusCodes } from 'http-status-codes'
 import { get, isEmpty, lowerCase } from 'lodash'
 import { parseFilters, parseOrderBy, parseWiths } from './crud.helper'
-import { IBasePagingQuery, TGetPagingQuery } from './crud.type'
+import {
+    IBasePagingBuilderQuery,
+    IBasePagingQuery,
+    TGetPagingQuery,
+} from './crud.type'
 
 /**
  * The base service class for interacting with the database.
@@ -439,39 +443,8 @@ export abstract class CRUDBaseService<
         withs = [],
         searchFields = [],
         q = '',
-    }: {
-        /**
-         * The query object.
-         * @example ['name| = |John', 'age| >|20']
-         */
-        filters?: string[]
-        /**
-         * The page number.
-         */
-        page?: number
-
-        /**
-         * The limit number.
-         */
-        limit?: number
-        /**
-         * The order direction.
-         * @example 'a||desc'
-         */
-        orderBy?: string
-        /**
-         * Fileds to select relationship.
-         * @example ['user','user.profile'] -> { user: true, user: { profile: true } }
-         */
-        withs?: string[]
-
-        /**
-         * The search fields.
-         */
-        searchFields?: string[]
-
-        q?: string
-    }) {
+        withh,
+    }: IBasePagingBuilderQuery) {
         const filterParsed = parseFilters(this.table, filters)
         const orderByParsed = parseOrderBy(this.table, orderBy)
         const withParsed = parseWiths(withs)

@@ -1,5 +1,6 @@
 import type { TOption } from '@/components/ui/tree-select'
 import { API_ENDPOINTS } from '@/constants'
+import { http_client } from '@/libs/http-client'
 import type { TBaseQueryParams, TSelectResponse } from '@/types/common'
 import type { TTopic } from '@/types/topic'
 import type { TInputTopicSchemaType } from '@/validators/topic'
@@ -38,6 +39,16 @@ class TopicApi extends BaseCrudApi<
         const tree = getChildren(null)
 
         return tree
+    }
+
+    public getGroupedTopics = async (opts?: {
+        parentId?: string | null
+        limit?: number
+    }): Promise<Record<string, TTopic[]>> => {
+        const data = await http_client.get(`${this.endpoint}/grouped`, {
+            params: opts,
+        })
+        return data.data
     }
 }
 

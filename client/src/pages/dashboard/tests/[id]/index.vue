@@ -24,12 +24,12 @@
 
         </div>
         <div class="max-w-xs mx-auto">
-            <img src="/images/img_prepare_2.png" alt="">
+            <img src="/images/peeking.png" alt="">
         </div>
     </div>
     <FooterWave>
         <div class="flex items-center justify-center gap-4">
-            <Button class="min-w-32" @click="handleStart">
+            <Button class="min-w-32" duolingo @click="handleStart">
                 Start
             </Button>
         </div>

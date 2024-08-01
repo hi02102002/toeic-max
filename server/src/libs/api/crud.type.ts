@@ -38,6 +38,7 @@ export interface IBasePagingQuery {
 export interface IBasePagingBuilderQuery extends Omit<IBasePagingQuery, 'asc'> {
     filters?: string[]
     withs?: string[]
+    withh?: Record<string, IBasePagingBuilderQuery>
 }
 
 export type TGetPagingQuery<

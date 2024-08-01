@@ -23,7 +23,7 @@
                             :is-play-audio="isStarted && currentQuestion?.section?.id === question?.section.id">
                             <template v-if="currentQuestion?.section?.name === 'Part 1'" #right>
                                 <div class="flex items-center justify-center ">
-                                    <Button v-if="!isStarted" class="min-w-40" @click="handelStart">
+                                    <Button v-if="!isStarted" class="min-w-40" duolingo @click="handelStart">
                                         Start timing
                                     </Button>
                                 </div>

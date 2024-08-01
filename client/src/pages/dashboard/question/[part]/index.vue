@@ -23,7 +23,7 @@
                     </SelectItem>
                 </SelectContent>
             </Select>
-            <Button class="w-full" :disabled="!numOfQuestion" @click="handleMoveToPractice">
+            <Button class="w-full" :disabled="!numOfQuestion" duolingo @click="handleMoveToPractice">
                 Start
             </Button>
         </div>

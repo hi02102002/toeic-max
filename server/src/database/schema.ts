@@ -2,17 +2,17 @@ import { TPracticePart, TTest } from '@/modules/history/history.type'
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
 import {
-    boolean,
-    index,
-    integer,
-    json,
-    pgEnum,
-    pgTable,
-    real,
-    text,
-    timestamp,
-    unique,
-    varchar,
+  boolean,
+  index,
+  integer,
+  json,
+  pgEnum,
+  pgTable,
+  real,
+  text,
+  timestamp,
+  unique,
+  varchar,
 } from 'drizzle-orm/pg-core'
 
 export const roles = pgEnum('roles', ['ADMIN', 'USER'])
@@ -324,6 +324,13 @@ export const topics_relations = relations(topics, ({ one, many }) => ({
     parent: one(topics, {
         fields: [topics.parent_id],
         references: [topics.id],
+        relationName: 'children',
+    }),
+}))
+
+export const topics_children = relations(topics, ({ many }) => ({
+    children: many(topics, {
+        relationName: 'children',
     }),
 }))
 

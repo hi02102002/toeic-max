@@ -22,6 +22,7 @@ export const useQueryState = <T extends Record<string, any>>(
     }
 
     watch(state, (newState) => {
+        console.log(newState)
         for (const [key, value] of Object.entries(newState)) {
             if (isEmpty(value)) {
                 params[key] = undefined

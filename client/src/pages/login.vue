@@ -3,14 +3,15 @@
         <div class="w-full max-w-sm flex flex-col gap-4">
             <div class="space-y-2">
                 <h2 class="text-2xl font-bold text-center">
-                    Login to <span class="text-primary"> Ninja Toiec </span>
+                    Login to <span class="text-primary"> {{
+                        appConfig.appName }} </span>
                 </h2>
                 <p class="text-sm text-muted-foreground text-center">
                     Enter your email and password to login to your account.
                 </p>
             </div>
             <LoginForm id="login-form" @submit="handleLogin" />
-            <Button form="login-form" type="submit" :loading="loginMutation.isPending.value">
+            <Button form="login-form" type="submit" :loading="loginMutation.isPending.value" duolingo>
                 Login
             </Button>
 
@@ -27,6 +28,7 @@
 <script setup lang="ts">
 import { LoginForm } from '@/components/forms'
 import { Button } from '@/components/ui/button'
+import { appConfig } from '@/configs/app'
 import { useLogin } from '@/hooks/auth'
 import type { LoginSchemaType } from '@/validators'
 import { definePage } from 'vue-router/auto'

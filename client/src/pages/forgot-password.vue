@@ -10,7 +10,7 @@
                 </p>
             </div>
             <ForgotPasswordForm id="forgot-password-form" />
-            <Button form="forgot-password-form" type="submit">
+            <Button form="forgot-password-form" type="submit" duolingo>
                 Send Reset Link
             </Button>
             <RouterLink :to="ROUTES.AUTH.LOGIN" :class="buttonVariants({

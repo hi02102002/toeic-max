@@ -5,7 +5,8 @@
                 <img src="/images/logo.png" alt="Logo" class="h-10 w-10" />
             </RouterLink>
             <RouterLink to="/login" :class="buttonVariants({
-                size: 'sm'
+                size: 'sm',
+                duolingo: true,
             })">
                 Start now
             </RouterLink>

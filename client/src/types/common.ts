@@ -24,16 +24,14 @@ export type TBaseQueryParams = {
     asc?: boolean
 }
 
-export type TBaseQueryPagingBuilderParams<
-    T extends Record<any, any> = Record<any, any>,
-> = {
+export type TBaseQueryPagingBuilderParams = {
     page?: number
     limit?: number
     filters?: string[]
     withs?: string[]
     orderBy?: string
     q?: string
-    searchFields?: (keyof T)[]
+    searchFields?: string[]
 }
 
 export type TSelectResponse = {
@@ -74,4 +72,11 @@ export enum EFilterCondition {
     NOT_EXISTS = 'notexists',
     NOT_ILIKE = 'nilike',
     ILIKE = 'ilike',
+}
+
+export enum EFilterType {
+    STRING = 'string',
+    NUMBER = 'number',
+    BOOLEAN = 'boolean',
+    DATE = 'date',
 }

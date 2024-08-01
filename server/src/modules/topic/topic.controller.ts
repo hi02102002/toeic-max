@@ -30,4 +30,12 @@ export class TopicController extends CRUDBaseController<TopicService> {
             data: children,
         })
     })
+
+    getGroupedTopics = catchAsync(async (req, res) => {
+        const data = await this.service.getGroupedTopics(
+            req.query?.parentId as string,
+            req.query?.limit ? Number(req.query?.limit) : undefined,
+        )
+        res.json({ data })
+    })
 }

@@ -18,9 +18,10 @@
         <div class="container-app">
             <div class="md:max-w-3xl md:mx-auto">
                 <div class='flex items-center justify-center flex-col gap-4'>
-                    <div class="w-24 h-24">
+                    <div class="w-40 h-40">
                         <AspectRatio :ratio="1">
-                            <img src="/images/star.png" alt="start" class="object-cover w-full h-full" />
+                            <img :src="percentage >= 50 ? '/images/university.png' : '/images/tired.png'" alt="start"
+                                class="object-cover w-full h-full" />
                         </AspectRatio>
                     </div>
                     <div class="flex flex-col font-semibold items-center">

@@ -13,12 +13,12 @@
         <RadioGroup :model-value="chooseOfQuestion?.choose || choose" :default-value="chooseOfQuestion?.choose"
             @update:model-value="handelChoose">
             <template v-for="(value, key) in question.opts" :key="key + question.id">
-                <Button v-if="!(PARTS_RENDER_ONLY_3_OPTS.includes(question.p) && key === 'd')" variant="ghost" :class="cn('p-1 h-auto justify-start cursor-pointer border-transparent border',
+                <Button v-if="!(PARTS_RENDER_ONLY_3_OPTS.includes(question.p) && key === 'd')" variant="outline" :class="cn('p-1 h-auto justify-start cursor-pointer ',
                     props.showIsCorrect && {
-                        'text-destructive border-destructive hover:text-destructive border': isIncorrect(key),
-                        'border border-primary': (isCorrect(key) || isDefaultAnswer(key)) && props.showIsCorrect,
+                        'text-destructive border-destructive hover:text-destructive': isIncorrect(key),
+                        'border-primary': (isCorrect(key) || isDefaultAnswer(key)) && props.showIsCorrect,
                     }
-                )">
+                )" duolingo>
                     <RadioGroupItem :id="`question-${question.id}-choice-${key}`" :value="key" :disabled="props.showIsCorrect && (props.disabled || choose !== '')
                         " :class="cn(
                             props.showIsCorrect && {

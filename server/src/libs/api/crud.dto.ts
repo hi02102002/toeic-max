@@ -3,7 +3,7 @@ import { Transform } from 'class-transformer'
 import {
     IsArray,
     IsBoolean,
-    IsNumberString,
+    IsNumber,
     IsOptional,
     IsString,
     Matches,
@@ -17,12 +17,13 @@ import {
 } from './crud.type'
 
 export class BaseQueryPagingBuilderDto implements IBasePagingBuilderQuery {
-    @IsNumberString()
+    @IsNumber()
     @IsOptional()
+    @Transform(({ value }) => (value ? parseInt(value, 10) : undefined))
     page?: number
-
-    @IsNumberString()
+    @IsNumber()
     @IsOptional()
+    @Transform(({ value }) => (value ? parseInt(value, 10) : undefined))
     limit?: number
 
     @IsString()
@@ -60,11 +61,13 @@ export class BaseQueryPagingBuilderDto implements IBasePagingBuilderQuery {
 }
 
 export class BaseQueryDto implements IBasePagingQuery {
-    @IsNumberString()
+    @IsNumber()
     @IsOptional()
+    @Transform(({ value }) => (value ? parseInt(value, 10) : 1))
     page?: number
-    @IsNumberString()
+    @IsNumber()
     @IsOptional()
+    @Transform(({ value }) => (value ? parseInt(value, 10) : 10))
     limit?: number
     @IsString()
     @IsOptional()

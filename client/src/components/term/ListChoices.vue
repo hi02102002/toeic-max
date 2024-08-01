@@ -4,10 +4,11 @@
             <h3 class="font-semibold">Part {{ part }}</h3>
             <ul class="flex items-center flex-wrap gap-2">
                 <li v-for="(choice, index) in choices" :key="choice.question_id">
-                    <Button class="p-0 w-7 h-7 text-sm" :variant="choice.choose ? 'default' : 'outline'" @click="emits('navigateToQuestion', {
-                        sectionQuestionId: choice.section_question_id,
-                        questionId: choice.question_id
-                    })">
+                    <Button duolingo class="p-0 w-7 h-7 text-sm" :variant="choice.choose ? 'default' : 'outline'"
+                        @click="emits('navigateToQuestion', {
+                            sectionQuestionId: choice.section_question_id,
+                            questionId: choice.question_id
+                        })">
                         <span v-if="props.originalLocation">
                             {{ choice.location }}
                         </span>

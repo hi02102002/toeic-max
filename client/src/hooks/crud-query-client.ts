@@ -205,7 +205,7 @@ export class CrudQueryClient<
         })
     }
 
-    usePagingBuilder(query?: TBaseQueryPagingBuilderParams<E>) {
+    usePagingBuilder(query?: TBaseQueryPagingBuilderParams) {
         return useQuery(this.getPagingBuilderQueryOptions(query))
     }
 

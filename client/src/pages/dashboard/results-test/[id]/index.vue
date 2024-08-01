@@ -2,10 +2,11 @@
     <div class="flex-1 py-4 relative">
         <FooterWave>
             <div class="flex items-center justify-center gap-3">
-                <Button variant='outline' @click="router.push(`/dashboard/results/${data?.history.id}/list-choice`)">
+                <Button variant='outline' duolingo
+                    @click="router.push(`/dashboard/results/${data?.history.id}/list-choice`)">
                     View result
                 </Button>
-                <Button variant='outline'
+                <Button variant='outline' duolingo
                     @click="router.push(`/dashboard/tests/${data?.history.meta_data.testId}/practice`)">
                     Do it again
                 </Button>

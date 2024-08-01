@@ -33,5 +33,10 @@ export class TopicRoute extends CrudRoute<TopicController> {
             `${this.path}/parents/:id`,
             this.controller.getParentsByChildId,
         )
+
+        this.router.get(
+            `${this.path}/grouped`,
+            this.controller.getGroupedTopics,
+        )
     }
 }

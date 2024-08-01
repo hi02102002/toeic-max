@@ -10,7 +10,8 @@
             <template #settings>
                 <Dialog>
                     <DialogTrigger as-child>
-                        <Button variant="outline" class="w-8 h-8 p-0 flex-shrink-0" title="Settings">
+                        <Button variant="outline" class="w-8 h-8 p-0 flex-shrink-0" title="Settings"
+                            aria-label="Settings" duolingo>
                             <SettingsIcon class="w-4 h-4" />
                         </Button>
                     </DialogTrigger>
@@ -37,7 +38,8 @@
             </template>
             <template #explain>
                 <Explanation :section-question="sectionQuestions[currentQuestionIndex]">
-                    <Button variant="outline" class="w-8 h-8 p-0 flex-shrink-0" title="Explain">
+                    <Button variant="outline" class="w-8 h-8 p-0 flex-shrink-0" title="Explain" aria-label="Explain"
+                        duolingo>
                         <BookA class="w-4 h-4" />
                     </Button>
                 </Explanation>
@@ -54,9 +56,7 @@
                     currentQuestionIndex + 5
                 )" v-show="currentQuestion?.id === question.id" :key="question.id" :question-section="question"
                     :is-auto-play-audio="config.autoPlayAudio" :is-active="currentQuestionIndex === index"
-                    :choices="choices" :show-is-correct="true" 
-                        @choose="handleToggleChoice"
-                    />
+                    :choices="choices" :show-is-correct="true" @choose="handleToggleChoice" />
             </template>
         </div>
     </div>

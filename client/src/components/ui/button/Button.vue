@@ -11,6 +11,7 @@ interface Props extends PrimitiveProps {
     class?: HTMLAttributes['class']
     loading?: boolean | undefined
     disabled?: boolean | undefined
+    duolingo?: boolean | undefined
 
 }
 
@@ -20,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <Primitive :as="as" :as-child="asChild" :class="cn(buttonVariants({ variant, size }), props.class)"
+    <Primitive :as="as" :as-child="asChild" :class="cn(buttonVariants({ variant, size, duolingo }), props.class)"
         :disabled="props.loading || props.disabled">
         <IconLoader2 v-if="props.loading" class="animate-spin h-4 w-4 mr-2 loader" />
         <slot />

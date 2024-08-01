@@ -8,7 +8,7 @@
             },
             route.meta?.class as string
         )">
-            <RouterView />
+            <RouterView :key="route.fullPath" />
         </div>
     </div>
     <ScrollToTop />

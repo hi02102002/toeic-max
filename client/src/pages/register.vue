@@ -10,7 +10,7 @@
                 </p>
             </div>
             <RegisterForm :id="'register-form'" @submit="registerMutation.mutate" />
-            <Button form="register-form" type="submit" :loading="registerMutation.isPending.value">
+            <Button form="register-form" type="submit" :loading="registerMutation.isPending.value" duolingo>
                 Create account
             </Button>
 

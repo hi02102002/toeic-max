@@ -3,6 +3,7 @@ import { topics } from '@/database/schema'
 import { CRUDBaseService, TGetPagingQuery } from '@/libs/api'
 import { getFirstNumberInString } from '@/utils/common'
 import {
+    asc,
     count,
     asc as dAsc,
     desc,
@@ -12,6 +13,7 @@ import {
     sql,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+import { get } from 'lodash'
 import slugify from 'slugify'
 import { Service } from 'typedi'
 import { QueryTopicDto, TopicDto } from './topic.dto'
@@ -148,7 +150,10 @@ export class TopicService extends CRUDBaseService<
         return res.rows as TTopic[]
     }
 
-    async getAllChildByParentId(parentId: string | null = null) {
+    async getAllChildByParentId(
+        parentId: string | null = null,
+        limit?: number,
+    ) {
         const where = parentId
             ? eq(topics.parent_id, parentId)
             : isNull(topics.parent_id)
@@ -169,6 +174,8 @@ export class TopicService extends CRUDBaseService<
             ${topics} t
           JOIN
             child c ON t.parent_id = c.id
+          ORDER BY t.order ASC
+          LIMIT ${limit || 9999}
         )
         SELECT DISTINCT
           *
@@ -177,5 +184,32 @@ export class TopicService extends CRUDBaseService<
       `,
         )
         return res.rows as TTopic[]
+    }
+
+    async getGroupedTopics(parentId?: string | null, limit?: number) {
+        const parents = await this.db.query.topics.findMany({
+            where: parentId
+                ? eq(topics.id, parentId)
+                : isNull(topics.parent_id),
+            orderBy: asc(topics.order),
+            with: {
+                children: {
+                    orderBy: asc(topics.order),
+                    limit,
+                    with: {
+                        children: {
+                            orderBy: asc(topics.order),
+                            limit: 1,
+                        },
+                    },
+                },
+            },
+        })
+
+        return parents.reduce((acc, parent) => {
+            acc[`${parent.name}-${parent.id}`] = get(parent, 'children', [])
+
+            return acc
+        }, {})
     }
 }

@@ -5,9 +5,9 @@
                 <h2 class="font-semibold text-lg">{{ key }}</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4">
                     <template v-for="test in tests" :key="test.id">
-                        <div class="bg-white p-4 rounded border-input border cursor-pointer flex flex-col items-center justify-center"
+                        <div class="bg-white p-4 rounded border-input border cursor-pointer flex flex-col items-center justify-center hover:border-primary"
                             @click="router.push(`/dashboard/tests/${test.id}`)">
-                            <img src="/images/exam.png" class="w-16 h-16 mx-auto mb-2" />
+                            <img src="/images/test.png" class="w-16 h-16 mx-auto mb-2" />
                             <h3 class="font-medium text-sm">{{ test.name }}</h3>
                         </div>
                     </template>

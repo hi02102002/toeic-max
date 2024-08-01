@@ -1,10 +1,12 @@
 <template>
     <div class="flex items-center justify-between sm:flex-row flex-col gap-3">
         <div class="flex items-center gap-3 w-full">
-            <Button size="sm" class="min-w-20 w-full sm:w-auto" :disabled="disabled" @click="emits('on-prev-question')">
+            <Button size="sm" class="min-w-20 w-full sm:w-auto" :disabled="disabled" duolingo
+                @click="emits('on-prev-question')">
                 Previous
             </Button>
-            <Button size="sm" class="min-w-20 w-full sm:w-auto" :disabled="disabled" @click="emits('on-next-question')">
+            <Button size="sm" class="min-w-20 w-full sm:w-auto" :disabled="disabled" duolingo
+                @click="emits('on-next-question')">
                 Next
             </Button>
         </div>
@@ -20,7 +22,7 @@
                     <Sheet v-model:open="isOpenListChoices">
                         <SheetTrigger as-child>
                             <Button :size="'icon'" variant="outline" class="w-8 h-8 flex-shrink-0" :disabled="disabled"
-                                title="List choices">
+                                title="List choices" duolingo aria-label="List choices">
                                 <LayoutGrid class="w-4 h-4" />
                             </Button>
                         </SheetTrigger>
@@ -40,7 +42,7 @@
             </div>
             <AlertDialog>
                 <AlertDialogTrigger as-child>
-                    <Button v-if="showSubmit" size="sm" class="min-w-20 w-full sm:w-auto"
+                    <Button v-if="showSubmit" size="sm" class="min-w-20 w-full sm:w-auto" duolingo aria-label="Submit"
                         :disabled="disabled || disabledSubmit">
                         Submit
                     </Button>
@@ -55,10 +57,10 @@
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>
+                        <AlertDialogCancel duolingo>
                             Cancel
                         </AlertDialogCancel>
-                        <AlertDialogAction @click="emits('on-submit')">
+                        <AlertDialogAction duolingo @click="emits('on-submit')">
                             Submit
                         </AlertDialogAction>
                     </AlertDialogFooter>
