@@ -1,35 +1,35 @@
 {
-  "name": "Ninja Toiec",
-  "short_name": "Ninja Toiec",
-  "icons": [
-    {
-      "src": "/pwa-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/pwa-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/pwa-maskable-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/pwa-maskable-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#FFFFFF",
-  "description": "Master the Toiec exam with Ninja Toiec! This platform offers comprehensive practice tests, personalized learning paths, interactive lessons, progress tracking, and expert tips. Improve your vocabulary, grammar, and listening skills to achieve your highest Toiec score."
+    "name": "ToeicMeow",
+    "short_name": "ToeicMeow",
+    "icons": [
+        {
+            "src": "/pwa-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/pwa-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/pwa-maskable-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/pwa-maskable-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "start_url": "/",
+    "display": "fullscreen",
+    "background_color": "#FFFFFF",
+    "theme_color": "#FFFFFF",
+    "description": "ToeicMeow is a fun and interactive TOEIC learning app that helps you improve your English skills with engaging exercises and a cute cat-themed interface."
 }

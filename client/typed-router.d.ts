@@ -19,7 +19,9 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/[...path]': RouteRecordInfo<'/[...path]', '/:path(.*)', { path: ParamValue<true> }, { path: ParamValue<false> }>,
     '/403': RouteRecordInfo<'/403', '/403', Record<never, never>, Record<never, never>>,
+    '/404': RouteRecordInfo<'/404', '/404', Record<never, never>, Record<never, never>>,
     '/admin/': RouteRecordInfo<'/admin/', '/admin', Record<never, never>, Record<never, never>>,
     '/admin/kit-tests/': RouteRecordInfo<'/admin/kit-tests/', '/admin/kit-tests', Record<never, never>, Record<never, never>>,
     '/admin/kits/': RouteRecordInfo<'/admin/kits/', '/admin/kits', Record<never, never>, Record<never, never>>,
@@ -42,7 +44,9 @@ declare module 'vue-router/auto-routes' {
     '/dashboard/tests/': RouteRecordInfo<'/dashboard/tests/', '/dashboard/tests', Record<never, never>, Record<never, never>>,
     '/dashboard/tests/[id]/': RouteRecordInfo<'/dashboard/tests/[id]/', '/dashboard/tests/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/dashboard/tests/[id]/practice/': RouteRecordInfo<'/dashboard/tests/[id]/practice/', '/dashboard/tests/:id/practice', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/dashboard/vocabularies/': RouteRecordInfo<'/dashboard/vocabularies/', '/dashboard/vocabularies', Record<never, never>, Record<never, never>>,
+    '/dashboard/topics/': RouteRecordInfo<'/dashboard/topics/', '/dashboard/topics', Record<never, never>, Record<never, never>>,
+    '/dashboard/topics/[id]': RouteRecordInfo<'/dashboard/topics/[id]', '/dashboard/topics/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/dashboard/topics/voca/[id]': RouteRecordInfo<'/dashboard/topics/voca/[id]', '/dashboard/topics/voca/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/forgot-password': RouteRecordInfo<'/forgot-password', '/forgot-password', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,

@@ -7,13 +7,14 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import { VitePWA } from 'vite-plugin-pwa'
 import VueDevTools from 'vite-plugin-vue-devtools'
 import Layouts from 'vite-plugin-vue-layouts'
-
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
+        ViteImageOptimizer(),
         VueRouter({
             routesFolder: [
                 {
@@ -55,8 +56,8 @@ export default defineConfig({
                 ],
             },
             manifest: {
-                name: 'ELand',
-                short_name: 'ELand',
+                name: 'ToeicMeow',
+                short_name: 'ToeicMeow',
                 icons: [
                     {
                         src: '/pwa-192x192.png',
@@ -83,12 +84,12 @@ export default defineConfig({
                         purpose: 'maskable',
                     },
                 ],
-                start_url: '/app',
-                display: 'standalone',
+                start_url: '/',
+                display: 'fullscreen',
                 background_color: '#FFFFFF',
                 theme_color: '#FFFFFF',
                 description:
-                    'Eland is an online platform for mastering the TOEIC exam. The "E" stands for "English," emphasizing top-quality language learning. Eland offers interactive lessons, practice tests, and personalized plans. With engaging multimedia content, Eland makes TOEIC preparation easy and enjoyable. Whether you\'re starting out or improving your score, Eland provides the tools and support needed for success.',
+                    'ToeicMeow is a fun and interactive TOEIC learning app that helps you improve your English skills with engaging exercises and a cute cat-themed interface.',
             },
         }),
     ],
