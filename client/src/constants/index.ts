@@ -130,3 +130,9 @@ export const PART_RENDER_TEASER = [6, 7]
 export const READING_PARTS = [5, 6, 7]
 export const LISTENING_PARTS = [1, 2, 3, 4]
 export const MAX_SCORE = 495
+
+export const ALPHABETS = new Array(26)
+    .fill(1)
+    .map((_, i) => String.fromCharCode(65 + i).toLowerCase())
+
+export const MAX_VOCA_PER_LEARN = 4

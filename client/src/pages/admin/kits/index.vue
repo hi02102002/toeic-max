@@ -13,6 +13,7 @@ import { TableHeader } from '@/components/ui/data-table';
 import { TableBuilder } from '@/components/ui/table-builder';
 import { API_ENDPOINTS } from '@/constants';
 import type { TKit } from '@/types/kit';
+import { getAppTitle } from '@/utils/common';
 import type { ColumnDef } from '@tanstack/vue-table';
 import { useTitle } from '@vueuse/core';
 import * as dayFns from 'date-fns';
@@ -94,7 +95,7 @@ const cols: ColumnDef<TKit>[] = [
 ]
 
 
-useTitle('Manage Kits | ELand')
+useTitle(getAppTitle('Manage Kits'))
 
 definePage({
     meta: {

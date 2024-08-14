@@ -1,4 +1,5 @@
 import { DB, db } from '@/database/db'
+import * as schema from '@/database/schema'
 import { PostgresTransaction } from '@/database/types'
 import { HttpException } from '@/exceptions/http-exception'
 import {
@@ -14,6 +15,7 @@ import {
 } from 'drizzle-orm'
 import {
     PgColumn,
+    PgSelect,
     PgTable,
     SelectedFields,
     TableConfig,
@@ -40,11 +42,18 @@ export abstract class CRUDBaseService<
 > {
     protected db: DB = db
     protected table: PgTable<TableConfig>
-    protected modelName: string
+    private modelName: string
 
-    constructor(table: PgTable<TableConfig>, modelName: string) {
+    constructor(table: PgTable<TableConfig>) {
         this.db = db
         this.table = table
+    }
+
+    getModelName() {
+        return this.modelName
+    }
+
+    setModelName(modelName: string) {
         this.modelName = modelName
     }
 
@@ -212,7 +221,7 @@ export abstract class CRUDBaseService<
         }
     }
 
-    async createMany<T = E>(
+    async createMany(
         data: C[],
         opts?: {
             transaction?: PostgresTransaction
@@ -226,7 +235,7 @@ export abstract class CRUDBaseService<
                 .values(data)
                 .returning()
 
-            return rows as T
+            return rows as E[]
         } catch (error: any) {
             if (error?.code === '23505') {
                 throw new HttpException(
@@ -250,12 +259,12 @@ export abstract class CRUDBaseService<
      * @param {string} options.id - The ID of the record to update.
      * @returns {Promise<T>} - A promise that resolves to the updated record.
      */
-    async update<T = E>({
+    async update<_U = U>({
         data,
         id,
         opts,
     }: {
-        data: U
+        data: _U
         id: string
         opts?: {
             throwIfNotFound?: boolean
@@ -275,7 +284,7 @@ export abstract class CRUDBaseService<
                 .where(eq(get(this.table, 'id'), id))
                 .returning()
 
-            return rows as T
+            return rows as E
         } catch (error) {
             if (error?.code === '23505') {
                 throw new HttpException(
@@ -296,7 +305,7 @@ export abstract class CRUDBaseService<
      * @returns A promise that resolves to the deleted record.
      * @template T - The type of the deleted record.
      */
-    async delete<T = E>(
+    async delete(
         id: string,
         opts?: {
             throwIfNotFound?: boolean
@@ -314,7 +323,7 @@ export abstract class CRUDBaseService<
             .where(eq(get(this.table, 'id'), id))
             .returning()
 
-        return rows as T
+        return rows as E
     }
 
     /**
@@ -443,9 +452,8 @@ export abstract class CRUDBaseService<
         withs = [],
         searchFields = [],
         q = '',
-        withh,
     }: IBasePagingBuilderQuery) {
-        const filterParsed = parseFilters(this.table, filters)
+        const filterParsed = parseFilters(this.table, filters || [])
         const orderByParsed = parseOrderBy(this.table, orderBy)
         const withParsed = parseWiths(withs)
 
@@ -455,7 +463,7 @@ export abstract class CRUDBaseService<
                     ilike(get(this.table, field), `%${q}%`),
                 ),
             ),
-            ...filterParsed,
+            ...(filterParsed || []),
         )
 
         const rows = await this.db.query[getTableName(this.table)].findMany({
@@ -481,4 +489,119 @@ export abstract class CRUDBaseService<
             total,
         }
     }
+
+    async getPagingBuilderV2({
+        filters = [],
+        limit,
+        orderBy,
+        page,
+        withs = [],
+        searchFields = [],
+        q = '',
+    }: IBasePagingBuilderQuery) {
+        const filterParsed = parseFilters(this.table, filters || [])
+
+        const where = and(
+            or(
+                ...searchFields.map((field) =>
+                    ilike(get(schema, field, get(this.table, field)), `%${q}%`),
+                ),
+            ),
+            ...(filterParsed || []),
+        )
+
+        let query = this.db.select().from(this.table).where(where).$dynamic()
+
+        query = this.withPagination(query, page, limit)
+
+        query = this.withOrderBy(query, orderBy)
+
+        query = this.withRelations(query, withs)
+
+        let totalQuery = this.db
+            .select({
+                total: sql<number>`cast(count(${get(
+                    this.table,
+                    'id',
+                )}) as integer)`.as('total'),
+            })
+            .from(this.table)
+            .where(where)
+            .$dynamic()
+
+        totalQuery = this.withRelations(totalQuery, withs)
+
+        const [items, [{ total }]] = await Promise.all([query, totalQuery])
+
+        return {
+            items: items.map((item) =>
+                nestObjects(getTableName(this.table), item),
+            ),
+            total,
+        }
+    }
+
+    private withPagination<T extends PgSelect>(
+        qb: T,
+        page?: number,
+        limit?: number,
+    ) {
+        if (page && limit) {
+            qb = qb.offset((page - 1) * limit).limit(limit)
+        }
+
+        if (limit) {
+            qb = qb.limit(limit)
+        }
+
+        return qb
+    }
+
+    private withOrderBy<T extends PgSelect>(qb: T, orderBy: string) {
+        const parsedOrderBy = parseOrderBy(this.table, orderBy)
+
+        if (parsedOrderBy) {
+            qb = qb.orderBy(parsedOrderBy)
+        }
+
+        return qb
+    }
+
+    private withRelations<T extends PgSelect>(qb: T, withs: string[]) {
+        for (const relat of withs) {
+            const [table, column] = relat.split('|')
+            qb = qb.leftJoin(
+                get(schema, table),
+                eq(get(get(schema, table), 'id'), get(this.table, column)),
+            ) as any
+        }
+
+        return qb
+    }
+}
+
+const nestObjects = (parentKey: string, data: Record<string, any>) => {
+    const parent = data[parentKey]
+
+    if (!parent) {
+        return data
+    }
+
+    const keys = Object.keys(data)
+
+    const nested = keys.reduce((acc, key) => {
+        if (key === parentKey) {
+            return {
+                ...parent,
+            }
+        }
+
+        if (!acc[key] && key !== parentKey) {
+            acc[key] = data[key]
+        }
+
+        return acc
+    }, {})
+
+    return nested
 }

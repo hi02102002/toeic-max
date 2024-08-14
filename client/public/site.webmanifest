@@ -31,5 +31,6 @@
     "display": "fullscreen",
     "background_color": "#FFFFFF",
     "theme_color": "#FFFFFF",
-    "description": "ToeicMeow is a fun and interactive TOEIC learning app that helps you improve your English skills with engaging exercises and a cute cat-themed interface."
+    "description": "ToeicMeow is a fun and interactive TOEIC learning app that helps you improve your English skills with engaging exercises and a cute cat-themed interface.",
+    "orientation": "portrait"
 }

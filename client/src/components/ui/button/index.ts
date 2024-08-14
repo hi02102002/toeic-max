@@ -25,7 +25,7 @@ export const buttonVariants = cva(
                 icon: 'h-9 w-9',
             },
             duolingo: {
-                true: 'border-b-4 active:border-b active:translate-y-[1px]',
+                true: 'border-b-4 active:border-b active:translate-y-[1px] border-t border-l border-r',
             },
         },
         defaultVariants: {
@@ -36,7 +36,12 @@ export const buttonVariants = cva(
             {
                 variant: 'default',
                 duolingo: true,
-                className: 'border-green-700',
+                className: 'border-b-green-700',
+            },
+            {
+                variant: 'destructive',
+                duolingo: true,
+                className: 'border-b-red-700',
             },
         ],
     },

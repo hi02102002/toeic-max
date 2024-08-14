@@ -58,6 +58,8 @@ import { Button } from '@/components/ui/button';
 import { groupedTopicsOptions, useGroupedTopics } from '@/hooks/topic';
 import { queryClient } from '@/libs/react-query';
 import type { TTopic } from '@/types/topic';
+import { getAppTitle } from '@/utils/common';
+import { useTitle } from '@vueuse/core';
 import { get, isEmpty } from 'lodash';
 import { defineComponent } from 'vue';
 import { definePage, RouterLink, useRoute } from 'vue-router/auto';
@@ -76,9 +78,12 @@ const path = (topic: TTopic) => {
     if (get(topic, 'children', []).length > 0) {
         return `/dashboard/topics?parent_id=${topic.id}`
     }
-    return `/dashboard/topics/voca/${topic.id}`
+    return `/dashboard/topics/${topic.id}`
 }
 
+useTitle(
+    getAppTitle('Topics')
+)
 
 definePage({
     meta: {

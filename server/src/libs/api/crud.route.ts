@@ -4,7 +4,7 @@ import { RolesMiddleware } from '@/middlewares/roles.middleware'
 import { ValidationMiddleware } from '@/middlewares/validation.middleware'
 import { Router } from 'express'
 import { CRUDBaseController } from './crud.controller'
-import { BaseQueryPagingBuilderDto } from './crud.dto'
+import { BaseQueryDto, BaseQueryPagingBuilderDto } from './crud.dto'
 
 function getClassMethods(obj: any) {
     return Object.keys(obj).filter((item) => typeof obj[item] === 'function')
@@ -58,10 +58,10 @@ export abstract class CrudRoute<CT extends CRUDBaseController<any>>
      * The configuration of the routes.
      */
     private configRoutes: TMapConfigRoute
-    private dtos: {
-        createDto: any
-        updateDto: any
-        queryDto: any
+    private dtos?: {
+        createDto?: any
+        updateDto?: any
+        queryDto?: any
     }
 
     /**
@@ -76,10 +76,10 @@ export abstract class CrudRoute<CT extends CRUDBaseController<any>>
         dtos,
     }: {
         controller: CT
-        dtos: {
-            createDto: any
-            updateDto: any
-            queryDto: any
+        dtos?: {
+            createDto?: any
+            updateDto?: any
+            queryDto?: any
         }
         configRoutes?: TMapConfigRoute
         path: string
@@ -108,14 +108,18 @@ export abstract class CrudRoute<CT extends CRUDBaseController<any>>
         return {
             [CrudActions.CREATE]: {
                 method: 'post',
-                middleware: [ValidationMiddleware(this.dtos.createDto)],
+                middleware: this?.dtos?.createDto
+                    ? [ValidationMiddleware(this.dtos.createDto)]
+                    : [],
                 requireAuth: true,
                 roles: ['ADMIN'],
             },
             [CrudActions.UPDATE]: {
                 method: 'put',
                 path: '/:id',
-                middleware: [ValidationMiddleware(this.dtos.updateDto)],
+                middleware: this?.dtos?.updateDto
+                    ? [ValidationMiddleware(this.dtos.updateDto)]
+                    : [],
                 requireAuth: true,
                 roles: ['ADMIN'],
             },
@@ -135,15 +139,17 @@ export abstract class CrudRoute<CT extends CRUDBaseController<any>>
             },
             [CrudActions.GET_PAGING]: {
                 method: 'get',
-                middleware: [
-                    ValidationMiddleware(
-                        this.dtos.queryDto,
-                        'query',
-                        true,
-                        false,
-                        true,
-                    ),
-                ],
+                middleware: this?.dtos?.queryDto
+                    ? [ValidationMiddleware(this.dtos.queryDto)]
+                    : [
+                          ValidationMiddleware(
+                              BaseQueryDto,
+                              'query',
+                              true,
+                              false,
+                              true,
+                          ),
+                      ],
             },
             [CrudActions.GET_FOR_SELECT]: {
                 method: 'get',

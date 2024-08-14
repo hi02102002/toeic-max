@@ -62,4 +62,36 @@ export class ResultService {
             questions,
         }
     }
+
+    async getVocabResult({
+        userId,
+        historyId,
+    }: {
+        userId: string
+        historyId: string
+    }) {
+        logger.info(
+            `${LOGGER_SECTION.RESULT_SERVICE} Try to get vocabulary part result for user ${userId} and history ${historyId}`,
+        )
+
+        const historyInCache = await redis.get(
+            REDIS_KEYS.RESULT(userId, historyId),
+        )
+
+        if (historyInCache) {
+            return JSON.parse(historyInCache)
+        }
+
+        const history = await this.historyService.getDetailHistory({
+            userId,
+            historyId,
+            type: 'vocab',
+        })
+
+        if (!history) {
+            return null
+        }
+
+        return history
+    }
 }

@@ -150,7 +150,7 @@ export abstract class CRUDBaseController<
     })
 
     public getPagingBuilder = catchAsync(async (req, res) => {
-        const data = await this.service.getPagingBuilder({
+        const data = await this.service.getPagingBuilderV2({
             ...req.body,
         })
 
