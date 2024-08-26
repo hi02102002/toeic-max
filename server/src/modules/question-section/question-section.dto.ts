@@ -64,12 +64,12 @@ export class CreateQuestionDto {
     @IsOptional()
     @IsString({ each: true })
     @Transform(({ value }) => value || [])
-    image_urls: string[]
+    imageUrls: string[]
 
     @IsString()
     @IsOptional()
     @Transform(({ value }) => value || '')
-    audio_url?: string
+    audioUrl?: string
 
     @IsObject()
     @IsOptional()
@@ -105,13 +105,13 @@ export class CreateQuestionDto {
 
     @IsString()
     @IsNotEmpty()
-    test_kit_id: string
+    testKitId: string
 }
 
 export class QueryQuestionSectionDto extends BaseQueryDto {
     @IsString()
     @IsOptional()
-    test_kit_id?: string
+    testKitId?: string
 
     @IsNumber()
     @IsOptional()

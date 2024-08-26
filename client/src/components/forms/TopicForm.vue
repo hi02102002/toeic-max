@@ -9,7 +9,7 @@
                 <FormMessage />
             </FormItem>
         </FormField>
-        <FormField v-if="props.type === 'create'" v-slot="{ componentField }" name="parent_id">
+        <FormField v-if="props.type === 'create'" v-slot="{ componentField }" name="parentId">
             <FormItem>
                 <FormLabel>
                     Parent

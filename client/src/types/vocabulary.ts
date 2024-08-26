@@ -8,12 +8,12 @@ export type TVocabulary = {
     spelling: string
     type: string
     meaning: string
-    topic_id: string
-    created_at: string
-    updated_at: string
+    topicId: string
+    createdAt: string
+    updatedAt: string
     category: string
 }
 
 export type TQueryVocabulary = TBaseQueryParams & {
-    topic_id?: string
+    topicId?: string
 }

@@ -57,6 +57,27 @@
       "when": 1719650251000,
       "tag": "0007_absurd_karma",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1723652389862,
+      "tag": "0008_salty_genesis",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1723820768801,
+      "tag": "0009_grey_raza",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1724422623583,
+      "tag": "0010_nifty_sally_floyd",
+      "breakpoints": true
     }
   ]
 }

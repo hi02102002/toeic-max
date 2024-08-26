@@ -13,11 +13,11 @@ import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 export class PracticePartDto {
     @IsString()
     @IsNotEmpty()
-    section_question_id: string
+    sectionQuestionId: string
 
     @IsString()
     @IsNotEmpty()
-    question_id: string
+    questionId: string
 
     @IsNumber()
     @Transform(({ value }) => parseInt(value))
@@ -35,7 +35,7 @@ export class PracticePartDto {
     @IsBoolean()
     @IsNotEmpty()
     @Transform(({ value }) => toBoolean(value))
-    is_correct: boolean
+    isCorrect: boolean
 }
 
 export class HistoryDto {
@@ -44,7 +44,7 @@ export class HistoryDto {
     contents: Array<PracticePartDto> | Array<any>
 
     @IsNotEmpty()
-    meta_data: any
+    metadata: any
 
     @IsString()
     @IsNotEmpty()
@@ -52,7 +52,7 @@ export class HistoryDto {
 
     @IsString()
     @IsNotEmpty()
-    user_id: string
+    userId: string
 }
 
 export class QueryHistoryDto extends BaseQueryDto {}

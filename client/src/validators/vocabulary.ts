@@ -21,7 +21,7 @@ export const InputVocabularySchema = z.object({
             required_error: 'Please enter vocabulary meaning.',
         })
         .min(1, 'Please enter vocabulary meaning.'),
-    topic_id: z
+    topicId: z
         .string({
             required_error: 'Please select topic.',
         })

@@ -1,9 +1,9 @@
 export type TTopic = {
     id: string
     name: string
-    created_at: string
-    updated_at: string
+    createdAt: string
+    updatedAt: string
     slug: string
-    parent_id: string
+    parentId: string
     level: number
 }

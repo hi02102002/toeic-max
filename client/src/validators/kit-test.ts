@@ -30,7 +30,7 @@ export const KitTestInputSchema = z.object({
                 message: 'Year must be between 1900 and current year.',
             },
         ),
-    kit_id: z.string({
+    kitId: z.string({
         required_error: 'Please enter kit ID.',
     }),
 })

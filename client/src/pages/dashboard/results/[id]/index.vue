@@ -5,12 +5,12 @@
                 <Button variant='outline' @click="router.push(`/dashboard/results/${data?.id}/list-choice`)">
                     View result
                 </Button>
-                <Button variant='outline' @click="router.push(`/dashboard/question/${data?.meta_data.part}/practice/${data?.meta_data.numOfQuestion
+                <Button variant='outline' @click="router.push(`/dashboard/question/${data?.metadata.part}/practice/${data?.metadata.numOfQuestion
                     }`)">
                     Continue
                 </Button>
                 <Button
-                    @click="router.push(`/dashboard/question/${data?.meta_data.part}/practice/${data?.meta_data.numOfQuestion}?ref=${data?.id}`)">
+                    @click="router.push(`/dashboard/question/${data?.metadata.part}/practice/${data?.metadata.numOfQuestion}?ref=${data?.id}`)">
                     Do it again
                 </Button>
             </div>
@@ -29,17 +29,17 @@
                             You have completed the training test
                         </span>
                         <span>
-                            {{ data?.meta_data.name }}
+                            {{ data?.metadata.name }}
                         </span>
                         <span>
-                            {{ data?.meta_data.title }}
+                            {{ data?.metadata.title }}
                         </span>
                     </div>
 
                     <div class="w-full space-y-3">
                         <span class='font-semibold '>
-                            Result {{ data?.meta_data.totalCorrect || 0 }}/{{
-                                data?.meta_data.numOfQuestion
+                            Result {{ data?.metadata.totalCorrect || 0 }}/{{
+                                data?.metadata.numOfQuestion
                             }}
                         </span>
                         <div class="rounded bg-white border border-input shadow-sm p-4 w-full">
@@ -97,8 +97,8 @@ const router = useRouter()
 const { data } = HistoryCrudClient.useGetById(id)
 
 const percentage = computed(() => {
-    return ((data?.value?.meta_data.totalCorrect || 0) * 100 /
-        data?.value?.meta_data.numOfQuestion)
+    return ((data?.value?.metadata.totalCorrect || 0) * 100 /
+        data?.value?.metadata.numOfQuestion)
 })
 
 

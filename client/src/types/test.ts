@@ -5,7 +5,7 @@ export type TTest = {
     name: string
     year: number
     slug: string
-    kit_id: string
+    kitId: string
     type: string
     kit: TKit
 }

@@ -21,32 +21,32 @@ import { TTopic } from './topic.type'
 
 @Service()
 export class TopicService extends CRUDBaseService<
-    Pick<TTopic, 'name' | 'level' | 'parent_id' | 'order'>,
-    Partial<TTopic>,
+    Pick<TTopic, 'name' | 'level' | 'parentId' | 'order'>,
+    TopicDto,
     TTopic
 > {
     constructor() {
-        super(topics, 'Topic')
+        super(topics)
     }
 
     async create<T = TTopic>(data: TopicDto) {
         let parent: TTopic | null = null
 
-        if (data.parent_id) {
-            parent = await this.getOneById(data.parent_id)
+        if (data.parentId) {
+            parent = await this.getOneById(data.parentId)
         }
 
         const topic = await super.create({
             level: parent ? parent.level + 1 : 1,
             order: getFirstNumberInString(data.name) || 0,
             name: data.name,
-            parent_id: data.parent_id,
+            parentId: data.parentId,
         })
 
         return topic as T
     }
 
-    async update<T = TTopic>({ data, id }: { data: TopicDto; id: string }) {
+    async update({ data, id }: { data: TopicDto; id: string }) {
         const topic = await super.update({
             id,
             opts: {
@@ -60,7 +60,7 @@ export class TopicService extends CRUDBaseService<
             },
         })
 
-        return topic as T
+        return topic
     }
 
     async getAll<T = TTopic>() {
@@ -75,7 +75,7 @@ export class TopicService extends CRUDBaseService<
     }
 
     async getPaging({ query }: TGetPagingQuery<QueryTopicDto>) {
-        const { parent_id, asc = true, orderBy = 'name', ...rest } = query
+        const { parentId, asc = true, orderBy = 'name', ...rest } = query
 
         const colsObj = getTableColumns(topics)
 
@@ -89,7 +89,7 @@ export class TopicService extends CRUDBaseService<
             },
             opts: {
                 wheres: [
-                    eq(topics.parent_id, parent_id ?? isNull(topics.parent_id)),
+                    eq(topics.parentId, parentId ?? isNull(topics.parentId)),
                 ],
                 searchFields: [topics.name],
                 selectFields: {
@@ -103,8 +103,8 @@ export class TopicService extends CRUDBaseService<
             },
             callback(query) {
                 query = query
-                    .leftJoin(children, eq(topics.id, children.parent_id))
-                    .leftJoin(parent, eq(topics.parent_id, parent.id))
+                    .leftJoin(children, eq(topics.id, children.parentId))
+                    .leftJoin(parent, eq(topics.parentId, parent.id))
                     .groupBy(topics.id, parent.id)
 
                 if (orderBy !== 'name') return query
@@ -155,8 +155,8 @@ export class TopicService extends CRUDBaseService<
         limit?: number,
     ) {
         const where = parentId
-            ? eq(topics.parent_id, parentId)
-            : isNull(topics.parent_id)
+            ? eq(topics.parentId, parentId)
+            : isNull(topics.parentId)
 
         const res = await this.db.execute(
             sql`
@@ -188,9 +188,7 @@ export class TopicService extends CRUDBaseService<
 
     async getGroupedTopics(parentId?: string | null, limit?: number) {
         const parents = await this.db.query.topics.findMany({
-            where: parentId
-                ? eq(topics.id, parentId)
-                : isNull(topics.parent_id),
+            where: parentId ? eq(topics.id, parentId) : isNull(topics.parentId),
             orderBy: asc(topics.order),
             with: {
                 children: {
@@ -203,6 +201,7 @@ export class TopicService extends CRUDBaseService<
                         },
                     },
                 },
+                vocabularies: true,
             },
         })
 

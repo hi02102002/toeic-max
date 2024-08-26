@@ -28,7 +28,7 @@ import { RouterLink, definePage, useRoute } from 'vue-router/auto';
 import { RowAction } from './components';
 
 const { handleChange, state } = useQueryState<TQueryVocabulary>({
-    topic_id: undefined
+    topicId: undefined
 })
 
 const route = useRoute()

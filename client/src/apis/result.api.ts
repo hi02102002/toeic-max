@@ -18,6 +18,10 @@ class ResultApi {
             API_ENDPOINTS.RESULT.PRACTICE_PART(historyId, type),
         )
     }
+
+    async getVocab(historyId: string): Promise<TBaseResponse<any>> {
+        return http_client.get(API_ENDPOINTS.RESULT.VOCAB(historyId))
+    }
 }
 
 export const resultApi = new ResultApi()

@@ -13,12 +13,12 @@
                 <RowAction />
             </div>
             <div class="flex items-start gap-4">
-                <div v-if="data?.teaser?.text || data?.image_urls.length !== 0 || data?.audio_url"
+                <div v-if="data?.teaser?.text || data?.imageUrls.length !== 0 || data?.audioUrl"
                     class="space-y-4 max-w-[50%] w-full">
-                    <audio v-if="data?.audio_url" controls :src="data?.audio_url" class="w-full" />
-                    <ul v-if="data?.image_urls?.length !== 0"
+                    <audio v-if="data?.audioUrl" controls :src="data?.audioUrl" class="w-full" />
+                    <ul v-if="data?.imageUrls?.length !== 0"
                         class="flex items-center gap-4 justify-center w-full flex-col">
-                        <li v-for="image in data?.image_urls" :key="image">
+                        <li v-for="image in data?.imageUrls" :key="image">
                             <img :src="image" alt="image" class="rounded w-full" />
                         </li>
                     </ul>

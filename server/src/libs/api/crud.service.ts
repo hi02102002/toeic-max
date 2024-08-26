@@ -2,6 +2,7 @@ import { DB, db } from '@/database/db'
 import * as schema from '@/database/schema'
 import { PostgresTransaction } from '@/database/types'
 import { HttpException } from '@/exceptions/http-exception'
+import { nestObjects } from '@/utils/common'
 import {
     and,
     asc,
@@ -36,8 +37,8 @@ import {
  * @template E - The type of the entity.
  */
 export abstract class CRUDBaseService<
-    C extends object = object,
-    U extends object = object,
+    C extends Record<string, any> = Record<string, any>,
+    U extends Record<string, any> = Record<string, any>,
     E = unknown,
 > {
     protected db: DB = db
@@ -259,12 +260,12 @@ export abstract class CRUDBaseService<
      * @param {string} options.id - The ID of the record to update.
      * @returns {Promise<T>} - A promise that resolves to the updated record.
      */
-    async update<_U = U>({
+    async update({
         data,
         id,
         opts,
     }: {
-        data: _U
+        data: U
         id: string
         opts?: {
             throwIfNotFound?: boolean
@@ -546,7 +547,8 @@ export abstract class CRUDBaseService<
         page?: number,
         limit?: number,
     ) {
-        if (page && limit) {
+        if (page) {
+            limit = limit || 10
             qb = qb.offset((page - 1) * limit).limit(limit)
         }
 
@@ -578,30 +580,4 @@ export abstract class CRUDBaseService<
 
         return qb
     }
-}
-
-const nestObjects = (parentKey: string, data: Record<string, any>) => {
-    const parent = data[parentKey]
-
-    if (!parent) {
-        return data
-    }
-
-    const keys = Object.keys(data)
-
-    const nested = keys.reduce((acc, key) => {
-        if (key === parentKey) {
-            return {
-                ...parent,
-            }
-        }
-
-        if (!acc[key] && key !== parentKey) {
-            acc[key] = data[key]
-        }
-
-        return acc
-    }, {})
-
-    return nested
 }

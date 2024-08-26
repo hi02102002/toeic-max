@@ -13,4 +13,5 @@ export type TLearnVoca = TVocabulary & {
     percent: number
     learned: Array<ELearnType>
     learning: Array<ELearnType>
+    needLearnAgain: Array<ELearnType>
 }

@@ -21,4 +21,17 @@ export class ResultController {
             })
         },
     )
+
+    public getVocabPartResult = catchAsync(
+        async (req: RequestWithUser, res) => {
+            const data = await this.resultService.getVocabResult({
+                userId: req.user.id,
+                historyId: req.params.historyId as string,
+            })
+
+            return res.status(StatusCodes.OK).json({
+                data,
+            })
+        },
+    )
 }

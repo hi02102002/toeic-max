@@ -99,8 +99,8 @@ export const QuestionSectionSchema = z
             })
             .min(1, 'Please choose part.'),
 
-        image_urls: z.array(z.string()).optional(),
-        audio_url: z.string().optional(),
+        imageUrls: z.array(z.string()).optional(),
+        audioUrl: z.string().optional(),
         teaser: z
             .object({
                 text: z.string().optional(),
@@ -132,7 +132,7 @@ export const QuestionSectionSchema = z
                     message: 'Please enter valid location.',
                 },
             ),
-        test_kit_id: z
+        testKitId: z
             .string({
                 required_error: 'Please choose test kit.',
             })
@@ -146,7 +146,7 @@ export const QuestionSectionSchema = z
         data.part = Number(data.part)
 
         if (data.part === 1) {
-            if (!data.audio_url) {
+            if (!data.audioUrl) {
                 ctx.addIssue({
                     message: 'Audio url is required.',
                     path: ['audio_url'],
@@ -154,7 +154,7 @@ export const QuestionSectionSchema = z
                 })
             }
 
-            if (!data.image_urls?.length) {
+            if (!data.imageUrls?.length) {
                 ctx.addIssue({
                     message: 'Image urls are required.',
                     path: ['image_urls'],
@@ -164,7 +164,7 @@ export const QuestionSectionSchema = z
         }
 
         if (data.part === 2) {
-            if (!data.audio_url) {
+            if (!data.audioUrl) {
                 ctx.addIssue({
                     message: 'Audio url is required.',
                     code: 'custom',

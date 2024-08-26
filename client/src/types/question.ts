@@ -1,12 +1,12 @@
 export type TSectionQuestion = {
     id: string
     location: string
-    test_kit_id: string
-    created_at: Date
-    updated_at: Date
+    testKitId: string
+    createdAt: Date
+    updatedAt: Date
     part: 1 | 2 | 3 | 4 | 5 | 6 | 7
-    image_urls: string[]
-    audio_url: string
+    imageUrls: string[]
+    audioUrl: string
     teaser: {
         text: string
         tran?: {
@@ -33,8 +33,8 @@ export type TQuestion = {
     }
     p: number
     location: number
-    question_section_id: string
-    created_at: Date
-    updated_at: Date
+    questionSectionId: string
+    createdAt: Date
+    updatedAt: Date
     q: string
 }

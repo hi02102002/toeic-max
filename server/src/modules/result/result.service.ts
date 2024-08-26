@@ -4,12 +4,14 @@ import { logger } from '@/utils/logger'
 import { Service } from 'typedi'
 import { HistoryService } from '../history'
 import { QuestionSectionService } from '../question-section'
+import { TLearnVoca, VocabularyService } from '../vocabulary'
 
 @Service()
 export class ResultService {
     constructor(
         private readonly historyService: HistoryService,
         private readonly questionSectionService: QuestionSectionService,
+        private readonly vocabularyService: VocabularyService,
     ) {}
 
     async getPracticeResult({
@@ -44,7 +46,7 @@ export class ResultService {
         }
 
         const sectionQuestionIds = history.contents.map(
-            ({ section_question_id }) => section_question_id,
+            (content) => (content as any).sectionQuestionId,
         )
 
         const questions =
@@ -70,18 +72,6 @@ export class ResultService {
         userId: string
         historyId: string
     }) {
-        logger.info(
-            `${LOGGER_SECTION.RESULT_SERVICE} Try to get vocabulary part result for user ${userId} and history ${historyId}`,
-        )
-
-        const historyInCache = await redis.get(
-            REDIS_KEYS.RESULT(userId, historyId),
-        )
-
-        if (historyInCache) {
-            return JSON.parse(historyInCache)
-        }
-
         const history = await this.historyService.getDetailHistory({
             userId,
             historyId,
@@ -92,6 +82,27 @@ export class ResultService {
             return null
         }
 
-        return history
+        const mapVocabIdToContent = history.contents.reduce((acc, content) => {
+            const _content = content as TLearnVoca
+
+            acc.set(_content.id, _content)
+            return acc
+        }, new Map<string, TLearnVoca>())
+
+        const vocabIds = history.contents.map((c) => {
+            return (c as TLearnVoca).id
+        })
+
+        const vocabs = await this.vocabularyService.getVocabByIds(vocabIds)
+
+        return {
+            ...history,
+            contents: vocabs.map((vocab) => {
+                return {
+                    ...vocab,
+                    ...mapVocabIdToContent.get(vocab.id),
+                }
+            }),
+        }
     }
 }

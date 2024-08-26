@@ -91,7 +91,7 @@
                 <FormMessage />
             </FormItem>
         </FormField>
-        <FormField v-slot="{ componentField }" name="topic_id">
+        <FormField v-slot="{ componentField }" name="topicId">
             <FormItem>
                 <FormLabel required>
                     Topic

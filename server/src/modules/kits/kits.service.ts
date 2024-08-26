@@ -11,7 +11,7 @@ export class KitsService extends CRUDBaseService<
     TKit
 > {
     constructor() {
-        super(kits, 'Kit')
+        super(kits)
     }
 
     async create<T = TKit>(data: KitDto): Promise<T> {

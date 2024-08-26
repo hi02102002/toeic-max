@@ -56,11 +56,13 @@ export const API_ENDPOINTS = {
     HISTORY: {
         INDEX: '/histories',
         ALL: '/histories/all',
+        CREATE_FOR_VOCAB: '/histories/create-for-vocab',
     },
     RESULT: {
         INDEX: '/results',
         PRACTICE_PART: (historyId: string, type: string) =>
             `/results/practice-part/${historyId}?type=${type}`,
+        VOCAB: (historyId: string) => `/results/vocab/${historyId}`,
     },
 } as const
 

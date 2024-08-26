@@ -1,0 +1,1 @@
+ALTER TABLE "histories" RENAME COLUMN "meta_data" TO "metadata";

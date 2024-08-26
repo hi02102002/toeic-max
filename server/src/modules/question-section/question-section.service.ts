@@ -6,6 +6,7 @@ import {
     tests,
 } from '@/database/schema'
 import { HttpException } from '@/exceptions/http-exception'
+import { CRUDBaseService, TGetPagingQuery } from '@/libs/api'
 import { redis } from '@/libs/redis'
 import { getFirstNumberInString } from '@/utils/common'
 import {
@@ -29,7 +30,6 @@ import {
     QueryQuestionSectionDto,
 } from './question-section.dto'
 import { TQuestionSection } from './question-section.type'
-import { CRUDBaseService, TGetPagingQuery } from '@/libs/api'
 
 @Service()
 export class QuestionSectionService extends CRUDBaseService<
@@ -42,31 +42,31 @@ export class QuestionSectionService extends CRUDBaseService<
         private readonly sectionService: SectionService,
         private readonly kitTestService: KitTestService,
     ) {
-        super(question_sections, 'Question')
+        super(question_sections)
     }
 
     async create<T = TQuestionSection>(data: CreateQuestionDto) {
         try {
             const {
-                image_urls,
+                imageUrls,
                 location,
                 part,
                 questions,
                 teaser,
-                audio_url,
-                test_kit_id,
+                audioUrl,
+                testKitId,
             } = data
 
             const questionSection = await this.db.transaction(async (trx) => {
                 const [questionSection] = await trx
                     .insert(question_sections)
                     .values({
-                        image_urls,
+                        imageUrls,
                         location,
                         part,
                         teaser,
-                        audio_url,
-                        test_kit_id,
+                        audioUrl,
+                        testKitId,
                     })
                     .returning()
 
@@ -96,13 +96,13 @@ export class QuestionSectionService extends CRUDBaseService<
     }
 
     async getPaging({ query }: TGetPagingQuery<QueryQuestionSectionDto>) {
-        const { test_kit_id, part, ...rest } = query
+        const { testKitId, part, ...rest } = query
         const { items, total } = await super.getPaging({
             query: rest,
             opts: {
                 wheres: [
-                    test_kit_id
-                        ? eq(question_sections.test_kit_id, test_kit_id)
+                    testKitId
+                        ? eq(question_sections.testKitId, testKitId)
                         : undefined,
                     part ? eq(question_sections.part, part) : undefined,
                 ],
@@ -114,7 +114,7 @@ export class QuestionSectionService extends CRUDBaseService<
             callback(query) {
                 return query.leftJoin(
                     tests,
-                    eq(tests.id, question_sections.test_kit_id),
+                    eq(tests.id, question_sections.testKitId),
                 )
             },
         })
@@ -145,8 +145,7 @@ export class QuestionSectionService extends CRUDBaseService<
         if (isEmpty(sectionQuestion) && opts?.throwIfNotFound) {
             throw new HttpException(
                 StatusCodes.NOT_FOUND,
-                opts?.message ||
-                    `Could not find ${this.modelName} with this id.`,
+                opts?.message || `Could not find question with this id.`,
             )
         }
 
@@ -230,7 +229,7 @@ export class QuestionSectionService extends CRUDBaseService<
         const sectionQuestions = await this.db.query.question_sections.findMany(
             {
                 where: and(
-                    eq(question_sections.test_kit_id, testId),
+                    eq(question_sections.testKitId, testId),
                     eq(question_sections.part, part),
                 ),
                 with: {

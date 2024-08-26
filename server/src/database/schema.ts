@@ -1,18 +1,19 @@
 import { TPracticePart, TTest } from '@/modules/history/history.type'
+import { TLearnVoca } from '@/modules/vocabulary'
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
 import {
-  boolean,
-  index,
-  integer,
-  json,
-  pgEnum,
-  pgTable,
-  real,
-  text,
-  timestamp,
-  unique,
-  varchar,
+    boolean,
+    index,
+    integer,
+    json,
+    pgEnum,
+    pgTable,
+    real,
+    text,
+    timestamp,
+    unique,
+    varchar,
 } from 'drizzle-orm/pg-core'
 
 export const roles = pgEnum('roles', ['ADMIN', 'USER'])
@@ -39,8 +40,8 @@ export const kits = pgTable('kits', {
         .$defaultFn(() => createId()),
     name: text('name').notNull().unique(),
     year: integer('year').notNull(),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
 })
 
 export const tests = pgTable('test_kits', {
@@ -50,12 +51,12 @@ export const tests = pgTable('test_kits', {
     name: text('name').notNull().unique(),
     year: integer('year').notNull(),
     slug: text('slug').notNull().unique(),
-    kit_id: varchar('kit_id').references(() => kits.id, {
+    kitId: varchar('kit_id').references(() => kits.id, {
         onDelete: 'set null',
     }),
     type: text('type').default('toeic'),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
 })
 
 export const sections = pgTable('sections', {
@@ -64,16 +65,16 @@ export const sections = pgTable('sections', {
         .$defaultFn(() => createId()),
     name: text('name').unique().notNull(),
     title: text('title'),
-    title_vi: text('title_vi'),
+    titleVi: text('title_vi'),
     intro: text('intro'),
-    intro_vi: text('intro_vi'),
-    intro_audio: text('intro_audio'),
-    intro_image: text('intro_image'),
-    intro_answer: text('intro_answer'),
-    section_title: text('section_title'),
-    section_description: text('section_description'),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
+    introVi: text('intro_vi'),
+    introAudio: text('intro_audio'),
+    introImage: text('intro_image'),
+    introAnswer: text('intro_answer'),
+    sectionTitle: text('section_title'),
+    sectionDescription: text('section_description'),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
 })
 
 export const question_sections = pgTable(
@@ -82,12 +83,12 @@ export const question_sections = pgTable(
         id: varchar('id')
             .primaryKey()
             .$defaultFn(() => createId()),
-        test_kit_id: varchar('test_kit_id').references(() => tests.id, {
+        testKitId: varchar('test_kit_id').references(() => tests.id, {
             onDelete: 'set null',
         }),
         part: integer('part').$type<1 | 2 | 3 | 4 | 5 | 6 | 7>(),
-        image_urls: json('image_urls').$type<string[]>(),
-        audio_url: text('audio_url'),
+        imageUrls: json('image_urls').$type<string[]>(),
+        audioUrl: text('audio_url'),
         teaser: json('teaser').$type<{
             text: string | null
             trans: {
@@ -95,14 +96,14 @@ export const question_sections = pgTable(
             }
         }>(),
         location: text('location'),
-        created_at: timestamp('created_at').defaultNow(),
-        updated_at: timestamp('updated_at').defaultNow(),
+        createdAt: timestamp('created_at').defaultNow(),
+        updatedAt: timestamp('updated_at').defaultNow(),
     },
-    ({ part, test_kit_id, location }) => {
+    ({ part, testKitId, location }) => {
         return {
             uniqueQuestionSection: unique('question_sections_unique').on(
                 part,
-                test_kit_id,
+                testKitId,
                 location,
             ),
         }
@@ -127,7 +128,7 @@ export const questions = pgTable(
         }>(),
         p: integer('p').notNull(),
         location: integer('location').notNull(),
-        question_section_id: varchar('question_section_id').references(
+        questionSectionId: varchar('question_section_id').references(
             () => question_sections.id,
             {
                 onDelete: 'cascade',
@@ -137,11 +138,11 @@ export const questions = pgTable(
         updated_at: timestamp('updated_at').defaultNow(),
         q: text('q'),
     },
-    ({ location, question_section_id, p }) => {
+    ({ location, questionSectionId, p }) => {
         return {
             uniqueQuestion: unique('questions_unique').on(
                 location,
-                question_section_id,
+                questionSectionId,
                 p,
             ),
         }
@@ -155,7 +156,7 @@ export const topics = pgTable(
             .primaryKey()
             .$defaultFn(() => createId()),
         name: text('name').notNull().unique(),
-        parent_id: varchar('parent_id').default(null),
+        parentId: varchar('parent_id').default(null),
         level: integer('level'),
         slug: text('slug').unique(),
         created_at: timestamp('created_at').defaultNow(),
@@ -179,16 +180,16 @@ export const vocabularies = pgTable(
         spelling: text('spelling'),
         type: text('type'),
         meaning: text('meaning'),
-        topic_id: varchar('topic_id').references(() => topics.id, {
+        topicId: varchar('topic_id').references(() => topics.id, {
             onDelete: 'cascade',
         }),
         category: text('category'),
-        created_at: timestamp('created_at').defaultNow(),
-        updated_at: timestamp('updated_at').defaultNow(),
+        createdAt: timestamp('created_at').defaultNow(),
+        updatedAt: timestamp('updated_at').defaultNow(),
     },
-    ({ name, topic_id, example }) => {
+    ({ name, topicId, example }) => {
         return {
-            unique: unique('vocabularies_unique').on(name, topic_id, example),
+            unique: unique('vocabularies_unique').on(name, topicId, example),
             nameIdx: index('vocabulary_name_idx').on(name),
         }
     },
@@ -198,26 +199,26 @@ export const courses = pgTable('courses', {
     id: varchar('id')
         .primaryKey()
         .$defaultFn(() => createId()),
-    cover_url: text('cover_url'),
+    coverUrl: text('cover_url'),
     description: text('description'),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
     slug: text('slug').unique(),
     teaser: text('teaser'),
     price: real('price').default(0),
-    old_price: real('old_price').default(0),
+    oldPrice: real('old_price').default(0),
 })
 
 export const course_topics = pgTable('course_topics', {
     id: varchar('id')
         .primaryKey()
         .$defaultFn(() => createId()),
-    course_id: varchar('course_id').references(() => courses.id, {
+    courseId: varchar('course_id').references(() => courses.id, {
         onDelete: 'cascade',
     }),
     name: text('name'),
     slug: text('slug').unique(),
-    parent_id: varchar('parent_id'),
+    parentId: varchar('parent_id'),
     introduction: text('introduction'),
 })
 
@@ -225,12 +226,12 @@ export const histories = pgTable('histories', {
     id: varchar('id')
         .primaryKey()
         .$defaultFn(() => createId()),
-    user_id: varchar('user_id').references(() => users.id, {
+    userId: varchar('user_id').references(() => users.id, {
         onDelete: 'cascade',
     }),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
-    meta_data: json('meta_data'),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+    metadata: json('metadata'),
     /**
      * with type is practice-part contents will be an array like this:
      * [
@@ -255,7 +256,9 @@ export const histories = pgTable('histories', {
      * }
      * ]
      */
-    contents: json('contents').$type<Array<TPracticePart> | Array<TTest>>(),
+    contents: json('contents').$type<
+        Array<TPracticePart> | Array<TTest> | Array<TLearnVoca>
+    >(),
     type: text('type').$type<'test' | 'course' | 'vocab' | 'practice-part'>(),
 })
 
@@ -265,16 +268,16 @@ export const listening = pgTable('listening', {
         .$defaultFn(() => createId()),
     name: text('name'),
     duration: integer('duration'),
-    duration_text: text('duration_text'),
-    audio_url: text('audio_url'),
-    image_url: text('image_url'),
+    durationText: text('duration_text'),
+    audioUrl: text('audio_url'),
+    imageUrl: text('image_url'),
     transcript: json('transcript').$type<{
         text: string
         trans: {
             vi: string
         }
     }>(),
-    meta_data: json('meta_data').$type<
+    metadata: json('meta_data').$type<
         Array<{
             text: string
             duration: {
@@ -286,7 +289,7 @@ export const listening = pgTable('listening', {
             }
         }>
     >(),
-    total_question: integer('total_question'),
+    totalQuestion: integer('total_question'),
 })
 
 export const kits_relations = relations(kits, ({ many }) => ({
@@ -295,7 +298,7 @@ export const kits_relations = relations(kits, ({ many }) => ({
 
 export const tests_relations = relations(tests, ({ one, many }) => ({
     kit: one(kits, {
-        fields: [tests.kit_id],
+        fields: [tests.kitId],
         references: [kits.id],
     }),
     question_sections: many(question_sections),
@@ -305,7 +308,7 @@ export const question_sections_relations = relations(
     question_sections,
     ({ one, many }) => ({
         test_kit: one(tests, {
-            fields: [question_sections.test_kit_id],
+            fields: [question_sections.testKitId],
             references: [tests.id],
         }),
         questions: many(questions),
@@ -314,7 +317,7 @@ export const question_sections_relations = relations(
 
 export const questions_relations = relations(questions, ({ one }) => ({
     question_section: one(question_sections, {
-        fields: [questions.question_section_id],
+        fields: [questions.questionSectionId],
         references: [question_sections.id],
     }),
 }))
@@ -322,7 +325,7 @@ export const questions_relations = relations(questions, ({ one }) => ({
 export const topics_relations = relations(topics, ({ one, many }) => ({
     vocabularies: many(vocabularies),
     parent: one(topics, {
-        fields: [topics.parent_id],
+        fields: [topics.parentId],
         references: [topics.id],
         relationName: 'children',
     }),
@@ -336,7 +339,7 @@ export const topics_children = relations(topics, ({ many }) => ({
 
 export const vocabularies_relations = relations(vocabularies, ({ one }) => ({
     topic: one(topics, {
-        fields: [vocabularies.topic_id],
+        fields: [vocabularies.topicId],
         references: [topics.id],
     }),
 }))

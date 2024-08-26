@@ -5,7 +5,7 @@ import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 export class VocabularyDto {
     @IsString()
     @IsNotEmpty()
-    topic_id: string
+    topicId: string
 
     @IsString()
     @IsNotEmpty()
@@ -39,7 +39,7 @@ export class VocabularyDto {
 export class QueryVocabularyDto extends BaseQueryDto {
     @IsString()
     @IsOptional()
-    topic_id?: string
+    topicId?: string
 }
 
 export const vocabularySchemas = validationMetadatasToSchemas()

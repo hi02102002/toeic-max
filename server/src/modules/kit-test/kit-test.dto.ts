@@ -15,7 +15,7 @@ export class KitTestDto {
 
     @IsString()
     @IsNotEmpty()
-    kit_id: string
+    kitId: string
 
     @IsString()
     @IsNotEmpty()
@@ -26,7 +26,7 @@ export class KitTestDto {
 export class QueryKitTestDto extends BaseQueryDto {
     @IsString()
     @IsOptional()
-    kit_id?: string
+    kitId?: string
 }
 
 export const kitTestSchemas = validationMetadatasToSchemas()

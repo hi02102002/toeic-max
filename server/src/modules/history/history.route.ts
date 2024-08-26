@@ -1,4 +1,6 @@
 import { CrudRoute } from '@/libs/api/crud.route'
+import { AuthMiddleware } from '@/middlewares/auth.middleware'
+import { ValidationMiddleware } from '@/middlewares/validation.middleware'
 import Container from 'typedi'
 import { HistoryController } from './history.controller'
 import { HistoryDto, QueryHistoryDto } from './history.dto'
@@ -25,9 +27,16 @@ export class HistoryRoute extends CrudRoute<HistoryController> {
                 },
             },
         })
+
+        this.extendRoutes()
     }
 
     extendRoutes(): void {
-        throw new Error('Method not implemented.')
+        this.router.post(
+            `${this.path}/create-for-vocab`,
+            AuthMiddleware,
+            ValidationMiddleware(HistoryDto),
+            this.controller.createForVocab,
+        )
     }
 }

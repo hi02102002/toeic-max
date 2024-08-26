@@ -11,7 +11,7 @@ export class QuestionService extends CRUDBaseService<
     TQuestion
 > {
     constructor() {
-        super(questions, 'Question')
+        super(questions)
     }
 
     async create<T = TQuestion>(
@@ -36,8 +36,8 @@ export class QuestionService extends CRUDBaseService<
         return question as T
     }
 
-    async createMany<T = TQuestion[]>(data: QuestionDto[], opts, sectionId) {
-        const _questions = await super.createMany<T>(
+    async createMany(data: QuestionDto[], opts, sectionId) {
+        const _questions = await super.createMany(
             data.map((item) => ({
                 ...item,
                 question_section_id: sectionId,

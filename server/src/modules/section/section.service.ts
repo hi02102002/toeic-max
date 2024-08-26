@@ -12,7 +12,7 @@ export class SectionService extends CRUDBaseService<
     TSection
 > {
     constructor() {
-        super(sections, 'Section')
+        super(sections)
     }
 
     async getByPart(part: number) {

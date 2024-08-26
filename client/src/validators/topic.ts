@@ -5,7 +5,7 @@ export const InputTopicSchema = z.object({
             required_error: 'Please enter topic name.',
         })
         .min(1, 'Please enter topic name.'),
-    parent_id: z
+    parentId: z
         .string({
             required_error: 'Please select parent topic.',
         })

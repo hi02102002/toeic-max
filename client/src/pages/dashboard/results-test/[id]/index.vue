@@ -7,7 +7,7 @@
                     View result
                 </Button>
                 <Button variant='outline' duolingo
-                    @click="router.push(`/dashboard/tests/${data?.history.meta_data.testId}/practice`)">
+                    @click="router.push(`/dashboard/tests/${data?.history.metadata.testId}/practice`)">
                     Do it again
                 </Button>
             </div>

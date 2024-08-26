@@ -44,7 +44,7 @@ export type TChoice = {
     question_id: string
     choose: string
     ans: string
-    is_correct: boolean
+    isCorrect: boolean
     part: number
     location: number
 }

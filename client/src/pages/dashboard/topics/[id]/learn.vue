@@ -46,12 +46,15 @@ export default defineComponent({
 <script setup lang="ts">
 import { ChooseWord, FillBlank, TrueOrFalse, Word } from '@/components/games';
 import { MAX_VOCA_PER_LEARN } from '@/constants';
+import { useCreateForVocab } from '@/hooks/history';
+import { TopicClient } from '@/hooks/topic';
+import { useAppTitle } from '@/hooks/use-app-title';
 import { VocabularyClient } from '@/hooks/vocabulary';
 import { queryClient } from '@/libs/react-query';
+import { useCurrentUserStore } from '@/stores/current-user';
 import { EFilterCondition, EFilterType, } from '@/types/common';
 import { ELearnType, type TLearnVoca } from '@/types/learn-voca';
-import { getAppTitle } from '@/utils/common';
-import { useTitle } from '@vueuse/core';
+import { pick } from 'lodash';
 import { defineComponent, ref, watch, watchEffect } from 'vue';
 import { definePage, useRoute, useRouter } from 'vue-router/auto';
 
@@ -72,12 +75,18 @@ const currentGame = ref<ELearnType>(ELearnType.VOCA)
 const { params } = useRoute('/dashboard/topics/[id]/');
 const router = useRouter()
 
+
+const { data: topic } = TopicClient.useGetById(params.id)
+
 const { data } = VocabularyClient.usePagingBuilder({
     filters: [
-        `topic_id|${EFilterCondition.EQUAL}|${params.id}|${EFilterType.STRING}`
+        `topicId|${EFilterCondition.EQUAL}|${params.id}|${EFilterType.STRING}`
     ],
 })
 
+const userStore = useCurrentUserStore()
+
+const createHistoryMutation = useCreateForVocab()
 
 const handleAutoGame = () => {
     const vocasStillLearning = learnings.value.filter(voca => voca.learning.length > 0)
@@ -104,6 +113,7 @@ const handleAutoGame = () => {
 
     currentVocaLeaning.value = randomVoca
 
+
     // update the voca in learnings
     learnings.value = learnings.value.map(voca => {
         if (voca.id === randomVoca.id) {
@@ -112,7 +122,6 @@ const handleAutoGame = () => {
 
         return voca
     })
-
 }
 
 const handleLearnVoca = async (
@@ -131,7 +140,8 @@ const handleLearnVoca = async (
         vocaToLearn = {
             ...vocaToLearn,
             learned: Object.values(ELearnType),
-            learning: []
+            learning: [],
+            percent: 100
         }
         learnings.value.push(vocaToLearn)
     } else {
@@ -142,6 +152,11 @@ const handleLearnVoca = async (
     currentVocaToLearn.value = currentVocaToLearn.value + 1
 
     const learningVocas = learnings.value.filter(voca => voca.learning.length > 0)
+    const learnedVocas = learnings.value.filter(voca => voca.learning.length === 0)
+
+    if (learnedVocas.length === learnings.value.length) {
+        return;
+    }
 
 
     if (learningVocas.length % MAX_VOCA_PER_LEARN === 0 ||
@@ -159,11 +174,19 @@ const handlePlayGame = (
     }
 ) => {
     if (!wordId) return
+    const learnedVocabs = learnings.value.filter(voca => voca.learning.length === 0)
+
+    if (learnedVocabs.length === learns.value.length) {
+        return;
+    }
+
+
     learnings.value = learnings.value.map(voca => {
         if (voca.id === wordId) {
             const _voca = {
                 ...voca,
-                percent: type === 'correct' ? voca.percent + 20 : voca.percent,
+                percent: type === 'correct' && voca.percent < 100 ? voca.percent + 20 : voca.percent,
+                needLearnAgain: type === 'incorrect' ? [...voca.needLearnAgain, gameType] : voca.needLearnAgain
             }
 
             return _voca
@@ -181,30 +204,46 @@ watch(data, (newData) => {
         return {
             ...voca,
             learned: [],
-            need_learn_again: [], // save the wrong answer
             learning: Object.values(ELearnType).filter(v => v !== ELearnType.VOCA),
-            percent: 0
+            percent: 0,
+            needLearnAgain: []
         }
     }) || []
 
 
 }, { immediate: true })
 
-watchEffect(async () => {
+watchEffect(() => {
     const learnedVocas = learnings.value.filter(voca => voca.learning.length === 0)
 
     if (learnedVocas.length === data?.value?.items.length) {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        const mappedVocabs = learnings.value.map(voca => {
+            return {
+                ...pick(voca, ['id', 'topic_id', 'percent', 'learned', 'needLearnAgain', 'learning']),
+                vocabulary_id: voca.id
+            }
+        })
 
-        router.push(`/dashboard/topics/${params.id}/result`)
+        createHistoryMutation.mutateAsync({
+            type: 'vocab',
+            userId: userStore?.currentUser?.id as string,
+            contents: mappedVocabs,
+            metadata: {
+                topicId: params.id,
+                topicName: topic.value?.name,
+                totalVocabs: data?.value?.items.length
+            }
+        }, {
+            onSuccess: (data) => {
+                router.push(
+                    `/dashboard/results-vocab/${data.data.id}`
+                )
+            }
+        })
     }
 })
 
-useTitle(
-    getAppTitle(
-        'Learn New Vocabularies'
-    )
-)
+useAppTitle('Learn Vocabularies')
 
 
 definePage({

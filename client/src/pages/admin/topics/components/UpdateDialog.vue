@@ -14,7 +14,7 @@
             </DialogHeader>
             <TopicForm :default-values="{
                 name: props.row.original.name,
-                parent_id: props.row.original.parent_id
+                parentId: props.row.original.parentId
             }" type="update" @submit="handleSubmit" />
             <DialogFooter>
                 <Button type="submit" form="topic-form" :loading="updateTopicMutation.isPending.value">

@@ -3,7 +3,7 @@
         :is-show-search="false" :query="state">
         <template #extra-filter>
             <div class="flex items-center gap-3">
-                <Select :model-value="state.test_kit_id" @update:model-value="handleChangeTestKit">
+                <Select :model-value="state.testKitId" @update:model-value="handleChangeTestKit">
                     <SelectTrigger class="w-[180px] h-8">
                         <SelectValue placeholder="Select a kit" />
                     </SelectTrigger>
@@ -76,13 +76,13 @@ useTitle('Manage Questions | ELand')
 const { data: options } = useForSelectKitTest()
 
 const { state, handleChange } = useQueryState({
-    test_kit_id: '',
+    testKitId: '',
     part: '',
 }
 )
 
 const handleChangeTestKit = (value: string) => {
-    handleChange('test_kit_id', value)
+    handleChange('testKitId', value)
 }
 
 const handleChangePart = (value: string) => {
@@ -117,7 +117,7 @@ const cols: ColumnDef<TSectionQuestion>[] = [
             })
         },
     }, {
-        accessorKey: 'created_at',
+        accessorKey: 'createdAt',
         header({ column }: any) {
             return h(TableHeader, {
                 title: 'Created At',
@@ -126,12 +126,12 @@ const cols: ColumnDef<TSectionQuestion>[] = [
         },
         cell({ row }) {
             return h('span', {},
-                dayFns.format(new Date(row.original.created_at), 'dd/MM/yyyy HH:mm')
+                dayFns.format(new Date(row.original.createdAt), 'dd/MM/yyyy HH:mm')
             )
         }
     },
     {
-        accessorKey: 'updated_at',
+        accessorKey: 'updatedAt',
         header({ column }: any) {
             return h(TableHeader, {
                 title: 'Updated At',
@@ -140,7 +140,7 @@ const cols: ColumnDef<TSectionQuestion>[] = [
         },
         cell({ row }) {
             return h('span', {},
-                dayFns.format(new Date(row.original.updated_at), 'dd/MM/yyyy HH:mm')
+                dayFns.format(new Date(row.original.updatedAt), 'dd/MM/yyyy HH:mm')
             )
         }
     },

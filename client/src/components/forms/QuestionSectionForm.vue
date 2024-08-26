@@ -60,7 +60,7 @@
             </FormItem>
         </FormField>
 
-        <FormField v-if="PART_TO_RENDER_AUDIO.includes(Number(part))" v-slot="{ componentField }" name="audio_url">
+        <FormField v-if="PART_TO_RENDER_AUDIO.includes(Number(part))" v-slot="{ componentField }" name="audioUrl">
             <FormItem>
                 <FormLabel :required="PART_TO_RENDER_AUDIO.includes(Number(part))">
                     Audio
@@ -71,7 +71,7 @@
                 <FormMessage />
             </FormItem>
         </FormField>
-        <FormField v-if="PART_TO_RENDER_IMAGE.includes(Number(part))" v-slot="{ componentField }" name="image_urls">
+        <FormField v-if="PART_TO_RENDER_IMAGE.includes(Number(part))" v-slot="{ componentField }" name="imageUrls">
             <FormItem>
                 <FormLabel :required="PART_TO_RENDER_IMAGE.includes(Number(part))">
                     Image Urls
@@ -210,11 +210,11 @@ const form = useForm({
     initialValues: {
         part: props.defaultValues?.part ?? '1' as unknown as number,
         questions: props.defaultValues?.questions || [],
-        image_urls: props.defaultValues?.image_urls || [],
-        audio_url: props.defaultValues?.audio_url || '',
+        imageUrls: props.defaultValues?.imageUrls || [],
+        audioUrl: props.defaultValues?.audioUrl || '',
         teaser: props.defaultValues?.teaser,
         location: props.defaultValues?.location || '',
-        test_kit_id: props.defaultValues?.test_kit_id || '',
+        testKitId: props.defaultValues?.testKitId || '',
     }
 })
 

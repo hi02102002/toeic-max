@@ -7,19 +7,19 @@ export type TCreateHistory = typeof histories.$inferInsert
 export type TUpdateHistory = typeof histories.$inferInsert
 
 export type TPracticePart = {
-    section_question_id: string
-    question_id: string
+    sectionQuestionId: string
+    questionId: string
     choose: string
     ans: string
-    is_correct: boolean
+    isCorrect: boolean
     part: number
 }
 
 export type TTest = {
-    section_question_id: string
-    question_id: string
+    sectionQuestionId: string
+    questionId: string
     choose: string
     ans: string
-    is_correct: boolean
+    isCorrect: boolean
     part: number
 }

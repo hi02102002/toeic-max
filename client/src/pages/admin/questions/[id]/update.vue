@@ -13,9 +13,9 @@
             },
             questions: data?.questions || [],
             part: data?.part.toString() as unknown as number,
-            test_kit_id: data?.test_kit_id || '',
-            audio_url: data?.audio_url || '',
-            image_urls: data?.image_urls || [],
+            testKitId: data?.testKitId || '',
+            audioUrl: data?.audioUrl || '',
+            imageUrls: data?.imageUrls || [],
         }" @submit="handleSubmit" />
         <div class="flex items-center justify-end">
             <Button type="submit" form="question-section-form">

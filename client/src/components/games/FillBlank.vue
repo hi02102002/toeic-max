@@ -62,6 +62,7 @@ import type { TLearnVoca } from '@/types/learn-voca';
 import { ELearnType } from '@/types/learn-voca';
 import { cn } from '@/utils';
 import { getWordAudioUrl } from '@/utils/common';
+import { useEventListener } from '@vueuse/core';
 import { Eraser, Ghost } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import CircleProgress from '../CircleProgress.vue';
@@ -179,6 +180,25 @@ watch(() => props.word, () => {
     answer.value = ''
     wordToHint.value = props.word.name.slice(0, Math.floor(props.word.name.length / 2))
     isCorrectAnswer.value = undefined
+})
+
+useEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        handleCheck()
+    }
+
+    if (e.key === 'Backspace') {
+        handleRemoveChar()
+    }
+
+    if (e.code === 'Space') {
+        handleClickKeyboard(' ')
+    }
+
+    if (ALPHABETS.includes(e.key)) {
+        handleClickKeyboard(e.key)
+    }
+
 })
 
 

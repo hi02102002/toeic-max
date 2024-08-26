@@ -5,7 +5,7 @@
             <CreateDialog />
         </template>
         <template #extra-filter>
-            <Select :model-value="state.kit_id" @update:model-value="handleChangeKit">
+            <Select :model-value="state.kitId" @update:model-value="handleChangeKit">
                 <SelectTrigger class="w-[180px] h-8">
                     <SelectValue placeholder="Select a kit" />
                 </SelectTrigger>
@@ -46,7 +46,7 @@ import { definePage } from 'vue-router/auto';
 import { CreateDialog, RowAction } from './components';
 
 const { state, handleChange } = useQueryState({
-    kit_id: '',
+    kitId: ''
 }
 )
 
@@ -112,7 +112,7 @@ const cols: ColumnDef<TTest>[] = [
 ]
 
 const handleChangeKit = (value: string) => {
-    handleChange('kit_id', value)
+    handleChange('kitId', value)
 }
 
 useTitle('Manage Tests | ELand')

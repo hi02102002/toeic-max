@@ -1,6 +1,7 @@
 import { jsonBuildObject } from '@/database/helper'
 import { kits, tests } from '@/database/schema'
-import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud.service'
+import { TGetPagingQuery } from '@/libs/api'
+import { CRUDBaseService } from '@/libs/api/crud.service'
 import { eq, getTableColumns } from 'drizzle-orm'
 import slugify from 'slugify'
 import { Service } from 'typedi'
@@ -14,7 +15,7 @@ export class KitTestService extends CRUDBaseService<
     TTest
 > {
     constructor() {
-        super(tests, 'Test')
+        super(tests)
     }
 
     async getAll<T = any>(): Promise<T[]> {
@@ -33,7 +34,7 @@ export class KitTestService extends CRUDBaseService<
             opts: {
                 searchFields: [tests.name, tests.slug],
                 wheres: [
-                    query.kit_id ? eq(tests.kit_id, query.kit_id) : undefined,
+                    query.kitId ? eq(tests.kitId, query.kitId) : undefined,
                 ],
                 selectFields: {
                     ...getTableColumns(tests),
@@ -43,7 +44,7 @@ export class KitTestService extends CRUDBaseService<
                 },
             },
             callback(query) {
-                return query.leftJoin(kits, eq(tests.kit_id, kits.id))
+                return query.leftJoin(kits, eq(tests.kitId, kits.id))
             },
         })
 
@@ -62,7 +63,7 @@ export class KitTestService extends CRUDBaseService<
         return test as T
     }
 
-    async update<T = TTest>({ data, id }: { data: KitTestDto; id: string }) {
+    async update({ data, id }: { data: KitTestDto; id: string }) {
         const test = await super.update({
             id,
             opts: {
@@ -75,6 +76,6 @@ export class KitTestService extends CRUDBaseService<
             },
         })
 
-        return test as T
+        return test
     }
 }

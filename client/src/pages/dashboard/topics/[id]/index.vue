@@ -56,7 +56,7 @@ export default defineComponent({
             } else {
                 await queryClient.ensureQueryData(VocabularyClient.getPagingBuilderQueryOptions({
                     filters: [
-                        `topic_id|${EFilterCondition.EQUAL}|${topicId}|${EFilterType.STRING}`
+                        `topicId|${EFilterCondition.EQUAL}|${topicId}|${EFilterType.STRING}`
                     ]
                 }))
                 next()
@@ -88,7 +88,7 @@ const router = useRouter()
 const { data: topic, } = TopicClient.useGetById(params.id)
 const { data } = VocabularyClient.usePagingBuilder({
     filters: [
-        `topic_id|${EFilterCondition.EQUAL}|${params.id}|${EFilterType.STRING}`
+        `topicId|${EFilterCondition.EQUAL}|${params.id}|${EFilterType.STRING}`
     ],
 })
 

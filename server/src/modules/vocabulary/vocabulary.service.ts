@@ -1,6 +1,7 @@
 import { jsonBuildObject } from '@/database/helper'
 import { topics, vocabularies } from '@/database/schema'
-import { CRUDBaseService, TGetPagingQuery } from '@/libs/api/crud.service'
+import { TGetPagingQuery } from '@/libs/api'
+import { CRUDBaseService } from '@/libs/api/crud.service'
 import { eq, getTableColumns, inArray } from 'drizzle-orm'
 import { Service } from 'typedi'
 import { TopicService } from '../topic'
@@ -14,29 +15,29 @@ export class VocabularyService extends CRUDBaseService<
     TVocabulary
 > {
     constructor(private readonly topicService: TopicService) {
-        super(vocabularies, 'Vocabulary')
+        super(vocabularies)
     }
 
     async getPaging({ query }: TGetPagingQuery<QueryVocabularyDto>) {
-        const { topic_id, ...rest } = query
+        const { topicId, ...rest } = query
 
         const topicIds = []
 
-        if (topic_id) {
+        if (topicId) {
             const topics =
-                await this.topicService.getAllChildByParentId(topic_id)
+                await this.topicService.getAllChildByParentId(topicId)
 
             topicIds.push(...topics.map((topic) => topic.id))
 
-            topicIds.push(topic_id)
+            topicIds.push(topicId)
         }
 
         return super.getPaging({
             query: rest,
             opts: {
                 wheres: [
-                    topic_id && topicIds.length
-                        ? inArray(vocabularies.topic_id, topicIds)
+                    topicId && topicIds.length
+                        ? inArray(vocabularies.topicId, topicIds)
                         : undefined,
                 ],
                 searchFields: [vocabularies.name],
@@ -51,9 +52,17 @@ export class VocabularyService extends CRUDBaseService<
             callback(query) {
                 return query.leftJoin(
                     topics,
-                    eq(vocabularies.topic_id, topics.id),
+                    eq(vocabularies.topicId, topics.id),
                 )
             },
+        })
+    }
+
+    async getVocabByIds(ids: string[]) {
+        const vocabularies = await this.getManyByInField('id', ids)
+
+        return vocabularies.sort((a, b) => {
+            return ids.indexOf(a.id) - ids.indexOf(b.id)
         })
     }
 }

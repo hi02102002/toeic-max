@@ -81,7 +81,7 @@ const cols: ColumnDef<TTopic>[] = [
         enableSorting: false
     },
     {
-        accessorKey: 'created_at',
+        accessorKey: 'createdAt',
         header({ column }: any) {
             return h(TableHeader, {
                 title: 'Created At',
@@ -90,12 +90,12 @@ const cols: ColumnDef<TTopic>[] = [
         },
         cell({ row }) {
             return h('span', {},
-                dayFns.format(new Date(row.original.created_at), 'dd/MM/yyyy HH:mm')
+                dayFns.format(new Date(row.original.createdAt), 'dd/MM/yyyy HH:mm')
             )
         }
     },
     {
-        accessorKey: 'updated_at',
+        accessorKey: 'updatedAt',
         header({ column }: any) {
             return h(TableHeader, {
                 title: 'Updated At',
@@ -104,7 +104,7 @@ const cols: ColumnDef<TTopic>[] = [
         },
         cell({ row }) {
             return h('span', {},
-                dayFns.format(new Date(row.original.updated_at), 'dd/MM/yyyy HH:mm')
+                dayFns.format(new Date(row.original.updatedAt), 'dd/MM/yyyy HH:mm')
             )
         }
     },

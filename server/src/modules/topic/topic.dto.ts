@@ -9,13 +9,17 @@ export class TopicDto {
 
     @IsString()
     @IsOptional()
-    parent_id?: string | null
+    parentId?: string | null
+
+    @IsString()
+    @IsOptional()
+    slug?: string | null
 }
 
 export class QueryTopicDto extends BaseQueryDto {
     @IsString()
     @IsOptional()
-    parent_id?: string | null
+    parentId?: string | null
 }
 
 export const topicSchemas = validationMetadatasToSchemas()

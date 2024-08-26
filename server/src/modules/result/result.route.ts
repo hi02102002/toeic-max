@@ -19,5 +19,10 @@ export class ResultRoute implements IRoutes {
             AuthMiddleware,
             this.controller.getPracticePartResult,
         )
+        this.router.get(
+            `${this.path}/vocab/:historyId`,
+            AuthMiddleware,
+            this.controller.getVocabPartResult,
+        )
     }
 }

@@ -19,7 +19,7 @@ export class UserService extends CRUDBaseService<
     TUser
 > {
     constructor(private readonly firebaseService: FirebaseService) {
-        super(users, 'User')
+        super(users)
     }
 
     public async getOneByEmail(email: string) {
